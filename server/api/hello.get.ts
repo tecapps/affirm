@@ -7,6 +7,6 @@
  */
 export default defineEventHandler(() => {
   return {
-    message: capitalize("hello from the server!"),
+    message: capitalize("hello from the server! This was returned from the API."),
   };
 });

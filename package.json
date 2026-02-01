@@ -80,5 +80,6 @@
     "tree-sitter-bash",
     "unrs-resolver",
     "workerd"
-  ]
+  ],
+  "version": "0.0.0-dev.0"
 }

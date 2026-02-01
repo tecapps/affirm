@@ -7,11 +7,13 @@
  * `ref` creates a reactive mutable value; `computed` derives a read-only
  * reactive value that updates automatically when its dependencies change.
  */
+import pkg from "../../package.json";
+
 export function useAppInfo() {
   const appName = ref("Affirm");
-  const version = ref("0.1.0");
+  const version = ref(pkg.version);
 
-  const greeting = computed(() => `Welcome to ${appName.value} v${version.value}`);
+  const greeting = computed(() => `Welcome to ${appName.value} ${version.value}`);
 
   return { appName, version, greeting };
 }

@@ -13,8 +13,8 @@ const { appName, version } = useAppInfo();
   <div class="prose mx-auto">
     <h1>About {{ appName }}</h1>
     <p>
-      <strong>{{ appName }}</strong> (v{{ version }}) is a Nuxt 4 application deployed to Cloudflare Workers. It uses
-      Tailwind CSS v4 with DaisyUI v5 for styling.
+      <strong>{{ appName }}</strong> ({{ version }}) is a Nuxt 4 application deployed to Cloudflare Workers. It uses
+      Tailwind CSS v4 with DaisyUI v5 for styling, and a Catppuccin Mocha colour palette.
     </p>
 
     <h2>Project Structure</h2>
