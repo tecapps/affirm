@@ -28,6 +28,9 @@ When it's ready to merge, submit a pull request. Two approvals are required on e
 
 The purpose of this isn't to be a pain in the arse, it's to minimise the possibility of broken code reaching production. Your pushes to branches generate a `workers.dev` URL, so you can validate things before submitting a PR and save everyone a bunch of time.
 
+> [!TIP]
+> Please **sign your commits**. It's a major security win and it's not enormous hassle. You don't need a GnuPG key any more; Git supports signing with SSH keys now, and you probably use one of those to push anyway. See [the documentation](https://docs.github.com/en/authentication/managing-commit-signature-verification/signing-commits) for more information.
+
 ## Setup
 
 Install [`bun`](https://bun.sh) if you haven't already. I suggest using [`mise`](https://github.com/jdx/mise), which you can also use to manage Node versions and a bunch of other stuff too.
