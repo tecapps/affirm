@@ -86,4 +86,14 @@ Locally preview production build:
 bun preview
 ```
 
+## Deployment
+
+Deployment is **automatic**. Every branch gets its own `workers.dev` URL; in fact, every **commit** does. There's an unstable per-commit URL, a stable "tip of the branch" URL, and the "production" URL at <https://affirm.transequitycoalition-org.workers.dev>.
+
+Check out the jobs which run on your commit (click the status indicator) to get URLs.
+
+Eventually, we'll point a domain. Currently we don't configure any routing, adding a domain is a simple enough change to [`wrangler.jsonc`](wrangler.jsonc). If someone else handles it, remember to point at `www.domain.tld` as well as the bare `domain.tld`.
+
+## Everything Else
+
 If you have further questions, check out the documentation for agents in [`.github/copilot-instructions.md`](.github/copilot-instructions.md). There are multiple symlinks to this file for various agents.
