@@ -1,6 +1,6 @@
 # `affirm`
 
-![CI status](https://github.com/tecapps/affirm/actions/workflows/ci.yaml/badge.svg) | ![DevSkim status](https://github.com/tecapps/affirm/actions/workflows/devskim.yaml/badge.svg)
+![CI status](https://github.com/tecapps/affirm/actions/workflows/ci.yaml/badge.svg) ![DevSkim status](https://github.com/tecapps/affirm/actions/workflows/devskim.yaml/badge.svg)
 
 Your first port of call should be the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
 
