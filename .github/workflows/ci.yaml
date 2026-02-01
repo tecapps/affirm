@@ -1,0 +1,23 @@
+name: ci
+permissions: read-all
+on:
+  push: null
+  pull_request: null
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+      - name: bun
+        uses: oven-sh/setup-bun@3d267786b128fe76c2f16a390aa2448b815359f3
+        with:
+          bun-version: 1.3.8
+      - name: install
+        run: bun install
+      - name: trunk
+        uses: trunk-io/trunk-action@bf81325059d2534b31df5365182237788c5e0338
+      - name: typecheck
+        run: bun run lint:types
+      - name: build
+        run: bun run build

@@ -22,10 +22,14 @@ Install [`bun`](https://bun.sh) if you haven't already. I suggest using [`mise`]
 
 There is a `mise.toml` file included in this repo. It will install everything you need.
 
+The only exception is `trunk` which is a _massive_ pain in the arse to manage using `mise`. It'll be installed as a dev dependency and can be invoked through `bun run trunk`, or read the [installation documentation](https://docs.trunk.io/code-quality/overview/initialize-trunk) to install it globally if you prefer.
+
 > [!NOTE]
 > It will also install a few extras; the CLIs for the major coding agents, and `rust` in case we decide to use `wasm` in the future. Feel free to edit it if you need to, just make sure you don't commit your changes.
+>
+> There are also `.tool-versions` and `.node-version` files, but they're more for Workers Builds. `mise` should be treated as the source of truth.
 
- If you are using `mise`, simply run:
+If you are using `mise`, simply run:
 
 ```bash
 # trust the mise.toml file
@@ -64,5 +68,3 @@ Locally preview production build:
 ```bash
 bun preview
 ```
-
-
