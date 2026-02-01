@@ -19,15 +19,15 @@ const { data: hello } = await useFetch("/api/hello");
           <div class="mb-4">
             <span class="badge badge-primary badge-lg">v{{ version }}</span>
           </div>
-          <h1 class="text-5xl md:text-6xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+          <h1
+            class="text-5xl md:text-6xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent"
+          >
             Welcome to Affirm
           </h1>
           <p v-if="hello" class="mt-6 text-xl opacity-80">
             {{ hello.message }}
           </p>
-          <p class="mt-4 text-lg opacity-70">
-            A modern Nuxt 4 application with Cloudflare Workers deployment
-          </p>
+          <p class="mt-4 text-lg opacity-70">A modern Nuxt 4 application with Cloudflare Workers deployment</p>
         </div>
       </div>
     </section>
@@ -36,9 +36,7 @@ const { data: hello } = await useFetch("/api/hello");
     <section class="stats stats-vertical lg:stats-horizontal shadow-lg w-full bg-base-100">
       <div class="stat">
         <div class="stat-figure text-primary">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block h-8 w-8 stroke-current">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-          </svg>
+          <Icon name="heroicons:bolt" size="2rem" />
         </div>
         <div class="stat-title">Framework</div>
         <div class="stat-value text-primary">Nuxt 4</div>
@@ -47,9 +45,7 @@ const { data: hello } = await useFetch("/api/hello");
 
       <div class="stat">
         <div class="stat-figure text-secondary">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block h-8 w-8 stroke-current">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
-          </svg>
+          <Icon name="heroicons:swatch" size="2rem" />
         </div>
         <div class="stat-title">Styling</div>
         <div class="stat-value text-secondary">Tailwind 4</div>
@@ -58,9 +54,7 @@ const { data: hello } = await useFetch("/api/hello");
 
       <div class="stat">
         <div class="stat-figure text-accent">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block h-8 w-8 stroke-current">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z" />
-          </svg>
+          <Icon name="heroicons:cloud" size="2rem" />
         </div>
         <div class="stat-title">Deployment</div>
         <div class="stat-value text-accent">Cloudflare</div>

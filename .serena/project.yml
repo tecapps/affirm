@@ -1,5 +1,5 @@
 # the name by which the project can be referenced within Serena
-project_name: "affirm"
+project_name: affirm
 
 # list of languages for which language servers are started; choose from:
 #   al                  bash                clojure             cpp                 csharp
@@ -29,7 +29,7 @@ languages:
 
 # the encoding used by text files in the project
 # For a list of possible encodings, see https://docs.python.org/3.11/library/codecs.html#standard-encodings
-encoding: "utf-8"
+encoding: utf-8
 
 # whether to use project's .gitignore files to ignore files
 ignore_all_files_in_gitignore: true
@@ -97,14 +97,14 @@ fixed_tools: []
 # Otherwise, this setting overrides the global configuration.
 # Set this to [] to disable base modes for this project.
 # Set this to a list of mode names to always include the respective modes for this project.
-base_modes:
+base_modes: null
 
 # list of mode names that are to be activated by default.
 # The full set of modes to be activated is base_modes + default_modes.
 # If the setting is undefined, the default_modes from the global configuration (serena_config.yml) apply.
 # Otherwise, this overrides the setting from the global configuration (serena_config.yml).
 # This setting can, in turn, be overridden by CLI parameters (--mode).
-default_modes:
+default_modes: null
 
 # initial prompt for the project. It will always be given to the LLM upon activating the project
 # (contrary to the memories, which are loaded on demand).

@@ -16,7 +16,7 @@ withDefaults(
   {
     badge: undefined,
     badgeColor: "primary",
-  }
+  },
 );
 </script>
 
