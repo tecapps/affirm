@@ -14,9 +14,7 @@ const { data: hello } = await useFetch("/api/hello");
   <div class="space-y-8">
     <section class="text-center py-8">
       <h1 class="text-4xl font-bold">{{ greeting }}</h1>
-      <p v-if="hello" class="mt-2 text-lg opacity-70">
-        Server says: {{ hello.message }}
-      </p>
+      <p v-if="hello" class="mt-2 text-lg opacity-70">Server says: {{ hello.message }}</p>
     </section>
 
     <section class="grid gap-6 md:grid-cols-3">

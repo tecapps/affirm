@@ -20,6 +20,7 @@
   },
   "devDependencies": {
     "@anthropic-ai/claude-code": "^2.1.29",
+    "@catppuccin/daisyui": "^2.1.1",
     "@github/copilot": "^0.0.400",
     "@google/gemini-cli": "^0.26.0",
     "@openai/codex": "^0.93.0",
