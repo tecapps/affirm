@@ -1,0 +1,68 @@
+# `affirm`
+
+Your first port of call should be the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+
+> [!IMPORTANT]
+> Opinions ahead! The following are recommendations. Feel free to ignore them if you have better ideas.
+
+All Nuxt modules except [NuxtUI](https://ui.nuxt.com) are installed and enabled. Notably, this includes [Nuxt Content](https://content.nuxtjs.org/), which will make our lives easier for copywriting by letting them write Markdown instead of HTML/Vue.
+
+But what are we going to use if not [NuxtUI](https://ui.nuxt.com)? Simple. [Tailwind](https://tailwindcss.com/) with [DaisyUI](https://daisyui.com/). This gives us a lot of flexibility while still providing a component library to speed up development.
+
+The benefit of [DaisyUI](https://daisyui.com/) is that they don't dick about by having a "pro" version. The open-source version of DaisyUI is it.
+
+I'm not a frontend developer but I'd encourage use of the [Catppuccin](https://github.com/catppuccin) palette. There are dedicated packages for [the palette](https://github.com/catppuccin/palette), [DaisyUI](https://github.com/catppuccin/daisyui), and [Tailwind](https://github.com/catppuccin/tailwindcss).
+
+> [!IMPORTANT]
+> Opinions end here. It's objectivity from here on.
+
+## Setup
+
+Install [`bun`](https://bun.sh) if you haven't already. I suggest using [`mise`](https://github.com/jdx/mise), which you can also use to manage Node versions and a bunch of other stuff too.
+
+There is a `mise.toml` file included in this repo. It will install everything you need.
+
+> [!NOTE]
+> It will also install a few extras; the CLIs for the major coding agents, and `rust` in case we decide to use `wasm` in the future. Feel free to edit it if you need to, just make sure you don't commit your changes.
+
+ If you are using `mise`, simply run:
+
+```bash
+# trust the mise.toml file
+mise trust
+
+# set up the environment
+mise install
+```
+
+When everything is set up, install dependencies:
+
+```bash
+# we are using bun for package management
+bun install
+```
+
+## Development Server
+
+Start the development server on `http://localhost:3000`:
+
+```bash
+bun dev
+```
+
+## Production
+
+Build the application for production:
+
+```bash
+# `bun run` required because `bun build` clashes with internal bun command
+bun run build
+```
+
+Locally preview production build:
+
+```bash
+bun preview
+```
+
+
