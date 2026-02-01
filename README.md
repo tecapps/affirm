@@ -13,8 +13,10 @@ The benefit of [DaisyUI](https://daisyui.com/) is that they don't dick about by 
 
 I'm not a frontend developer but I'd encourage use of the [Catppuccin](https://github.com/catppuccin) palette. There are dedicated packages for [the palette](https://github.com/catppuccin/palette), [DaisyUI](https://github.com/catppuccin/daisyui), and [Tailwind](https://github.com/catppuccin/tailwindcss).
 
+Recommended VS Code extensions are configured for this workspace. Check the extensions view's _Recommended_ section. Feel free to add any you find useful.
+
 > [!IMPORTANT]
-> Opinions end here. It's objectivity from here on.
+> Opinions end here. It's objectivity from here on. Mostly.
 
 ## Setup
 
@@ -25,7 +27,7 @@ There is a `mise.toml` file included in this repo. It will install everything yo
 The only exception is `trunk` which is a _massive_ pain in the arse to manage using `mise`. It'll be installed as a dev dependency and can be invoked through `bun run trunk`, or read the [installation documentation](https://docs.trunk.io/code-quality/overview/initialize-trunk) to install it globally if you prefer.
 
 > [!NOTE]
-> It will also install a few extras; the CLIs for the major coding agents, and `rust` in case we decide to use `wasm` in the future. Feel free to edit it if you need to, just make sure you don't commit your changes.
+> It will also install a few extras; the CLIs for the major coding agents, and `rust` in case we decide to use `wasm` in the future. Feel free to edit it if you need to, just be aware you'll be changing it for everyone else too.
 >
 > There are also `.tool-versions` and `.node-version` files, but they're more for Workers Builds. `mise` should be treated as the source of truth.
 

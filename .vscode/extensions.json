@@ -1,0 +1,12 @@
+{
+  "recommendations": [
+    "ms-dotnettools.vscode-dotnet-runtime",
+    "nuxtr.nuxt-vscode-extentions",
+    "vue.volar",
+    "nuxt.mdc",
+    "meritek.nuxt-intellisense",
+    "nuxtr.nuxtr-vscode",
+    "trunk.io",
+    "anthropic.claude-code"
+  ]
+}

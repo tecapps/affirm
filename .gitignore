@@ -30,3 +30,6 @@ logs
 # .dev.vars is a symlink to .env so can be committed
 !.dev.vars
 !.dev.vars.example
+
+# vs code local history
+.history/
