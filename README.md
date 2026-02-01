@@ -18,6 +18,16 @@ Recommended VS Code extensions are configured for this workspace. Check the exte
 > [!IMPORTANT]
 > Opinions end here. It's objectivity from here on. Mostly.
 
+## Branch protections
+
+The `main` branch is the production deployment. It's protected; changes to it can only come from a pull request, and that means a separate branch.
+
+Do your work in a branch named `username/purpose`; eg `daveio/fix-header`.
+
+When it's ready to merge, submit a pull request. Two approvals are required on each PR. I (@daveio) will try to review all PRs and you can function as the other approver if you like. If I'm unavailable to review a PR, ask another team member to review it for you. Anyone can.
+
+The purpose of this isn't to be a pain in the arse, it's to minimise the possibility of broken code reaching production. Your pushes to branches generate a `workers.dev` URL, so you can validate things before submitting a PR and save everyone a bunch of time.
+
 ## Setup
 
 Install [`bun`](https://bun.sh) if you haven't already. I suggest using [`mise`](https://github.com/jdx/mise), which you can also use to manage Node versions and a bunch of other stuff too.
