@@ -70,3 +70,5 @@ Locally preview production build:
 ```bash
 bun preview
 ```
+
+If you have further questions, check out the documentation for agents in [`.github/copilot-instructions.md`](.github/copilot-instructions.md). There are multiple symlinks to this file for various agents.
