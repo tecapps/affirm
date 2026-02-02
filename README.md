@@ -173,4 +173,4 @@ Eventually, we'll point a domain. Currently we don't configure any routing, addi
 
 ## Everything Else
 
-If you have further questions, check out the documentation for agents in [`.github/copilot-instructions.md`](.github/copilot-instructions.md). There are multiple symlinks to this file for various agents.
+If you have further questions, just contact Dave. I'm more than happy to help.
