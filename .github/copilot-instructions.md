@@ -97,7 +97,7 @@ Always use `bun` for package management and script execution:
 ## Git & Deployment
 
 - Work in branches named `username/purpose` (e.g., `daveio/fix-header`)
-- **ALWAYS** sign commits (use SSH key signing)
+- Please sign your commits (SSH key signing recommended)
 - Two PR approvals required for merge to `main`
 - Deployment is automatic via GitHub Actions
 - Each branch gets its own `workers.dev` URL for testing
