@@ -109,7 +109,7 @@ Always use `bun` for package management and script execution:
 - **DON'T** use `any` in TypeScript
 - **DON'T** commit without running linters: `bun run lint:fix`
 - **DON'T** use `npm` or `yarn` - always use `bun`
-- **DON'T** force push or rebase (branch protection prevents this)
+- **DON'T** force-push to protected branches like `main`; avoid rebasing shared branches (branch protection on `main` helps enforce this)
 
 ## Special Considerations
 
