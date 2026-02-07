@@ -76,7 +76,7 @@ Always use `bun` for package management and script execution:
 
 - Use Drizzle ORM for database operations
 - Database is Cloudflare D1 (SQLite)
-- Migrations are in `drizzle/migrations/`
+- Migrations are in `drizzle/`
 - Run migrations: `bun run db:migrate`
 
 ## Testing
