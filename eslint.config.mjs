@@ -2,5 +2,5 @@
 import withNuxt from "./.nuxt/eslint.config.mjs";
 
 export default withNuxt({
-  ignores: ["worker-configuration.d.ts"],
+  ignores: ["worker-configuration.d.ts", "drizzle/relations.ts", "drizzle/schema.ts"],
 });

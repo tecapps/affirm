@@ -14,6 +14,7 @@
       "binding": "DB",
       "database_id": "cb7d337c-9e00-40e2-b597-00d7b8577409",
       "database_name": "affirm",
+      "migrations_dir": "./drizzle",
     },
   ],
   "images": {

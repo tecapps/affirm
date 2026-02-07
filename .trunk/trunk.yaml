@@ -39,6 +39,10 @@ lint:
       paths:
         - env.d.ts
         - worker-configuration.d.ts
+    - linters:
+        - eslint
+      paths:
+        - drizzle/**
 actions:
   definitions:
     - id: bun-install
