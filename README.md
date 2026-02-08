@@ -103,6 +103,8 @@ This project follows the **Nuxt 4** directory structure (source in `app/`).
   - **`assets/`**: CSS and static assets (Tailwind entry point).
 - **`server/`**: Nitro server backend.
   - **`api/`**: API endpoints (e.g., `/api/hello`).
+  - **`database/`**: Drizzle schema and migrations.
+  - **`utils/`**: Auto-imported server utilities (e.g., `useDB`).
 - **`shared/`**: Code shared between client and server.
 - **`public/`**: Static files served at root (favicon, robots.txt).
 

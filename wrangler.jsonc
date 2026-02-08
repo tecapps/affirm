@@ -14,6 +14,7 @@
       "binding": "DB",
       "database_id": "cb7d337c-9e00-40e2-b597-00d7b8577409",
       "database_name": "affirm",
+      "migrations_dir": "server/database/migrations",
     },
   ],
   "images": {
@@ -42,4 +43,18 @@
     "binding": "CF_VERSION_METADATA",
   },
   "workers_dev": true,
+  // D1 bindings are non-inheritable — staging must redeclare its own d1_databases.
+  "env": {
+    "staging": {
+      "name": "affirm-staging",
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_id": "1bb3778c-e922-4edc-8f86-dd25ce217b33",
+          "database_name": "affirm-staging",
+          "migrations_dir": "server/database/migrations",
+        },
+      ],
+    },
+  },
 }
