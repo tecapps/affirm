@@ -23,7 +23,7 @@ This document outlines the development workflow, commands, and patterns for work
 ### Database (Drizzle & D1)
 
 - **Generate Migrations**: `bun run db:generate` (Run after changing `server/database/schema.ts`)
-- **Migrate Local**: `bun run db:migrate:local` (Applies migrations to local D1 instance)
+- **Migrate Local**: `bun run db:migrate` (Applies migrations to local D1 instance)
 - **Migrate Staging**: `bun run db:migrate:staging` (Applies to `affirm-staging` DB)
 - **Migrate Production**: `bun run db:migrate:prod` (Applies to `affirm` DB)
 - **Drizzle Studio**:
