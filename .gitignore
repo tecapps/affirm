@@ -40,9 +40,3 @@ logs
 # Gemini
 .gemini/
 
-# AI context
-AGENTS.md
-CLAUDE.md
-GEMINI.md
-WARP.md
-.github/copilot-instructions.md
