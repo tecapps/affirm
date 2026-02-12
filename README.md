@@ -1,6 +1,6 @@
 # `affirm`
 
-![CI status](https://github.com/tecapps/affirm/actions/workflows/ci.yaml/badge.svg) ![DevSkim status](https://github.com/tecapps/affirm/actions/workflows/devskim.yaml/badge.svg)
+![CI status](https://github.com/tecapps/affirm/actions/workflows/ci.yaml/badge.svg) ![Deploy status](https://github.com/tecapps/affirm/actions/workflows/deploy.yaml/badge.svg) ![DevSkim status](https://github.com/tecapps/affirm/actions/workflows/devskim.yaml/badge.svg)
 
 Your first port of call should be the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
 
@@ -80,9 +80,19 @@ This repository hosts a **Nuxt 4** web application deployed to **Cloudflare Work
 Run these commands with `bun`.
 
 - **Install dependencies**: `bun install` (or `bun run postinstall` to setup Trunk)
-- **Development Server**: `bun run dev` (starts Nuxt dev server)
-- **Build**: `bun run build` (builds for Cloudflare)
-- **Deploy**: `bun run deploy` (deploys to Cloudflare via Wrangler)
+- **Development Server**: `bun run dev` (starts Nuxt dev server with local D1)
+- **Build**:
+  - `bun run build` (builds for production — uses `--envName=production`)
+  - `bun run build:staging` (builds for staging — uses `--envName=staging`)
+- **Deploy** (prefer CI — see [Deployment](#deployment)):
+  - `bun run deploy` (build + deploy to production)
+  - `bun run deploy:staging` (build staging + upload non-promoted version)
+- **Database**:
+  - `bun run db:generate` (generate migrations after schema changes)
+  - `bun run db:migrate` (apply migrations to local D1)
+  - `bun run db:migrate:staging` (apply migrations to staging D1)
+  - `bun run db:migrate:prod` (apply migrations to production D1)
+  - `bun run db:studio:staging` / `bun run db:studio:prod` (Drizzle Studio)
 - **Lint & Format**:
   - `bun run lint:fix` (Run all linters and fix issues)
   - `bun run format` (Format code with Prettier and Trunk)
@@ -139,16 +149,54 @@ This project follows the **Nuxt 4** directory structure (source in `app/`).
   });
   ```
 
+### 🗄️ Database (D1)
+
+The app uses Cloudflare D1 (SQLite) with Drizzle ORM. There is one worker (`affirm`) and two D1 databases:
+
+| Database         | Purpose              | Used by                        |
+| ---------------- | -------------------- | ------------------------------ |
+| `affirm`         | Production data      | Promoted (live) worker version |
+| `affirm-staging` | Staging/preview data | Non-promoted worker versions   |
+
+#### Environment configuration
+
+D1 bindings are configured in `nuxt.config.ts` using Nuxt's `$env` overrides, **not** in `wrangler.jsonc`. This is because Nitro's `deployConfig: true` generates a redirected wrangler config at build time, and Wrangler rejects redirected configs containing `env` blocks. The `$env` mechanism builds a flat config targeting exactly one database.
+
+- `bun run build` → production D1 binding (`--envName=production`)
+- `bun run build:staging` → staging D1 binding (`--envName=staging`)
+- `bun run dev` → local D1 via `wrangler.dev.jsonc` (a separate config read by the dev server only)
+
+> [!WARNING]
+> Every build **must** specify an `--envName`. A build without one produces no D1 binding. The `build` and `build:staging` scripts handle this automatically.
+
+#### Schema changes
+
+1. Edit `server/database/schema.ts`
+2. Run `bun run db:generate` to create a migration
+3. Run `bun run db:migrate` to apply it locally
+4. Commit the migration files — CI handles staging/production migrations on deploy
+
+#### Why two wrangler configs?
+
+| File                 | Used by                                   | Contains D1?                   |
+| -------------------- | ----------------------------------------- | ------------------------------ |
+| `wrangler.jsonc`     | Nitro build (generates output config)     | No — D1 is in `nuxt.config.ts` |
+| `wrangler.dev.jsonc` | Dev server (`bun dev`) + local migrations | Yes — local D1 binding         |
+
+This split exists because `defu` (the merge library used by both Nuxt and Nitro) **concatenates arrays**. If D1 were in both `wrangler.jsonc` and `nuxt.config.ts`, the build output would contain duplicate bindings.
+
 ### 🛠 Tooling & Configuration
 
 - **Trunk**: Manages linting and formatting tools. Use `bun run lint:fix` to ensure compliance.
-- **Wrangler**: Handles Cloudflare deployment. Configured in `wrangler.jsonc`.
-- **Nuxt Config**: Located in `nuxt.config.ts`.
+- **Wrangler**: Handles Cloudflare deployment. Non-D1 config in `wrangler.jsonc`; D1 bindings in `nuxt.config.ts`.
+- **Nuxt Config**: Located in `nuxt.config.ts`. D1 environment overrides use the `$env` key.
 - **TypeScript**: Strict mode is enabled. Ensure types are valid.
 
 ### ⚠️ Gotchas
 
 - **Nuxt 4**: This project uses Nuxt 4. Nuxt 3 documentation might differ significantly (e.g., `app/` directory usage).
+- **D1 in nuxt.config, not wrangler.jsonc**: See [Database](#-database-d1) above. Do not add `d1_databases` to `wrangler.jsonc`.
+- **Always use `--envName`**: Bare `nuxt build` produces no D1 binding. Use the `build` / `build:staging` scripts.
 
 ## Production
 
@@ -167,9 +215,41 @@ bun preview
 
 ## Deployment
 
-Deployment is **automatic**. Every branch gets its own `workers.dev` URL; in fact, every **commit** does. There's an unstable per-commit URL, a stable "tip of the branch" URL, and the "production" URL at <https://affirm.transequitycoalition-org.workers.dev>.
+Deployment is **automatic** via GitHub Actions. There is one Cloudflare Worker (`affirm`) with two D1 databases (production and staging).
 
-Check out the jobs which run on your commit (click the status indicator) to get URLs.
+### CI workflows
+
+| Workflow   | Trigger              | What happens                                                      |
+| ---------- | -------------------- | ----------------------------------------------------------------- |
+| **ci**     | All pushes and PRs   | Lint, typecheck, build check                                      |
+| **deploy** | Push to `staging`    | Migrate staging D1 → build staging → upload non-promoted version  |
+| **deploy** | Push to `production` | Migrate production D1 → build production → promote version (live) |
+| **deploy** | PR to `staging`      | Build staging → upload non-promoted version → comment preview URL |
+
+### How it works
+
+The `affirm` worker uses Cloudflare's [worker versioning](https://developers.cloudflare.com/workers/configuration/versions-and-deployments/). Each version carries its own D1 binding:
+
+- **`wrangler deploy`** (production): Promotes the version — it receives live traffic and uses the production D1.
+- **`wrangler versions upload`** (staging/preview): Creates a non-promoted version accessible only via its preview URL, using the staging D1.
+
+Every commit to a PR gets a preview URL posted as a PR comment. Preview versions read/write the staging database; no migrations are run for previews.
+
+### Required setup
+
+Add the `CLOUDFLARE_API_TOKEN` secret to the GitHub repo (Settings → Secrets → Actions). Optionally, create `staging` and `production` [environments](https://docs.github.com/en/actions/deployment/targeting-different-environments/using-environments-for-deployment) to enable protection rules (e.g., required reviewers for production).
+
+### Manual deployment
+
+If you need to deploy outside of CI:
+
+```bash
+# Production: build + promote
+bun run deploy
+
+# Staging: build + upload non-promoted version
+bun run deploy:staging
+```
 
 Eventually, we'll point a domain. Currently we don't configure any routing, adding a domain is a simple enough change to [`wrangler.jsonc`](wrangler.jsonc). If someone else handles it, remember to point at `www.domain.tld` as well as the bare `domain.tld`.
 

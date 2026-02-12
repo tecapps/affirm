@@ -1,0 +1,14 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_id": "local-dev",
+      "database_name": "affirm-local",
+      "migrations_dir": "server/database/migrations",
+    },
+  ],
+  "images": {
+    "binding": "IMAGES",
+  },
+}
