@@ -10,6 +10,7 @@ This document outlines the development workflow, commands, and patterns for work
 - **Package Manager**: Bun
 - **Styling**: Tailwind CSS v4 + DaisyUI
 - **Tooling**: Trunk (lint/format), Vitest (testing), Playwright (e2e)
+- **Deployment**: Cloudflare Workers Builds (CI/CD triggered on push)
 
 ## Essential Commands
 
@@ -24,8 +25,8 @@ This document outlines the development workflow, commands, and patterns for work
 
 - **Generate Migrations**: `bun run db:generate` (Run after changing `server/database/schema.ts`)
 - **Migrate Local**: `bun run db:migrate` (Applies migrations to local D1 instance)
-- **Migrate Staging**: `bun run db:migrate:staging` (Applies to `affirm-staging` DB)
-- **Migrate Production**: `bun run db:migrate:prod` (Applies to `affirm` DB)
+- **Migrate Staging**: `bun run db:migrate:staging` (Applies to `affirm-staging` DB via `wrangler.staging.jsonc`)
+- **Migrate Production**: `bun run db:migrate:prod` (Applies to `affirm` DB via `wrangler.jsonc`)
 - **Drizzle Studio**:
   - Staging: `bun run db:studio:staging`
   - Production: `bun run db:studio:prod`
@@ -39,8 +40,16 @@ This document outlines the development workflow, commands, and patterns for work
 
 ### Deployment
 
-- **Deploy to Production**: `bun run deploy`
-- **Deploy to Staging**: `bun run deploy:nonprod` (Uploads versions without immediate promotion)
+Deployment is handled by **Cloudflare Workers Builds** — there is no GitHub Actions deploy workflow.
+
+- Pushing to `staging` triggers a build+deploy of the `affirm-staging` Worker.
+- Pushing to `production` triggers a build+deploy of the `affirm` Worker.
+- PRs targeting `staging` get preview versions uploaded to `affirm-staging`.
+
+For manual/local deploys (rarely needed):
+
+- **Deploy to Production**: `bun run deploy` (builds + `wrangler deploy -c wrangler.jsonc`)
+- **Deploy to Staging**: `bun run deploy:staging` (builds + `wrangler versions upload -c wrangler.staging.jsonc`)
 
 ## Code Structure
 
@@ -82,13 +91,17 @@ export default defineEventHandler(async (event) => {
 
 ## Configuration
 
-- **`nuxt.config.ts`**: Main Nuxt configuration.
-- **`wrangler.jsonc`**: Cloudflare Workers configuration. Defines `DB` bindings for `prod` and `staging` environments.
-- **`drizzle.config.ts`**: Drizzle Kit configuration.
+- **`wrangler.jsonc`**: Production Cloudflare Workers config. Includes the production D1 binding (`affirm`).
+- **`wrangler.staging.jsonc`**: Staging Cloudflare Workers config. Includes the staging D1 binding (`affirm-staging`).
+- **`wrangler.dev.jsonc`**: Local dev Cloudflare Workers config. Used by `bun run dev` and local migrations.
+- **`nuxt.config.ts`**: Main Nuxt configuration. Uses `$env` to inject the correct D1 binding at build time.
+- **`drizzle.config.ts`**: Drizzle Kit configuration (for `db:push` and `db:studio` commands).
 
 ## Gotchas & Guidelines
 
-1. **Environment Variables**: Managed via `wrangler.jsonc` bindings for runtime. For local dev, `.dev.vars` is used.
-2. **Migrations**: Always run `bun run db:generate` after modifying schema. Do not modify SQL files manually.
+1. **Environment Variables**: Managed via wrangler config bindings for runtime. For local dev, `.dev.vars` is used.
+2. **Migrations**: Always run `bun run db:generate` after modifying schema. Do not modify SQL files manually. Remote migrations use the D1 binding from the appropriate wrangler config file.
 3. **Bindings**: The application relies on Cloudflare bindings (`DB`, `ASSETS`). Ensure `bun run dev` is used to properly proxy these during development.
 4. **Imports**: Use `~` alias for project root (e.g., `~/server/utils/db`).
+5. **Wrangler Configs**: Each environment has its own wrangler config. Migration and deploy scripts use `-c <config>` to target the right D1 database. Never pass `--database-id` to wrangler — it's not a valid flag for `d1 migrations apply`.
+6. **Workers Builds**: Deployment is handled by Cloudflare Workers Builds, not GitHub Actions. The `ci.yaml` workflow only runs lint/typecheck/build checks.
