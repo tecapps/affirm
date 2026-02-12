@@ -43,7 +43,7 @@
     "build:staging": "bun run nuxt build --envName=staging",
     "deploy": "bun run-s build deploy:wrangler",
     "deploy:staging": "bun run-s build:staging deploy:nonprod:wrangler",
-    "deploy:nonprod": "bun run-s build deploy:nonprod:wrangler",
+    "deploy:nonprod": "bun run-s build:staging deploy:nonprod:wrangler",
     "deploy:nonprod:wrangler": "bun run wrangler versions upload",
     "deploy:wrangler": "bun run wrangler deploy",
     "dev": "bun run nuxt dev",
