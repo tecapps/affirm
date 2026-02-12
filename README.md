@@ -17,7 +17,7 @@ with [DaisyUI](https://daisyui.com/). This gives us a lot of flexibility while s
 speed up development.
 
 The benefit of [DaisyUI](https://daisyui.com/) is that they don't dick about by having a "pro" version. The open-source
-version of DaisyUI is it.
+version of DaisyUI is the full package.
 
 I'm not a frontend developer but I'd encourage use of the [Catppuccin](https://github.com/catppuccin) palette. There are
 dedicated packages
