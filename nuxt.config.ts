@@ -19,7 +19,7 @@ export default defineNuxtConfig({
     },
   },
   vite: {
-    plugins: [tailwindcss() as unknown as undefined],
+    plugins: [tailwindcss()],
   },
   modules: [
     "@nuxt/a11y",
