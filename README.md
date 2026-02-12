@@ -175,7 +175,7 @@ This project follows the **Nuxt 4** directory structure (source in `app/`).
   });
   ```
 
-### 🗄️ D1 Database
+### Database
 
 The app uses Cloudflare D1 (SQLite) with Drizzle ORM. There is one worker (`affirm`) and two D1 databases:
 
@@ -225,7 +225,7 @@ both `wrangler.jsonc` and `nuxt.config.ts`, the build output would contain dupli
 ### ⚠️ Gotchas
 
 - **Nuxt 4**: This project uses Nuxt 4. Nuxt 3 documentation might differ significantly (e.g., `app/` directory usage).
-- **D1 in nuxt.config, not wrangler.jsonc**: See [Database](#-d1-database) above. Do not add `d1_databases` to
+- **D1 in nuxt.config, not wrangler.jsonc**: See [Database](#database) above. Do not add `d1_databases` to
   `wrangler.jsonc`.
 - **Always use `--envName`**: Bare `nuxt build` produces no D1 binding. Use the `build` / `build:staging` scripts.
 
