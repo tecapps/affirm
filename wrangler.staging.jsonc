@@ -10,6 +10,7 @@
     "directory": "./.output/public/",
   },
   "compatibility_date": "2026-02-01",
+  "compatibility_flags": ["nodejs_compat", "no_nodejs_compat_v2"],
   "d1_databases": [
     {
       "binding": "DB",
