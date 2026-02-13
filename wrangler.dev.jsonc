@@ -1,7 +1,4 @@
-/**
- * For more details on how to configure Wrangler, refer to:
- * https://developers.cloudflare.com/workers/wrangler/configuration/
- */ {
+{
   "$schema": "node_modules/wrangler/config-schema.json",
   "account_id": "0d5d3a1ef1df71581f0d4ba61c3ea50f",
   "assets": {
@@ -16,31 +13,17 @@
   "keep_names": true,
   "logpush": false,
   "main": "./.output/server/index.mjs",
-  "minify": true,
+  "minify": false,
   "name": "affirm",
-  "observability": {
-    "enabled": true,
-    "logs": {
-      "enabled": true,
-      "head_sampling_rate": 1,
-      "invocation_logs": true,
-    },
-  },
-  "placement": {
-    "mode": "smart",
-  },
-  "preview_urls": true,
-  "send_metrics": true,
-  "upload_source_maps": true,
   "version_metadata": {
     "binding": "CF_VERSION_METADATA",
   },
-  "workers_dev": true,
+  "workers_dev": false,
   "d1_databases": [
     {
       "binding": "DB",
-      "database_id": "cb7d337c-9e00-40e2-b597-00d7b8577409",
-      "database_name": "affirm",
+      "database_id": "local-dev",
+      "database_name": "affirm-local",
       "migrations_dir": "server/database/migrations",
     },
   ],

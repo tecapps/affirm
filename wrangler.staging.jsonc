@@ -1,4 +1,5 @@
 /**
+ * Staging environment — deployed as the `affirm-staging` Worker.
  * For more details on how to configure Wrangler, refer to:
  * https://developers.cloudflare.com/workers/wrangler/configuration/
  */ {
@@ -10,14 +11,22 @@
   },
   "compatibility_date": "2026-02-01",
   "compatibility_flags": ["nodejs_compat", "no_nodejs_compat_v2"],
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_id": "1bb3778c-e922-4edc-8f86-dd25ce217b33",
+      "database_name": "affirm-staging",
+      "migrations_dir": "server/database/migrations",
+    },
+  ],
   "images": {
     "binding": "IMAGES",
   },
   "keep_names": true,
   "logpush": false,
   "main": "./.output/server/index.mjs",
-  "minify": true,
-  "name": "affirm",
+  "minify": false,
+  "name": "affirm-staging",
   "observability": {
     "enabled": true,
     "logs": {
@@ -36,12 +45,4 @@
     "binding": "CF_VERSION_METADATA",
   },
   "workers_dev": true,
-  "d1_databases": [
-    {
-      "binding": "DB",
-      "database_id": "cb7d337c-9e00-40e2-b597-00d7b8577409",
-      "database_name": "affirm",
-      "migrations_dir": "server/database/migrations",
-    },
-  ],
 }
