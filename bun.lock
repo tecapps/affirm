@@ -38,7 +38,7 @@
         "playwright": "^1.58.2",
         "prettier": "^3.8.1",
         "vitest": "^4.0.18",
-        "wrangler": "^4.65.0",
+        "wrangler": "^4.66.0",
       },
     },
   },
