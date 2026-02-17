@@ -290,7 +290,7 @@ flowchart TD
 
 Affirm follows the **Nuxt 4** directory convention. The key difference from Nuxt 3 is that application source code lives under the `app/` directory, providing a clear separation between client-side and server-side code.
 
-```
+```plaintext
 affirm/
 ├── app/                        # 🖥️ Vue application source
 │   ├── assets/                 #    CSS, fonts, images (Tailwind entry point)
