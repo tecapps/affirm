@@ -11,4 +11,4 @@ node = { version = "24.13.1" }
 rust = { version = "1.93.0" }
 
 [tasks]
-'start' = { run = "bun dev", description = "Start the development server" }
+start = "bun dev"
