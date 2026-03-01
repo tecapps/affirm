@@ -6,30 +6,30 @@
   },
   "dependencies": {
     "@nuxt/a11y": "1.0.0-alpha.1",
-    "@nuxt/content": "3.11.2",
-    "@nuxt/eslint": "1.15.1",
+    "@nuxt/content": "3.12.0",
+    "@nuxt/eslint": "1.15.2",
     "@nuxt/fonts": "0.14.0",
     "@nuxt/hints": "1.0.0-alpha.6",
     "@nuxt/icon": "2.2.1",
     "@nuxt/image": "2.0.0",
     "@nuxt/scripts": "0.13.2",
-    "@tailwindcss/vite": "^4.1.18",
-    "@unhead/vue": "^2.1.4",
+    "@tailwindcss/vite": "^4.2.1",
+    "@unhead/vue": "^2.1.9",
     "better-sqlite3": "^12.6.2",
-    "daisyui": "^5.5.18",
+    "daisyui": "^5.5.19",
     "drizzle-orm": "^0.45.1",
-    "eslint": "^10.0.0",
+    "eslint": "^10.0.2",
     "nuxt": "^4.3.1",
-    "tailwindcss": "^4.1.18",
-    "vue": "^3.5.28",
-    "vue-router": "^5.0.2"
+    "tailwindcss": "^4.2.1",
+    "vue": "^3.5.29",
+    "vue-router": "^5.0.3"
   },
   "devDependencies": {
     "@catppuccin/daisyui": "^2.1.1",
     "@iconify-json/heroicons": "^1.2.3",
     "@iconify-json/logos": "^1.2.10",
     "@trunkio/launcher": "^1.3.4",
-    "@types/node": "^25.2.3",
+    "@types/node": "^25.3.3",
     "drizzle-kit": "^0.31.9",
     "nitro-cloudflare-dev": "^0.2.2",
     "nitropack": "^2.13.1",
@@ -38,14 +38,14 @@
     "playwright": "^1.58.2",
     "prettier": "^3.8.1",
     "vitest": "^4.0.18",
-    "wrangler": "^4.66.0"
+    "wrangler": "^4.69.0"
   },
   "engines": {
-    "bun": "^1.3.9",
-    "node": "^24.13.1"
+    "bun": "^1.3.10",
+    "node": "^24.14.0"
   },
   "name": "affirm",
-  "packageManager": "bun@1.3.9",
+  "packageManager": "bun@1.3.10",
   "private": true,
   "scripts": {
     "build": "bun run nuxt build --envName=production",
