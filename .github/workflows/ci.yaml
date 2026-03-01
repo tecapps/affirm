@@ -12,7 +12,7 @@ jobs:
       - name: bun
         uses: oven-sh/setup-bun@3d267786b128fe76c2f16a390aa2448b815359f3
         with:
-          bun-version: 1.3.9
+          bun-version: 1.3.10
       - name: install
         run: bun install
       - name: trunk
