@@ -1,0 +1,1869 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Affirm — Developer Setup Guide</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* ──────────────────────────────────────────────
+     Catppuccin Mocha palette — mirrors the app
+  ────────────────────────────────────────────── */
+      :root {
+        --ctp-rosewater: #f5e0dc;
+        --ctp-flamingo: #f2cdcd;
+        --ctp-pink: #f5c2e7;
+        --ctp-mauve: #cba6f7;
+        --ctp-red: #f38ba8;
+        --ctp-maroon: #eba0ac;
+        --ctp-peach: #fab387;
+        --ctp-yellow: #f9e2af;
+        --ctp-green: #a6e3a1;
+        --ctp-teal: #94e2d5;
+        --ctp-sky: #89dceb;
+        --ctp-sapphire: #74c7ec;
+        --ctp-blue: #89b4fa;
+        --ctp-lavender: #b4befe;
+        --ctp-text: #cdd6f4;
+        --ctp-subtext1: #bac2de;
+        --ctp-subtext0: #a6adc8;
+        --ctp-overlay2: #9399b2;
+        --ctp-overlay1: #7f849c;
+        --ctp-overlay0: #6c7086;
+        --ctp-surface2: #585b70;
+        --ctp-surface1: #45475a;
+        --ctp-surface0: #313244;
+        --ctp-base: #1e1e2e;
+        --ctp-mantle: #181825;
+        --ctp-crust: #11111b;
+
+        --font-display: "Outfit", sans-serif;
+        --font-mono: "JetBrains Mono", monospace;
+      }
+
+      /* ──────────────────────────────────────────────
+     Reset & base
+  ────────────────────────────────────────────── */
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      html {
+        scroll-behavior: smooth;
+        scrollbar-color: var(--ctp-surface2) var(--ctp-crust);
+      }
+
+      body {
+        font-family: var(--font-display);
+        font-weight: 400;
+        background: var(--ctp-crust);
+        color: var(--ctp-text);
+        line-height: 1.7;
+        min-height: 100vh;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      /* ──────────────────────────────────────────────
+     Layout shell
+  ────────────────────────────────────────────── */
+      .page-wrapper {
+        max-width: 960px;
+        margin: 0 auto;
+        padding: 2rem 1.5rem 6rem;
+      }
+
+      /* ──────────────────────────────────────────────
+     Hero
+  ────────────────────────────────────────────── */
+      .hero {
+        text-align: center;
+        padding: 4rem 1rem 3rem;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .hero::before {
+        content: "";
+        position: absolute;
+        top: -60%;
+        left: -20%;
+        width: 140%;
+        height: 200%;
+        background:
+          radial-gradient(ellipse at 30% 50%, rgba(203, 166, 247, 0.08) 0%, transparent 60%),
+          radial-gradient(ellipse at 70% 40%, rgba(137, 180, 250, 0.06) 0%, transparent 50%);
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      .hero > * {
+        position: relative;
+        z-index: 1;
+      }
+
+      .hero-label {
+        display: inline-block;
+        font-family: var(--font-mono);
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--ctp-mauve);
+        border: 1px solid var(--ctp-surface1);
+        border-radius: 999px;
+        padding: 0.35rem 1rem;
+        margin-bottom: 1.5rem;
+        background: var(--ctp-base);
+      }
+
+      .hero h1 {
+        font-size: clamp(2.4rem, 5vw, 3.6rem);
+        font-weight: 800;
+        letter-spacing: -0.03em;
+        line-height: 1.1;
+        background: linear-gradient(135deg, var(--ctp-text) 0%, var(--ctp-lavender) 50%, var(--ctp-mauve) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 0.75rem;
+      }
+
+      .hero p {
+        color: var(--ctp-subtext0);
+        font-size: 1.1rem;
+        max-width: 540px;
+        margin: 0 auto;
+      }
+
+      .hero-meta {
+        display: flex;
+        gap: 1.5rem;
+        justify-content: center;
+        margin-top: 1.5rem;
+        flex-wrap: wrap;
+      }
+
+      .hero-meta span {
+        font-family: var(--font-mono);
+        font-size: 0.78rem;
+        color: var(--ctp-overlay1);
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+      }
+
+      .hero-meta .dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        display: inline-block;
+      }
+
+      /* ──────────────────────────────────────────────
+     IDE Toggle (global)
+  ────────────────────────────────────────────── */
+      .ide-toggle-bar {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        background: var(--ctp-mantle);
+        border-bottom: 1px solid var(--ctp-surface0);
+        padding: 0.6rem 0;
+        display: flex;
+        justify-content: center;
+        gap: 0.5rem;
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+      }
+
+      .ide-btn {
+        font-family: var(--font-mono);
+        font-size: 0.8rem;
+        font-weight: 600;
+        border: 1px solid var(--ctp-surface1);
+        background: var(--ctp-base);
+        color: var(--ctp-subtext0);
+        padding: 0.45rem 1.2rem;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.45rem;
+      }
+
+      .ide-btn:hover {
+        border-color: var(--ctp-overlay0);
+        color: var(--ctp-text);
+      }
+
+      .ide-btn.active {
+        background: var(--ctp-surface0);
+        border-color: var(--ctp-mauve);
+        color: var(--ctp-mauve);
+        box-shadow: 0 0 12px rgba(203, 166, 247, 0.15);
+      }
+
+      .ide-btn .icon {
+        font-size: 1rem;
+      }
+
+      /* Conditional content */
+      .ide-vscode,
+      .ide-webstorm {
+        display: none;
+      }
+      body.show-vscode .ide-vscode {
+        display: block;
+      }
+      body.show-webstorm .ide-webstorm {
+        display: block;
+      }
+      .ide-both {
+        display: block;
+      }
+
+      /* ──────────────────────────────────────────────
+     Sections
+  ────────────────────────────────────────────── */
+      .section {
+        margin-top: 3.5rem;
+      }
+
+      .section-number {
+        font-family: var(--font-mono);
+        font-size: 0.7rem;
+        font-weight: 700;
+        color: var(--ctp-mauve);
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        margin-bottom: 0.4rem;
+        display: block;
+      }
+
+      .section h2 {
+        font-size: 1.7rem;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        color: var(--ctp-text);
+        margin-bottom: 0.4rem;
+      }
+
+      .section > .section-desc {
+        color: var(--ctp-subtext0);
+        font-size: 0.95rem;
+        margin-bottom: 1.5rem;
+        max-width: 700px;
+      }
+
+      .section h3 {
+        font-size: 1.15rem;
+        font-weight: 600;
+        color: var(--ctp-subtext1);
+        margin: 2rem 0 0.8rem;
+      }
+
+      .section p {
+        margin-bottom: 1rem;
+      }
+
+      /* ──────────────────────────────────────────────
+     Cards
+  ────────────────────────────────────────────── */
+      .card {
+        background: var(--ctp-base);
+        border: 1px solid var(--ctp-surface0);
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+      }
+
+      .card-header {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        margin-bottom: 0.75rem;
+      }
+
+      .card-header .badge {
+        font-family: var(--font-mono);
+        font-size: 0.65rem;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        padding: 0.2rem 0.6rem;
+        border-radius: 6px;
+        background: var(--ctp-surface0);
+        color: var(--ctp-overlay2);
+      }
+
+      .card-header .badge.required {
+        background: rgba(243, 139, 168, 0.12);
+        color: var(--ctp-red);
+      }
+
+      .card-header .badge.recommended {
+        background: rgba(166, 227, 161, 0.1);
+        color: var(--ctp-green);
+      }
+
+      .card-header .badge.optional {
+        background: rgba(249, 226, 175, 0.1);
+        color: var(--ctp-yellow);
+      }
+
+      .card h4 {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--ctp-text);
+      }
+
+      .card p,
+      .card li {
+        color: var(--ctp-subtext0);
+        font-size: 0.9rem;
+      }
+
+      .card a {
+        color: var(--ctp-blue);
+        text-decoration: none;
+        border-bottom: 1px solid rgba(137, 180, 250, 0.3);
+        transition: border-color 0.2s;
+      }
+
+      .card a:hover {
+        border-color: var(--ctp-blue);
+      }
+
+      /* ──────────────────────────────────────────────
+     Code blocks
+  ────────────────────────────────────────────── */
+      pre {
+        background: var(--ctp-mantle);
+        border: 1px solid var(--ctp-surface0);
+        border-radius: 10px;
+        padding: 1.2rem 1.4rem;
+        overflow-x: auto;
+        font-family: var(--font-mono);
+        font-size: 0.82rem;
+        line-height: 1.65;
+        color: var(--ctp-text);
+        margin-bottom: 1rem;
+        position: relative;
+      }
+
+      pre .comment {
+        color: var(--ctp-overlay0);
+      }
+      pre .cmd {
+        color: var(--ctp-green);
+      }
+      pre .flag {
+        color: var(--ctp-peach);
+      }
+      pre .string {
+        color: var(--ctp-yellow);
+      }
+      pre .url {
+        color: var(--ctp-sapphire);
+      }
+      pre .prompt {
+        color: var(--ctp-overlay1);
+        user-select: none;
+      }
+
+      .copy-btn {
+        position: absolute;
+        top: 0.6rem;
+        right: 0.6rem;
+        font-family: var(--font-mono);
+        font-size: 0.65rem;
+        font-weight: 600;
+        background: var(--ctp-surface0);
+        border: 1px solid var(--ctp-surface1);
+        color: var(--ctp-overlay2);
+        padding: 0.25rem 0.6rem;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.15s;
+      }
+      .copy-btn:hover {
+        background: var(--ctp-surface1);
+        color: var(--ctp-text);
+      }
+      .copy-btn.copied {
+        color: var(--ctp-green);
+        border-color: var(--ctp-green);
+      }
+
+      /* ──────────────────────────────────────────────
+     Callout boxes
+  ────────────────────────────────────────────── */
+      .callout {
+        border-radius: 10px;
+        padding: 1rem 1.25rem;
+        margin-bottom: 1rem;
+        font-size: 0.88rem;
+        line-height: 1.6;
+        display: flex;
+        gap: 0.75rem;
+        align-items: flex-start;
+      }
+
+      .callout .icon {
+        font-size: 1.2rem;
+        flex-shrink: 0;
+        margin-top: 0.1rem;
+      }
+
+      .callout.tip {
+        background: rgba(166, 227, 161, 0.06);
+        border: 1px solid rgba(166, 227, 161, 0.15);
+        color: var(--ctp-green);
+      }
+
+      .callout.warning {
+        background: rgba(249, 226, 175, 0.06);
+        border: 1px solid rgba(249, 226, 175, 0.15);
+        color: var(--ctp-yellow);
+      }
+
+      .callout.important {
+        background: rgba(243, 139, 168, 0.06);
+        border: 1px solid rgba(243, 139, 168, 0.15);
+        color: var(--ctp-red);
+      }
+
+      .callout.info {
+        background: rgba(137, 180, 250, 0.06);
+        border: 1px solid rgba(137, 180, 250, 0.15);
+        color: var(--ctp-blue);
+      }
+
+      .callout p {
+        margin: 0;
+      }
+      .callout code {
+        font-family: var(--font-mono);
+        font-size: 0.8rem;
+        background: rgba(255, 255, 255, 0.06);
+        padding: 0.1rem 0.35rem;
+        border-radius: 4px;
+      }
+
+      /* ──────────────────────────────────────────────
+     Directory tree diagram
+  ────────────────────────────────────────────── */
+      .tree {
+        font-family: var(--font-mono);
+        font-size: 0.78rem;
+        line-height: 1.9;
+        background: var(--ctp-mantle);
+        border: 1px solid var(--ctp-surface0);
+        border-radius: 10px;
+        padding: 1.2rem 1.4rem;
+        margin-bottom: 1rem;
+        overflow-x: auto;
+        color: var(--ctp-subtext0);
+        white-space: pre;
+      }
+
+      .tree .dir {
+        color: var(--ctp-blue);
+        font-weight: 600;
+      }
+      .tree .file {
+        color: var(--ctp-text);
+      }
+      .tree .desc {
+        color: var(--ctp-overlay0);
+      }
+      .tree .highlight {
+        color: var(--ctp-mauve);
+        font-weight: 600;
+      }
+
+      /* ──────────────────────────────────────────────
+     Steps / timeline
+  ────────────────────────────────────────────── */
+      .steps {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      .steps li {
+        position: relative;
+        padding-left: 2.4rem;
+        padding-bottom: 1.5rem;
+        border-left: 2px solid var(--ctp-surface1);
+        margin-left: 0.6rem;
+      }
+
+      .steps li:last-child {
+        border-left-color: transparent;
+        padding-bottom: 0;
+      }
+
+      .steps li::before {
+        content: attr(data-step);
+        position: absolute;
+        left: -0.75rem;
+        top: 0;
+        width: 1.5rem;
+        height: 1.5rem;
+        border-radius: 50%;
+        background: var(--ctp-surface0);
+        border: 2px solid var(--ctp-mauve);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: var(--font-mono);
+        font-size: 0.65rem;
+        font-weight: 700;
+        color: var(--ctp-mauve);
+      }
+
+      .steps li h4 {
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: var(--ctp-text);
+        margin-bottom: 0.35rem;
+      }
+
+      .steps li p,
+      .steps li pre {
+        font-size: 0.88rem;
+        color: var(--ctp-subtext0);
+      }
+
+      /* ──────────────────────────────────────────────
+     Collapsible details
+  ────────────────────────────────────────────── */
+      details {
+        background: var(--ctp-base);
+        border: 1px solid var(--ctp-surface0);
+        border-radius: 10px;
+        margin-bottom: 1rem;
+        overflow: hidden;
+      }
+
+      details summary {
+        padding: 1rem 1.25rem;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 0.95rem;
+        color: var(--ctp-text);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        list-style: none;
+        user-select: none;
+        transition: background 0.15s;
+      }
+
+      details summary::-webkit-details-marker {
+        display: none;
+      }
+
+      details summary::before {
+        content: "▸";
+        font-family: var(--font-mono);
+        font-size: 0.8rem;
+        color: var(--ctp-overlay1);
+        transition: transform 0.2s;
+        display: inline-block;
+      }
+
+      details[open] summary::before {
+        transform: rotate(90deg);
+      }
+      details summary:hover {
+        background: var(--ctp-surface0);
+      }
+
+      details .details-content {
+        padding: 0 1.25rem 1.25rem;
+      }
+
+      details .details-content p {
+        font-size: 0.9rem;
+        color: var(--ctp-subtext0);
+      }
+
+      /* ──────────────────────────────────────────────
+     Architecture diagram (SVG-based)
+  ────────────────────────────────────────────── */
+      .diagram-wrapper {
+        background: var(--ctp-mantle);
+        border: 1px solid var(--ctp-surface0);
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+        overflow-x: auto;
+      }
+
+      .diagram-wrapper svg text {
+        font-family: var(--font-mono);
+      }
+
+      /* ──────────────────────────────────────────────
+     Extension grid
+  ────────────────────────────────────────────── */
+      .ext-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 0.75rem;
+        margin-bottom: 1rem;
+      }
+
+      .ext-card {
+        background: var(--ctp-base);
+        border: 1px solid var(--ctp-surface0);
+        border-radius: 10px;
+        padding: 1rem 1.15rem;
+        transition: border-color 0.2s;
+      }
+
+      .ext-card:hover {
+        border-color: var(--ctp-surface2);
+      }
+
+      .ext-card h5 {
+        font-size: 0.88rem;
+        font-weight: 600;
+        color: var(--ctp-text);
+        margin-bottom: 0.25rem;
+      }
+
+      .ext-card p {
+        font-size: 0.78rem;
+        color: var(--ctp-overlay2);
+        margin: 0;
+        line-height: 1.5;
+      }
+
+      .ext-card .ext-id {
+        font-family: var(--font-mono);
+        font-size: 0.7rem;
+        color: var(--ctp-overlay0);
+        margin-top: 0.35rem;
+        display: block;
+      }
+
+      /* ──────────────────────────────────────────────
+     Checklist
+  ────────────────────────────────────────────── */
+      .checklist {
+        list-style: none;
+        padding: 0;
+      }
+
+      .checklist li {
+        display: flex;
+        align-items: center;
+        gap: 0.65rem;
+        padding: 0.6rem 0;
+        border-bottom: 1px solid var(--ctp-surface0);
+        font-size: 0.9rem;
+        color: var(--ctp-subtext0);
+        cursor: pointer;
+        user-select: none;
+      }
+
+      .checklist li:last-child {
+        border-bottom: none;
+      }
+
+      .checklist li .check {
+        width: 1.2rem;
+        height: 1.2rem;
+        border: 2px solid var(--ctp-surface2);
+        border-radius: 5px;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s;
+        font-size: 0.7rem;
+      }
+
+      .checklist li.done .check {
+        background: var(--ctp-green);
+        border-color: var(--ctp-green);
+        color: var(--ctp-crust);
+      }
+
+      .checklist li.done {
+        color: var(--ctp-overlay0);
+        text-decoration: line-through;
+      }
+
+      .progress-bar {
+        width: 100%;
+        height: 6px;
+        background: var(--ctp-surface0);
+        border-radius: 3px;
+        margin-bottom: 1rem;
+        overflow: hidden;
+      }
+
+      .progress-bar .fill {
+        height: 100%;
+        background: linear-gradient(90deg, var(--ctp-mauve), var(--ctp-blue));
+        border-radius: 3px;
+        transition: width 0.3s ease;
+        width: 0%;
+      }
+
+      .progress-text {
+        font-family: var(--font-mono);
+        font-size: 0.72rem;
+        color: var(--ctp-overlay1);
+        margin-bottom: 0.5rem;
+        text-align: right;
+      }
+
+      /* ──────────────────────────────────────────────
+     Table of contents (side-scrolling)
+  ────────────────────────────────────────────── */
+      .toc {
+        display: flex;
+        gap: 0.5rem;
+        overflow-x: auto;
+        padding: 1rem 0;
+        margin-bottom: 2rem;
+        scrollbar-width: none;
+      }
+
+      .toc::-webkit-scrollbar {
+        display: none;
+      }
+
+      .toc a {
+        flex-shrink: 0;
+        font-family: var(--font-mono);
+        font-size: 0.72rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: var(--ctp-overlay1);
+        text-decoration: none;
+        padding: 0.4rem 0.85rem;
+        border-radius: 8px;
+        background: var(--ctp-base);
+        border: 1px solid var(--ctp-surface0);
+        transition: all 0.2s;
+        white-space: nowrap;
+      }
+
+      .toc a:hover {
+        color: var(--ctp-text);
+        border-color: var(--ctp-surface2);
+      }
+
+      /* ──────────────────────────────────────────────
+     Inline code
+  ────────────────────────────────────────────── */
+      code {
+        font-family: var(--font-mono);
+        font-size: 0.82em;
+        background: var(--ctp-surface0);
+        padding: 0.15rem 0.4rem;
+        border-radius: 5px;
+        color: var(--ctp-rosewater);
+      }
+
+      /* ──────────────────────────────────────────────
+     Comparison table
+  ────────────────────────────────────────────── */
+      .compare-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        font-size: 0.85rem;
+        background: var(--ctp-base);
+        border: 1px solid var(--ctp-surface0);
+        border-radius: 10px;
+        overflow: hidden;
+        margin-bottom: 1rem;
+      }
+
+      .compare-table th {
+        background: var(--ctp-mantle);
+        font-family: var(--font-mono);
+        font-size: 0.72rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--ctp-overlay2);
+        padding: 0.8rem 1rem;
+        text-align: left;
+        border-bottom: 1px solid var(--ctp-surface0);
+      }
+
+      .compare-table td {
+        padding: 0.7rem 1rem;
+        border-bottom: 1px solid var(--ctp-surface0);
+        color: var(--ctp-subtext0);
+      }
+
+      .compare-table tr:last-child td {
+        border-bottom: none;
+      }
+
+      /* ──────────────────────────────────────────────
+     Footer
+  ────────────────────────────────────────────── */
+      .footer {
+        text-align: center;
+        padding: 3rem 0 1rem;
+        font-family: var(--font-mono);
+        font-size: 0.72rem;
+        color: var(--ctp-overlay0);
+      }
+
+      .footer a {
+        color: var(--ctp-blue);
+        text-decoration: none;
+      }
+    </style>
+  </head>
+
+  <body class="show-vscode">
+    <!-- ═══════════════════════════════════════════════
+     IDE TOGGLE BAR (sticky)
+════════════════════════════════════════════════ -->
+    <div class="ide-toggle-bar">
+      <button class="ide-btn active" data-ide="vscode" onclick="setIDE('vscode')">
+        <span class="icon">⬡</span> VS Code
+      </button>
+      <button class="ide-btn" data-ide="webstorm" onclick="setIDE('webstorm')">
+        <span class="icon">⬢</span> WebStorm
+      </button>
+    </div>
+
+    <div class="page-wrapper">
+      <!-- ═══════════════════════════════════════════════
+     HERO
+════════════════════════════════════════════════ -->
+      <header class="hero">
+        <span class="hero-label">Developer Onboarding</span>
+        <h1>Getting Started with Affirm</h1>
+        <p>
+          Everything you need to clone, configure, and start contributing to the Affirm frontend — a Nuxt&nbsp;4
+          application deployed to Cloudflare Workers.
+        </p>
+        <div class="hero-meta">
+          <span><span class="dot" style="background: var(--ctp-green)"></span> Nuxt 4</span>
+          <span><span class="dot" style="background: var(--ctp-blue)"></span> Vue 3</span>
+          <span><span class="dot" style="background: var(--ctp-peach)"></span> Bun</span>
+          <span><span class="dot" style="background: var(--ctp-mauve)"></span> Tailwind v4</span>
+          <span><span class="dot" style="background: var(--ctp-yellow)"></span> DaisyUI</span>
+          <span><span class="dot" style="background: var(--ctp-teal)"></span> Cloudflare Workers</span>
+        </div>
+      </header>
+
+      <!-- ═══════════════════════════════════════════════
+     TABLE OF CONTENTS
+════════════════════════════════════════════════ -->
+      <nav class="toc">
+        <a href="#prereqs">Prerequisites</a>
+        <a href="#clone">Clone &amp; Install</a>
+        <a href="#ide-setup">IDE Setup</a>
+        <a href="#architecture">Architecture</a>
+        <a href="#dev-server">Dev Server</a>
+        <a href="#workflow">Git Workflow</a>
+        <a href="#commands">Commands</a>
+        <a href="#database">Database</a>
+        <a href="#gotchas">Gotchas</a>
+        <a href="#checklist">Checklist</a>
+      </nav>
+
+      <!-- ═══════════════════════════════════════════════
+     SECTION 1 — Prerequisites
+════════════════════════════════════════════════ -->
+      <section class="section" id="prereqs">
+        <span class="section-number">01 — Prerequisites</span>
+        <h2>What You'll Need</h2>
+        <p class="section-desc">
+          The project uses <code>mise</code> to manage tool versions. Once you trust the repo's <code>mise.toml</code>,
+          it installs everything automatically — including Bun, Node, and the Cloudflare CLI.
+        </p>
+
+        <div class="card">
+          <div class="card-header">
+            <h4>mise (tool version manager)</h4>
+            <span class="badge required">Required</span>
+          </div>
+          <p>
+            <code>mise</code> replaces nvm, fnm, and similar tools. It reads the repo's <code>mise.toml</code> and
+            installs the exact tool versions the project expects.
+          </p>
+          <pre><span class="comment"># macOS / Linux</span>
+<span class="cmd">curl</span> <span class="url">https://mise.run</span> | <span class="cmd">sh</span>
+
+<span class="comment"># Or via Homebrew</span>
+<span class="cmd">brew</span> install mise</pre>
+          <p>
+            See
+            <a href="https://mise.jdx.dev/getting-started.html" target="_blank">mise documentation</a>
+            for full installation options and shell integration.
+          </p>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h4>Git (with commit signing)</h4>
+            <span class="badge required">Required</span>
+          </div>
+          <p>
+            The project strongly encourages <strong>signed commits</strong>. You can sign with an SSH key — no GnuPG
+            needed.
+          </p>
+
+          <details>
+            <summary>How to set up SSH commit signing</summary>
+            <div class="details-content">
+              <pre><span class="comment"># Tell Git to sign with SSH</span>
+<span class="cmd">git</span> config <span class="flag">--global</span> gpg.format ssh
+
+<span class="comment"># Point to your SSH key</span>
+<span class="cmd">git</span> config <span class="flag">--global</span> user.signingkey <span class="string">~/.ssh/id_ed25519.pub</span>
+
+<span class="comment"># Sign all commits by default</span>
+<span class="cmd">git</span> config <span class="flag">--global</span> commit.gpgsign true</pre>
+              <p>
+                Then add the same public key to your GitHub account under
+                <strong>Settings → SSH and GPG keys → New SSH key</strong>
+                (select <em>Signing Key</em> as the type).
+              </p>
+            </div>
+          </details>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h4>GitHub Access</h4>
+            <span class="badge required">Required</span>
+          </div>
+          <p>
+            Ensure you have push access to
+            <a href="https://github.com/tecapps/affirm" target="_blank">tecapps/affirm</a>. If you can see the repo but
+            can't push, contact Dave.
+          </p>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════
+     SECTION 2 — Clone & Install
+════════════════════════════════════════════════ -->
+      <section class="section" id="clone">
+        <span class="section-number">02 — Clone &amp; Install</span>
+        <h2>Get the Code Running</h2>
+        <p class="section-desc">Three commands from zero to a working local dev environment.</p>
+
+        <ol class="steps">
+          <li data-step="1">
+            <h4>Clone the repository</h4>
+            <pre><span class="prompt">❯ </span><span class="cmd">git</span> clone <span class="url">git@github.com:tecapps/affirm.git</span>
+<span class="prompt">❯ </span><span class="cmd">cd</span> affirm</pre>
+          </li>
+          <li data-step="2">
+            <h4>Trust and install tools via mise</h4>
+            <p>
+              This reads <code>mise.toml</code> and installs Bun, Node, wrangler, and everything else the project needs.
+            </p>
+            <pre><span class="prompt">❯ </span><span class="cmd">mise</span> trust
+<span class="prompt">❯ </span><span class="cmd">mise</span> install</pre>
+          </li>
+          <li data-step="3">
+            <h4>Install dependencies</h4>
+            <pre><span class="prompt">❯ </span><span class="cmd">bun</span> install</pre>
+            <p>This also runs the <code>postinstall</code> hook to set up Trunk (the linter/formatter orchestrator).</p>
+          </li>
+        </ol>
+
+        <div class="callout tip">
+          <span class="icon">💡</span>
+          <p>
+            There are also <code>.tool-versions</code> and <code>.node-version</code> files for compatibility, but
+            <strong>mise.toml is the source of truth</strong> for local development.
+          </p>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════
+     SECTION 3 — IDE Setup
+════════════════════════════════════════════════ -->
+      <section class="section" id="ide-setup">
+        <span class="section-number">03 — IDE Setup</span>
+        <h2>Configure Your Editor</h2>
+        <p class="section-desc">
+          Specific guidance depending on your editor of choice. Toggle between them using the bar at the top of the
+          page.
+        </p>
+
+        <!-- VS Code ────────────────────────────────── -->
+        <div class="ide-vscode">
+          <h3>VS Code Setup</h3>
+          <p>
+            The repo includes a <code>.vscode/</code> directory with workspace recommendations. When you open the
+            project, VS Code should prompt you to install the recommended extensions.
+          </p>
+
+          <div class="callout info">
+            <span class="icon">ℹ️</span>
+            <p>
+              Check the Extensions sidebar → filter by
+              <strong>Recommended</strong> to see what the workspace suggests.
+            </p>
+          </div>
+
+          <h3>Essential Extensions</h3>
+          <div class="ext-grid">
+            <div class="ext-card">
+              <h5>Vue — Official</h5>
+              <p>Full language support for Vue 3 SFCs — syntax highlighting, type checking, intellisense.</p>
+              <span class="ext-id">Vue.volar</span>
+            </div>
+            <div class="ext-card">
+              <h5>Nuxtr</h5>
+              <p>Nuxt-specific tooling — file scaffolding, quick navigation between pages/layouts/components.</p>
+              <span class="ext-id">Nuxtr.nuxtr-vscode</span>
+            </div>
+            <div class="ext-card">
+              <h5>Tailwind CSS IntelliSense</h5>
+              <p>Autocomplete, linting, and hover previews for Tailwind utility classes.</p>
+              <span class="ext-id">bradlc.vscode-tailwindcss</span>
+            </div>
+            <div class="ext-card">
+              <h5>ESLint</h5>
+              <p>
+                Inline linting and auto-fix on save. The project's
+                <code>eslint.config.mjs</code> is pre-configured.
+              </p>
+              <span class="ext-id">dbaeumer.vscode-eslint</span>
+            </div>
+            <div class="ext-card">
+              <h5>EditorConfig</h5>
+              <p>Reads the repo's <code>.editorconfig</code> for consistent indentation and line endings.</p>
+              <span class="ext-id">EditorConfig.EditorConfig</span>
+            </div>
+            <div class="ext-card">
+              <h5>Trunk</h5>
+              <p>Integrates Trunk's multi-linter toolchain directly into VS Code.</p>
+              <span class="ext-id">Trunk.io</span>
+            </div>
+          </div>
+
+          <h3>Recommended Settings</h3>
+          <p>Add these to your workspace <code>.vscode/settings.json</code> if they aren't already present:</p>
+          <pre>{
+  <span class="string">"editor.formatOnSave"</span>: <span class="cmd">true</span>,
+  <span class="string">"editor.defaultFormatter"</span>: <span class="string">"dbaeumer.vscode-eslint"</span>,
+  <span class="string">"eslint.useFlatConfig"</span>: <span class="cmd">true</span>,
+  <span class="string">"editor.codeActionsOnSave"</span>: {
+    <span class="string">"source.fixAll.eslint"</span>: <span class="string">"explicit"</span>
+  },
+  <span class="string">"typescript.tsdk"</span>: <span class="string">"node_modules/typescript/lib"</span>,
+  <span class="string">"files.associations"</span>: {
+    <span class="string">"*.css"</span>: <span class="string">"tailwindcss"</span>
+  }
+}</pre>
+        </div>
+
+        <!-- WebStorm ───────────────────────────────── -->
+        <div class="ide-webstorm">
+          <h3>WebStorm Setup</h3>
+          <p>
+            WebStorm has built-in support for Vue, TypeScript, and Tailwind CSS. Here's how to get the most out of it
+            for this project.
+          </p>
+
+          <h3>Enable Plugins</h3>
+          <div class="ext-grid">
+            <div class="ext-card">
+              <h5>
+                Vue.js
+                <span class="badge" style="font-size: 0.6rem; margin-left: 0.3rem">Built-in</span>
+              </h5>
+              <p>Bundled by default. Ensure it's enabled under Settings → Plugins.</p>
+              <span class="ext-id">Preferences → Plugins → Vue.js</span>
+            </div>
+            <div class="ext-card">
+              <h5>
+                Tailwind CSS
+                <span class="badge" style="font-size: 0.6rem; margin-left: 0.3rem">Built-in</span>
+              </h5>
+              <p>WebStorm provides autocomplete for utility classes natively. No extra plugin needed.</p>
+              <span class="ext-id">Preferences → Plugins → Tailwind CSS</span>
+            </div>
+            <div class="ext-card">
+              <h5>
+                EditorConfig
+                <span class="badge" style="font-size: 0.6rem; margin-left: 0.3rem">Built-in</span>
+              </h5>
+              <p>Automatically reads <code>.editorconfig</code>. Ensure it's enabled in Preferences.</p>
+              <span class="ext-id">Preferences → Plugins → EditorConfig</span>
+            </div>
+            <div class="ext-card">
+              <h5>Catppuccin Theme</h5>
+              <p>Optional but recommended for visual consistency with the app's palette.</p>
+              <span class="ext-id">Preferences → Plugins → Marketplace → "Catppuccin"</span>
+            </div>
+          </div>
+
+          <h3>Configure ESLint</h3>
+          <ol class="steps">
+            <li data-step="1">
+              <h4>Open ESLint settings</h4>
+              <p>
+                Go to
+                <strong>Preferences → Languages &amp; Frameworks → JavaScript → Code Quality Tools → ESLint</strong>.
+              </p>
+            </li>
+            <li data-step="2">
+              <h4>Select "Automatic ESLint configuration"</h4>
+              <p>
+                WebStorm will detect the flat config in
+                <code>eslint.config.mjs</code> automatically.
+              </p>
+            </li>
+            <li data-step="3">
+              <h4>Enable "Run eslint --fix on save"</h4>
+              <p>This ensures your code is automatically formatted and linted when you save.</p>
+            </li>
+          </ol>
+
+          <h3>Configure TypeScript</h3>
+          <p>
+            Go to
+            <strong>Preferences → Languages &amp; Frameworks → TypeScript</strong>
+            and ensure the TypeScript version is set to the project's
+            <code>node_modules/typescript</code>. WebStorm usually detects this automatically.
+          </p>
+
+          <div class="callout tip">
+            <span class="icon">💡</span>
+            <p>
+              WebStorm natively supports Nuxt's auto-imports. If auto-completion for composables like
+              <code>useFetch</code> isn't working, try <strong>File → Invalidate Caches → Restart</strong>.
+            </p>
+          </div>
+
+          <h3>Configure Bun</h3>
+          <p>
+            Go to
+            <strong>Preferences → Languages &amp; Frameworks → Node.js</strong>
+            and set the package manager to <strong>bun</strong>. Point the interpreter to the mise shim for bun
+            (typically <code>~/.local/share/mise/shims/bun</code>).
+          </p>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════
+     SECTION 4 — Architecture
+════════════════════════════════════════════════ -->
+      <section class="section" id="architecture">
+        <span class="section-number">04 — Architecture</span>
+        <h2>Project Structure</h2>
+        <p class="section-desc">
+          Affirm follows the Nuxt 4 directory convention, where application source lives under <code>app/</code>.
+        </p>
+
+        <div class="tree">
+          <span class="dir">affirm/</span> ├── <span class="dir">app/</span>
+          <span class="desc">← Main Vue application source</span> │ ├── <span class="dir">pages/</span>
+          <span class="desc">← File-based routing</span> │ ├── <span class="dir">components/</span>
+          <span class="desc">← Auto-imported Vue components</span> │ ├── <span class="dir">composables/</span>
+          <span class="desc">← Auto-imported state/logic hooks</span> │ ├── <span class="dir">layouts/</span>
+          <span class="desc">← Page layouts</span> │ ├── <span class="dir">middleware/</span>
+          <span class="desc">← Route middleware</span> │ └── <span class="dir">assets/</span>
+          <span class="desc">← CSS &amp; static assets (Tailwind entry)</span> ├── <span class="dir">server/</span>
+          <span class="desc">← Nitro server backend</span> │ ├── <span class="dir">api/</span>
+          <span class="desc">← API endpoints (/api/…)</span> │ ├── <span class="dir">database/</span>
+          <span class="desc">← Drizzle schema &amp; migrations</span> │ └── <span class="dir">utils/</span>
+          <span class="desc">← Auto-imported server utilities</span> ├── <span class="dir">shared/</span>
+          <span class="desc">← Code shared between client &amp; server</span> ├── <span class="dir">public/</span>
+          <span class="desc">← Static files (favicon, robots.txt)</span> ├──
+          <span class="highlight">nuxt.config.ts</span>
+          <span class="desc">← Nuxt configuration (incl. D1 bindings)</span> ├──
+          <span class="highlight">drizzle.config.ts</span> <span class="desc">← Drizzle ORM configuration</span> ├──
+          <span class="file">eslint.config.mjs</span> <span class="desc">← ESLint flat config</span> ├──
+          <span class="file">wrangler.jsonc</span> <span class="desc">← Production Cloudflare config</span> ├──
+          <span class="file">wrangler.staging.jsonc</span> <span class="desc">← Staging Cloudflare config</span> ├──
+          <span class="file">wrangler.dev.jsonc</span> <span class="desc">← Local dev Cloudflare config</span> └──
+          <span class="file">mise.toml</span> <span class="desc">← Tool version definitions</span>
+        </div>
+
+        <h3>Deployment Architecture</h3>
+        <div class="diagram-wrapper">
+          <svg viewBox="0 0 800 340" xmlns="http://www.w3.org/2000/svg" width="100%">
+            <!-- Arrows -->
+            <defs>
+              <marker id="arr" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+                <polygon points="0 0, 8 3, 0 6" fill="#7f849c" />
+              </marker>
+              <marker id="arr-green" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+                <polygon points="0 0, 8 3, 0 6" fill="#a6e3a1" />
+              </marker>
+              <marker id="arr-peach" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+                <polygon points="0 0, 8 3, 0 6" fill="#fab387" />
+              </marker>
+            </defs>
+
+            <!-- Git repo box -->
+            <rect x="20" y="30" width="180" height="110" rx="10" fill="#1e1e2e" stroke="#45475a" />
+            <text x="110" y="58" text-anchor="middle" fill="#cdd6f4" font-size="13" font-weight="700">
+              Git Repository
+            </text>
+            <text x="110" y="82" text-anchor="middle" fill="#89b4fa" font-size="10">production branch</text>
+            <text x="110" y="100" text-anchor="middle" fill="#fab387" font-size="10">staging branch</text>
+            <text x="110" y="118" text-anchor="middle" fill="#a6adc8" font-size="10">feature branches</text>
+
+            <!-- CI Box -->
+            <rect x="20" y="190" width="180" height="60" rx="10" fill="#1e1e2e" stroke="#45475a" />
+            <text x="110" y="218" text-anchor="middle" fill="#cdd6f4" font-size="12" font-weight="600">
+              GitHub Actions CI
+            </text>
+            <text x="110" y="236" text-anchor="middle" fill="#6c7086" font-size="10">lint · typecheck · build</text>
+
+            <!-- Arrow: git → CI -->
+            <line
+              x1="110"
+              y1="140"
+              x2="110"
+              y2="190"
+              stroke="#7f849c"
+              stroke-width="1.5"
+              marker-end="url(#arr)"
+              stroke-dasharray="4"
+            />
+
+            <!-- Workers Builds -->
+            <rect x="310" y="30" width="180" height="110" rx="10" fill="#1e1e2e" stroke="#45475a" />
+            <text x="400" y="58" text-anchor="middle" fill="#cdd6f4" font-size="13" font-weight="700">
+              Workers Builds
+            </text>
+            <text x="400" y="78" text-anchor="middle" fill="#6c7086" font-size="10">Cloudflare CI/CD</text>
+            <text x="400" y="100" text-anchor="middle" fill="#a6adc8" font-size="10">bun install</text>
+            <text x="400" y="116" text-anchor="middle" fill="#a6adc8" font-size="10">bun run build[:staging]</text>
+
+            <!-- Arrow: git → Workers Builds -->
+            <line x1="200" y1="85" x2="310" y2="85" stroke="#7f849c" stroke-width="1.5" marker-end="url(#arr)" />
+            <text x="255" y="78" text-anchor="middle" fill="#6c7086" font-size="9">push</text>
+
+            <!-- Production Worker -->
+            <rect x="600" y="20" width="180" height="80" rx="10" fill="#1e1e2e" stroke="#a6e3a1" stroke-opacity=".4" />
+            <text x="690" y="48" text-anchor="middle" fill="#a6e3a1" font-size="12" font-weight="700">affirm</text>
+            <text x="690" y="66" text-anchor="middle" fill="#6c7086" font-size="10">Production Worker</text>
+            <text x="690" y="82" text-anchor="middle" fill="#6c7086" font-size="10">D1: affirm</text>
+
+            <!-- Staging Worker -->
+            <rect x="600" y="120" width="180" height="80" rx="10" fill="#1e1e2e" stroke="#fab387" stroke-opacity=".4" />
+            <text x="690" y="148" text-anchor="middle" fill="#fab387" font-size="12" font-weight="700">
+              affirm-staging
+            </text>
+            <text x="690" y="166" text-anchor="middle" fill="#6c7086" font-size="10">Staging Worker</text>
+            <text x="690" y="182" text-anchor="middle" fill="#6c7086" font-size="10">D1: affirm-staging</text>
+
+            <!-- Arrows: builds → workers -->
+            <line
+              x1="490"
+              y1="65"
+              x2="600"
+              y2="55"
+              stroke="#a6e3a1"
+              stroke-width="1.5"
+              marker-end="url(#arr-green)"
+              stroke-opacity=".6"
+            />
+            <line
+              x1="490"
+              y1="105"
+              x2="600"
+              y2="155"
+              stroke="#fab387"
+              stroke-width="1.5"
+              marker-end="url(#arr-peach)"
+              stroke-opacity=".6"
+            />
+
+            <!-- Local dev -->
+            <rect x="310" y="200" width="180" height="80" rx="10" fill="#1e1e2e" stroke="#cba6f7" stroke-opacity=".4" />
+            <text x="400" y="228" text-anchor="middle" fill="#cba6f7" font-size="12" font-weight="700">Local Dev</text>
+            <text x="400" y="248" text-anchor="middle" fill="#6c7086" font-size="10">bun dev</text>
+            <text x="400" y="264" text-anchor="middle" fill="#6c7086" font-size="10">D1: affirm-local</text>
+
+            <!-- Legend -->
+            <text x="310" y="320" fill="#6c7086" font-size="9">⬤ Push to production → deploys to live</text>
+            <text x="310" y="335" fill="#6c7086" font-size="9">⬤ Push to staging → deploys preview version</text>
+          </svg>
+        </div>
+
+        <h3>Stack at a Glance</h3>
+        <table class="compare-table">
+          <thead>
+            <tr>
+              <th>Layer</th>
+              <th>Technology</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Framework</td>
+              <td>Nuxt 4</td>
+              <td>Source in <code>app/</code> directory</td>
+            </tr>
+            <tr>
+              <td>UI Library</td>
+              <td>Vue 3 (Composition API)</td>
+              <td><code>&lt;script setup lang="ts"&gt;</code></td>
+            </tr>
+            <tr>
+              <td>Styling</td>
+              <td>Tailwind CSS v4 + DaisyUI</td>
+              <td>Catppuccin Mocha theme</td>
+            </tr>
+            <tr>
+              <td>Content</td>
+              <td>Nuxt Content</td>
+              <td>Markdown-based copywriting</td>
+            </tr>
+            <tr>
+              <td>Runtime</td>
+              <td>Bun</td>
+              <td>Package manager and dev scripts</td>
+            </tr>
+            <tr>
+              <td>Database</td>
+              <td>Cloudflare D1 + Drizzle ORM</td>
+              <td>SQLite on the edge</td>
+            </tr>
+            <tr>
+              <td>Hosting</td>
+              <td>Cloudflare Workers</td>
+              <td>Separate prod &amp; staging workers</td>
+            </tr>
+            <tr>
+              <td>Linting</td>
+              <td>Trunk + ESLint</td>
+              <td>Multi-tool orchestration</td>
+            </tr>
+            <tr>
+              <td>CI</td>
+              <td>GitHub Actions + Workers Builds</td>
+              <td>CI checks only; deployment via CF</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════
+     SECTION 5 — Dev Server
+════════════════════════════════════════════════ -->
+      <section class="section" id="dev-server">
+        <span class="section-number">05 — Development Server</span>
+        <h2>Run It Locally</h2>
+        <p class="section-desc">
+          The dev server runs on <code>http://localhost:3000</code> with hot-module replacement and a local D1 database.
+        </p>
+
+        <h3>Environment Variables</h3>
+        <p>Copy the example files to create your local config:</p>
+        <pre><span class="prompt">❯ </span><span class="cmd">cp</span> .env.example .env
+<span class="prompt">❯ </span><span class="cmd">cp</span> .dev.vars.example .dev.vars</pre>
+
+        <div class="callout warning">
+          <span class="icon">⚠️</span>
+          <p>
+            The <code>.dev.vars</code> file contains Cloudflare-specific secrets for local development. Never commit it
+            — it's already in <code>.gitignore</code>.
+          </p>
+        </div>
+
+        <h3>Start the Server</h3>
+        <pre><span class="prompt">❯ </span><span class="cmd">bun</span> dev</pre>
+        <p>
+          This starts the Nuxt dev server with a local D1 instance via
+          <code>wrangler.dev.jsonc</code>. Open <a href="http://localhost:3000" target="_blank">localhost:3000</a> in
+          your browser.
+        </p>
+
+        <h3>Running Database Migrations Locally</h3>
+        <p>If you've pulled changes that include new database migrations, apply them to your local D1:</p>
+        <pre><span class="prompt">❯ </span><span class="cmd">bun</span> run db:migrate</pre>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════
+     SECTION 6 — Git Workflow
+════════════════════════════════════════════════ -->
+      <section class="section" id="workflow">
+        <span class="section-number">06 — Git Workflow</span>
+        <h2>Branch Strategy</h2>
+        <p class="section-desc">
+          Both <code>production</code> and <code>staging</code> are protected. All changes go through pull requests.
+        </p>
+
+        <div class="diagram-wrapper">
+          <svg viewBox="0 0 800 200" xmlns="http://www.w3.org/2000/svg" width="100%">
+            <!-- production branch -->
+            <line x1="80" y1="40" x2="760" y2="40" stroke="#a6e3a1" stroke-width="3" stroke-linecap="round" />
+            <circle cx="80" cy="40" r="6" fill="#a6e3a1" />
+            <circle cx="700" cy="40" r="6" fill="#a6e3a1" />
+            <text x="30" y="44" fill="#a6e3a1" font-size="11" font-weight="700">prod</text>
+
+            <!-- staging branch -->
+            <line x1="80" y1="90" x2="760" y2="90" stroke="#fab387" stroke-width="3" stroke-linecap="round" />
+            <circle cx="80" cy="90" r="6" fill="#fab387" />
+            <circle cx="540" cy="90" r="6" fill="#fab387" />
+            <text x="18" y="94" fill="#fab387" font-size="11" font-weight="700">staging</text>
+
+            <!-- feature branch -->
+            <line x1="200" y1="90" x2="250" y2="150" stroke="#cba6f7" stroke-width="2" stroke-linecap="round" />
+            <line x1="250" y1="150" x2="480" y2="150" stroke="#cba6f7" stroke-width="2" stroke-linecap="round" />
+            <line
+              x1="480"
+              y1="150"
+              x2="540"
+              y2="90"
+              stroke="#cba6f7"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-dasharray="6"
+            />
+            <circle cx="250" cy="150" r="5" fill="#cba6f7" />
+            <circle cx="350" cy="150" r="5" fill="#cba6f7" />
+            <circle cx="450" cy="150" r="5" fill="#cba6f7" />
+            <text x="310" y="175" fill="#cba6f7" font-size="10" font-weight="600">you/feature-name</text>
+
+            <!-- Merge to staging arrow -->
+            <text x="500" y="120" fill="#6c7086" font-size="9">PR → staging</text>
+
+            <!-- Merge staging to prod -->
+            <line
+              x1="540"
+              y1="90"
+              x2="700"
+              y2="40"
+              stroke="#7f849c"
+              stroke-width="1.5"
+              stroke-dasharray="6"
+              marker-end="url(#arr)"
+            />
+            <text x="610" y="72" fill="#6c7086" font-size="9">PR → prod</text>
+
+            <!-- Labels -->
+            <text x="760" y="44" fill="#a6e3a1" font-size="9" font-weight="600">live</text>
+            <text x="760" y="94" fill="#fab387" font-size="9" font-weight="600">preview</text>
+          </svg>
+        </div>
+
+        <ol class="steps">
+          <li data-step="1">
+            <h4>Create a feature branch</h4>
+            <p>Branch from <code>staging</code> using the format <code>username/purpose</code>:</p>
+            <pre><span class="prompt">❯ </span><span class="cmd">git</span> checkout staging
+<span class="prompt">❯ </span><span class="cmd">git</span> pull
+<span class="prompt">❯ </span><span class="cmd">git</span> checkout <span class="flag">-b</span> <span class="string">yourname/fix-header</span></pre>
+          </li>
+          <li data-step="2">
+            <h4>Work, commit, push</h4>
+            <p>
+              Make your changes and push. Pushes to branches generate
+              <strong>preview deployments</strong> on the staging Worker.
+            </p>
+            <pre><span class="prompt">❯ </span><span class="cmd">git</span> add <span class="flag">-A</span>
+<span class="prompt">❯ </span><span class="cmd">git</span> commit <span class="flag">-m</span> <span class="string">"fix: correct header alignment"</span>
+<span class="prompt">❯ </span><span class="cmd">git</span> push <span class="flag">-u</span> origin yourname/fix-header</pre>
+          </li>
+          <li data-step="3">
+            <h4>Open a PR targeting <code>staging</code></h4>
+            <p>
+              Two approvals are required. Dave (<a href="https://github.com/daveio" target="_blank">@daveio</a>) will
+              review all PRs where possible — you can be the second reviewer.
+            </p>
+          </li>
+        </ol>
+
+        <div class="callout info">
+          <span class="icon">ℹ️</span>
+          <p>
+            The project uses the <code>.fastconventional.yaml</code> config for commit message conventions. Use prefixes
+            like <code>feat:</code>, <code>fix:</code>, <code>chore:</code>, <code>docs:</code> etc.
+          </p>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════
+     SECTION 7 — Commands
+════════════════════════════════════════════════ -->
+      <section class="section" id="commands">
+        <span class="section-number">07 — Commands Reference</span>
+        <h2>Essential Commands</h2>
+        <p class="section-desc">Run all commands with <code>bun</code> (or <code>bun run</code> where noted).</p>
+
+        <table class="compare-table">
+          <thead>
+            <tr>
+              <th>Command</th>
+              <th>Purpose</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>bun dev</code></td>
+              <td>Start local dev server with local D1</td>
+            </tr>
+            <tr>
+              <td><code>bun run build</code></td>
+              <td>Build for production (must use <code>bun run</code>)</td>
+            </tr>
+            <tr>
+              <td><code>bun run build:staging</code></td>
+              <td>Build for staging</td>
+            </tr>
+            <tr>
+              <td><code>bun run lint:fix</code></td>
+              <td>Run all linters and auto-fix</td>
+            </tr>
+            <tr>
+              <td><code>bun run format</code></td>
+              <td>Format code with Prettier + Trunk</td>
+            </tr>
+            <tr>
+              <td><code>bun run test</code></td>
+              <td>Run unit tests (Vitest)</td>
+            </tr>
+            <tr>
+              <td><code>bun run test:e2e</code></td>
+              <td>Run end-to-end tests (Playwright)</td>
+            </tr>
+            <tr>
+              <td><code>bun run db:generate</code></td>
+              <td>Generate migrations after schema changes</td>
+            </tr>
+            <tr>
+              <td><code>bun run db:migrate</code></td>
+              <td>Apply migrations to local D1</td>
+            </tr>
+            <tr>
+              <td><code>bun run deploy</code></td>
+              <td>Manual deploy to production</td>
+            </tr>
+            <tr>
+              <td><code>bun run deploy:staging</code></td>
+              <td>Manual deploy to staging</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="callout important">
+          <span class="icon">🚨</span>
+          <p>
+            Use <code>bun run build</code> not <code>bun build</code> — the latter invokes Bun's own bundler instead of
+            the Nuxt build script.
+          </p>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════
+     SECTION 8 — Database
+════════════════════════════════════════════════ -->
+      <section class="section" id="database">
+        <span class="section-number">08 — Database</span>
+        <h2>D1 &amp; Drizzle</h2>
+        <p class="section-desc">
+          The app uses Cloudflare D1 (edge SQLite) with Drizzle ORM. There are three environments.
+        </p>
+
+        <table class="compare-table">
+          <thead>
+            <tr>
+              <th>Environment</th>
+              <th>Wrangler Config</th>
+              <th>D1 Database</th>
+              <th>Worker</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Local dev</td>
+              <td><code>wrangler.dev.jsonc</code></td>
+              <td>affirm-local</td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <td>Staging</td>
+              <td><code>wrangler.staging.jsonc</code></td>
+              <td>affirm-staging</td>
+              <td>affirm-staging</td>
+            </tr>
+            <tr>
+              <td>Production</td>
+              <td><code>wrangler.jsonc</code></td>
+              <td>affirm</td>
+              <td>affirm</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>Making Schema Changes</h3>
+        <ol class="steps">
+          <li data-step="1">
+            <h4>Edit the schema</h4>
+            <p>Modify <code>server/database/schema.ts</code>.</p>
+          </li>
+          <li data-step="2">
+            <h4>Generate a migration</h4>
+            <pre><span class="prompt">❯ </span><span class="cmd">bun</span> run db:generate</pre>
+          </li>
+          <li data-step="3">
+            <h4>Apply locally</h4>
+            <pre><span class="prompt">❯ </span><span class="cmd">bun</span> run db:migrate</pre>
+          </li>
+          <li data-step="4">
+            <h4>Commit the migration files</h4>
+            <p>Workers Builds handles applying migrations to staging and production on deploy.</p>
+          </li>
+        </ol>
+
+        <div class="callout warning">
+          <span class="icon">⚠️</span>
+          <p>
+            D1 bindings exist in <strong>both</strong> the wrangler config files and <code>nuxt.config.ts</code> (via
+            <code>$env</code> overrides). Keep them in sync if you ever modify either.
+          </p>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════
+     SECTION 9 — Gotchas
+════════════════════════════════════════════════ -->
+      <section class="section" id="gotchas">
+        <span class="section-number">09 — Gotchas</span>
+        <h2>Things to Watch Out For</h2>
+
+        <details>
+          <summary>Nuxt 4 ≠ Nuxt 3</summary>
+          <div class="details-content">
+            <p>
+              This project uses <strong>Nuxt 4</strong>. Some Nuxt 3 documentation may not apply — particularly around
+              directory structure (source lives in <code>app/</code>, not at the root).
+            </p>
+          </div>
+        </details>
+
+        <details>
+          <summary>Always use <code>--envName</code> for builds</summary>
+          <div class="details-content">
+            <p>
+              A bare <code>nuxt build</code> produces <strong>no D1 binding</strong>. Always use the project scripts
+              (<code>bun run build</code> or <code>bun run build:staging</code>) which pass the correct
+              <code>--envName</code>.
+            </p>
+          </div>
+        </details>
+
+        <details>
+          <summary><code>bun build</code> vs <code>bun run build</code></summary>
+          <div class="details-content">
+            <p>
+              <code>bun build</code> invokes Bun's <em>own</em> bundler. <code>bun run build</code> runs the
+              <code>build</code> script from <code>package.json</code>, which is what you want.
+            </p>
+          </div>
+        </details>
+
+        <details>
+          <summary>D1 bindings in two places</summary>
+          <div class="details-content">
+            <p>
+              D1 database bindings are configured in both the wrangler config files (for CLI commands like migrations)
+              and in
+              <code>nuxt.config.ts</code> (for the Nuxt/Nitro build). If you change one, update the other.
+            </p>
+          </div>
+        </details>
+
+        <details>
+          <summary>Auto-imports — don't manually import components</summary>
+          <div class="details-content">
+            <p>
+              Nuxt auto-imports components from <code>app/components/</code> and composables from
+              <code>app/composables/</code>. You don't need manual import statements for these.
+            </p>
+          </div>
+        </details>
+
+        <details>
+          <summary>Trunk is a dev dependency, not global</summary>
+          <div class="details-content">
+            <p>
+              Trunk (the linter orchestrator) is installed as a dev dependency. Invoke it via
+              <code>bun run trunk</code> or install it globally by following
+              <a href="https://docs.trunk.io/code-quality/overview/initialize-trunk" target="_blank">the Trunk docs</a>.
+            </p>
+          </div>
+        </details>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════
+     SECTION 10 — Checklist
+════════════════════════════════════════════════ -->
+      <section class="section" id="checklist">
+        <span class="section-number">10 — Setup Checklist</span>
+        <h2>Ready to Go?</h2>
+        <p class="section-desc">
+          Tick off each item as you complete it. Your progress is saved in this browser session.
+        </p>
+
+        <div class="progress-text" id="progress-text">0 / 10 complete</div>
+        <div class="progress-bar">
+          <div class="fill" id="progress-fill"></div>
+        </div>
+
+        <ul class="checklist" id="checklist-list">
+          <li data-item="0">
+            <span class="check"></span>Install mise and run
+            <code>mise trust && mise install</code>
+          </li>
+          <li data-item="1"><span class="check"></span>Clone the repo and <code>cd affirm</code></li>
+          <li data-item="2"><span class="check"></span>Run <code>bun install</code></li>
+          <li data-item="3">
+            <span class="check"></span>Copy <code>.env.example → .env</code> and
+            <code>.dev.vars.example → .dev.vars</code>
+          </li>
+          <li data-item="4"><span class="check"></span>Set up your IDE (extensions/plugins configured)</li>
+          <li data-item="5"><span class="check"></span>Run <code>bun dev</code> and open localhost:3000</li>
+          <li data-item="6"><span class="check"></span>Run <code>bun run db:migrate</code> to set up local D1</li>
+          <li data-item="7"><span class="check"></span>Set up SSH commit signing</li>
+          <li data-item="8">
+            <span class="check"></span>Create a test branch
+            <code>yourname/test-setup</code>
+          </li>
+          <li data-item="9"><span class="check"></span>Run <code>bun run lint:fix</code> to verify linting works</li>
+        </ul>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════
+     FOOTER
+════════════════════════════════════════════════ -->
+      <footer class="footer">
+        <p>
+          Questions? Contact
+          <a href="https://github.com/daveio" target="_blank">Dave</a>. He's more than happy to help.
+        </p>
+        <p style="margin-top: 0.4rem">Affirm Setup Guide · tecapps</p>
+      </footer>
+    </div>
+    <!-- .page-wrapper -->
+
+    <!-- ═══════════════════════════════════════════════
+     SCRIPTS
+════════════════════════════════════════════════ -->
+    <script>
+      // ── IDE Toggle ──────────────────────────────────
+      function setIDE(ide) {
+        document.body.classList.remove("show-vscode", "show-webstorm");
+        document.body.classList.add("show-" + ide);
+        document.querySelectorAll(".ide-btn").forEach((btn) => {
+          btn.classList.toggle("active", btn.dataset.ide === ide);
+        });
+        try {
+          sessionStorage.setItem("affirm-ide", ide);
+        } catch (e) {}
+      }
+
+      // Restore preference
+      try {
+        const saved = sessionStorage.getItem("affirm-ide");
+        if (saved) setIDE(saved);
+      } catch (e) {}
+
+      // ── Copy buttons ────────────────────────────────
+      document.querySelectorAll("pre").forEach((pre) => {
+        // Skip the tree diagram
+        if (pre.closest(".tree")) return;
+
+        const btn = document.createElement("button");
+        btn.className = "copy-btn";
+        btn.textContent = "Copy";
+        btn.addEventListener("click", () => {
+          // Extract raw text, stripping prompt characters
+          const raw = pre.textContent
+            .replace(/Copy|Copied!/g, "")
+            .replace(/^❯ /gm, "")
+            .trim();
+          navigator.clipboard.writeText(raw).then(() => {
+            btn.textContent = "Copied!";
+            btn.classList.add("copied");
+            setTimeout(() => {
+              btn.textContent = "Copy";
+              btn.classList.remove("copied");
+            }, 1500);
+          });
+        });
+        pre.style.position = "relative";
+        pre.appendChild(btn);
+      });
+
+      // ── Interactive Checklist ───────────────────────
+      const items = document.querySelectorAll("#checklist-list li");
+      const totalItems = items.length;
+      let checked = new Set();
+
+      // Restore from sessionStorage
+      try {
+        const savedChecks = JSON.parse(sessionStorage.getItem("affirm-checks") || "[]");
+        savedChecks.forEach((i) => checked.add(i));
+      } catch (e) {}
+
+      function updateProgress() {
+        const pct = (checked.size / totalItems) * 100;
+        document.getElementById("progress-fill").style.width = pct + "%";
+        document.getElementById("progress-text").textContent = checked.size + " / " + totalItems + " complete";
+
+        items.forEach((li) => {
+          const idx = parseInt(li.dataset.item);
+          if (checked.has(idx)) {
+            li.classList.add("done");
+            li.querySelector(".check").textContent = "✓";
+          } else {
+            li.classList.remove("done");
+            li.querySelector(".check").textContent = "";
+          }
+        });
+
+        try {
+          sessionStorage.setItem("affirm-checks", JSON.stringify([...checked]));
+        } catch (e) {}
+      }
+
+      items.forEach((li) => {
+        li.addEventListener("click", () => {
+          const idx = parseInt(li.dataset.item);
+          if (checked.has(idx)) {
+            checked.delete(idx);
+          } else {
+            checked.add(idx);
+          }
+          updateProgress();
+        });
+      });
+
+      updateProgress();
+    </script>
+  </body>
+</html>
