@@ -7,9 +7,13 @@
 import * as argon2 from "argon2";
 const password = "password";
 const hash = await argon2.hash(password);
-console.log(hash);
-export default defineEventHandler((data) => {
+
+export default defineEventHandler((request) => {
+  console.log("POST LOGIN API was here");
+  console.log(request);
+  console.log(hash);
+  console.log("Finished login");
   return {
-    message: capitalize("hello from the server! This was returned from the API." + data),
+    message: capitalize("hello from the server! This was returned from the API." + request),
   };
 });

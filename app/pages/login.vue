@@ -1,44 +1,32 @@
 <script setup lang="ts">
-import * as v from "valibot";
-import type { FormSubmitEvent } from "@nuxt/ui";
-
-const schema = v.object({
-  email: v.pipe(v.string(), v.email("Invalid email")),
-  password: v.pipe(v.string(), v.minLength(8, "Must be at least 8 characters")),
-});
-type Schema = v.InferOutput<typeof schema>;
-async function handleLogin(event: FormSubmitEvent<Schema>) {
-  const res = await useFetch("/api/login", {
-    method: "POST",
-    body: {
-      //form data
-    },
-  });
-
-  toast.add({ title: "Success", description: "The form has been submitted.", color: "success" });
-  console.log(event.data);
-  //console.log(res.data);
-  return res.data;
+async function handleLogin() {
+  try {
+    await console.log("Start Fetch");
+    const res = await useFetch("/api/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: {},
+    });
+    console.log("Fetch Complete"); //This doesnt work or log anywhere
+    console.log(res); //This doesnt work or log anywhere
+    //return res.data;
+  } catch (e) {
+    console.log(e.message);
+  }
 }
-
-const state = reactive({
-  email: "",
-  password: "",
-});
-
-const toast = useToast();
 </script>
 
 <template>
-  <UForm :schema="schema" :state="state" class="space-y-4" @submit="handleLogin">
-    <UFormField label="Email" name="email">
-      <UInput v-model="state.email" />
-    </UFormField>
+  <form @submit="handleLogin">
+    <fieldset class="fieldset">
+      <legend class="fieldset-legend">Login Page</legend>
+      <label class="label">Email</label>
+      <input id="email" type="text" class="input" placeholder="email@example.com" />
 
-    <UFormField label="Password" name="password">
-      <UInput v-model="state.password" type="password" />
-    </UFormField>
+      <label class="label">Password</label>
+      <input type="text" id="password" class="input" placeholder="password" />
 
-    <UButton type="submit"> Submit </UButton>
-  </UForm>
+      <button class="btn">Login</button>
+    </fieldset>
+  </form>
 </template>
