@@ -1,8 +1,6 @@
 import { drizzle } from "drizzle-orm/d1";
 import { users } from "#server/database/schema";
 
-type D1Database = any;
-
 export interface Env {
   DB: D1Database;
 }
