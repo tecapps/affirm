@@ -23,7 +23,7 @@ async function handleLogin() {
       <input id="email" type="text" class="input" placeholder="email@example.com" />
 
       <label class="label">Password</label>
-      <input type="text" id="password" class="input" placeholder="password" />
+      <input id="password" type="text" class="input" placeholder="password" />
 
       <button class="btn">Login</button>
     </fieldset>
