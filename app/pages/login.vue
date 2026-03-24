@@ -1,11 +1,11 @@
 <script setup lang="ts">
 async function handleLogin() {
   try {
-    console.log("Start Fetch");
+    console.log("Start Fetch"); //Browser has these
     const res = await $fetch("/api/insertSample", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: {},
+      body: { email: "test@gmail.com" },
     });
     console.log("Fetch Complete");
     console.log(res);

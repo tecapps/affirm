@@ -47,14 +47,13 @@ import { useDB } from "#server/utils/db"; // is this handled as an auto import o
 
 export default defineEventHandler(async (event) => {
   const db = useDB(event);
-  const insert = await db
+  /*const insert = await db
     .insert(users)
-    .values({ name: "selene", email: "selene.s.posada@gmail.com", password: "test" });
+    .values({ name: "selene", email: "selene.s.posada@gmail.com", password: "test" });*/
   const select = await db.select().from(users).all();
-  // console.log(result);
+  console.log(select);
   return {
     message: capitalize("hello from the server! This was returned from the API." + event),
-    insert,
     select,
   };
 });
