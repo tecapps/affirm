@@ -2,7 +2,7 @@
 async function handleLogin() {
   try {
     await console.log("Start Fetch");
-    const res = await useFetch("/api/login", {
+    const res = await useFetch("/api/insertSample", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: {},

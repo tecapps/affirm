@@ -19,11 +19,11 @@
     "better-sqlite3": "^12.8.0",
     "daisyui": "^5.5.19",
     "drizzle-orm": "^0.45.1",
-    "eslint": "^10.0.3",
+    "eslint": "^10.1.0",
     "nuxt": "^4.4.2",
     "tailwindcss": "^4.2.2",
     "vue": "^3.5.30",
-    "vue-router": "^5.0.3"
+    "vue-router": "^5.0.4"
   },
   "devDependencies": {
     "@catppuccin/daisyui": "^2.1.1",
@@ -31,15 +31,15 @@
     "@iconify-json/logos": "^1.2.10",
     "@trunkio/launcher": "^1.3.4",
     "@types/node": "^25.5.0",
-    "drizzle-kit": "^0.31.9",
+    "drizzle-kit": "^0.31.10",
     "nitro-cloudflare-dev": "^0.2.2",
-    "nitropack": "^2.13.1",
+    "nitropack": "^2.13.2",
     "node-gyp": "^12.2.0",
     "npm-run-all2": "^8.0.4",
     "playwright": "^1.58.2",
     "prettier": "^3.8.1",
-    "vitest": "^4.1.0",
-    "wrangler": "^4.73.0"
+    "vitest": "^4.1.1",
+    "wrangler": "^4.76.0"
   },
   "engines": {
     "bun": "^1.3.10",
