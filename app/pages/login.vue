@@ -1,23 +1,22 @@
 <script setup lang="ts">
 async function handleLogin() {
   try {
-    await console.log("Start Fetch");
-    const res = await useFetch("/api/insertSample", {
+    console.log("Start Fetch");
+    const res = await $fetch("/api/insertSample", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: {},
     });
-    console.log("Fetch Complete"); //This doesnt work or log anywhere
-    console.log(res); //This doesnt work or log anywhere
-    //return res.data;
-  } catch (e) {
-    console.log(e.message);
+    console.log("Fetch Complete");
+    console.log(res);
+  } catch (error) {
+    console.error("Login failed:", error);
   }
 }
 </script>
 
 <template>
-  <form @submit="handleLogin">
+  <form @submit.prevent="handleLogin">
     <fieldset class="fieldset">
       <legend class="fieldset-legend">Login Page</legend>
       <label class="label">Email</label>
