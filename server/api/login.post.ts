@@ -5,9 +5,15 @@
  * Gotta figure out how to pass the password from the login
  */
 import * as argon2 from "argon2";
-
+import * as dotenv from "dotenv";
+dotenv.config();
 const password = "password";
-const hash = await argon2.hash(password);
+const hash = await argon2.hash(password, {
+  type: argon2.argon2id,
+  memoryCost: 2 ** 16,
+  timeCost: 4,
+  secret: "someSecret",
+});
 
 //const dataBaseHash = await query();
 /*try {
