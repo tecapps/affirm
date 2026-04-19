@@ -1,5 +1,6 @@
 // import { drizzle } from "drizzle-orm/d1";
 import { users } from "#server/database/schema";
+import { eq } from "drizzle-orm";
 // import { useDB } from "#server/utils/db";
 
 // export interface Env {
@@ -50,8 +51,10 @@ export default defineEventHandler(async (event) => {
   /*const insert = await db
     .insert(users)
     .values({ name: "selene", email: "selene.s.posada@gmail.com", password: "test" });*/
-  const select = await db.select().from(users).all();
+  const select = await db.select().from(users).where(eq(users.email, "selene.s.posada@gmail.com"));
   console.log(select);
+  if (select.length > 0) console.log(select);
+  else console.log("no such email");
   return {
     message: capitalize("hello from the server! This was returned from the API." + event),
     select,
