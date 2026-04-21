@@ -13,6 +13,7 @@
     "@nuxt/scripts": "^1.0.1",
     "@tailwindcss/vite": "^4.2.4",
     "@unhead/vue": "^3.0.4",
+    "argon2": "^0.44.0",
     "better-sqlite3": "^12.9.0",
     "daisyui": "^5.5.19",
     "drizzle-orm": "^0.45.2",
@@ -94,6 +95,7 @@
   "type": "module",
   "trustedDependencies": [
     "@parcel/watcher",
+    "argon2",
     "better-sqlite3",
     "esbuild",
     "keytar",
