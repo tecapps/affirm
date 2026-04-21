@@ -19,14 +19,15 @@ export default defineNuxtConfig({
     },
   },
   vite: {
+    optimizeDeps: {
+      include: ["@vue/devtools-core", "@vue/devtools-kit"],
+    },
     plugins: [tailwindcss()],
   },
   modules: [
-    "@nuxt/a11y",
     "@nuxt/content",
     "@nuxt/eslint",
     "@nuxt/fonts",
-    "@nuxt/hints",
     "@nuxt/icon",
     "@nuxt/image",
     "@nuxt/scripts",

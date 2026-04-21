@@ -1,12 +1,19 @@
 {
   "recommendations": [
-    "ms-dotnettools.vscode-dotnet-runtime",
-    "nuxtr.nuxt-vscode-extentions",
     "vue.volar",
     "nuxt.mdc",
     "meritek.nuxt-intellisense",
     "nuxtr.nuxtr-vscode",
     "trunk.io",
-    "anthropic.claude-code"
+    "anthropic.claude-code",
+    "christian-kohler.npm-intellisense",
+    "firefox-devtools.vscode-firefox-debug",
+    "fill-labs.dependi",
+    "tamasfe.even-better-toml",
+    "ms-vscode-remote.remote-containers",
+    "chrislajoie.vscode-modelines",
+    "redhat.vscode-yaml",
+    "ms-azuretools.vscode-containers",
+    "pflannery.vscode-versionlens"
   ]
 }
