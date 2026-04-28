@@ -21,12 +21,9 @@ dotenv.config();
 export default defineEventHandler(async (event) => {
   console.log(event);
   console.log("----------------------------------------------");
-  console.log(await readBody(event));
-  return {
-    message: capitalize("hello from the server! This was returned from the API." + event),
-  };
+  const body = await readBody(event);
 
-  const hash = await argon2.hash(event.password, {
+  const hash = await argon2.hash(body.password, {
     type: argon2.argon2id,
     memoryCost: 2 ** 16,
     timeCost: 4,
