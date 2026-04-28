@@ -4,6 +4,8 @@
  * Needs to take the password from the login page and encrypt it into argon2 for storage
  * Gotta figure out how to pass the password from the login
  */
+import { users } from "#server/database/schema";
+import { eq } from "drizzle-orm";
 import * as argon2 from "argon2";
 import * as dotenv from "dotenv";
 dotenv.config();
@@ -19,7 +21,6 @@ dotenv.config();
 */
 
 export default defineEventHandler(async (event) => {
-  console.log(event);
   console.log("----------------------------------------------");
   const body = await readBody(event);
 
@@ -33,6 +34,6 @@ export default defineEventHandler(async (event) => {
   console.log(hash);
   console.log("Finished login");
   return {
-    message: capitalize("hello from the server! This was returned from the API." + event),
+    message: capitalize("hello from the server! This was returned from the API. SUCCESS!"),
   };
 });

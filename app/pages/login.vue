@@ -1,14 +1,18 @@
 <script setup lang="ts">
 async function handleLogin() {
+  const email = document.getElementById("email") as HTMLInputElement;
+  const password = document.getElementById("password") as HTMLInputElement;
   try {
     console.log("Start Fetch"); //Browser has these
-    const res = await $fetch("/api/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: { email: "test@gmail.com" },
-    });
-    console.log("Fetch Complete");
-    console.log(res);
+    if (email?.value && password?.value) {
+      const res = await $fetch("/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: { email: email.value, password: password.value },
+      });
+      console.log("Fetch Complete");
+      console.log(res);
+    } else console.log("Login Failed, empty input");
   } catch (error) {
     console.error("Login failed:", error);
   }
