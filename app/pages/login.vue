@@ -2,7 +2,7 @@
 async function handleLogin() {
   try {
     console.log("Start Fetch"); //Browser has these
-    const res = await $fetch("/api/insertSample", {
+    const res = await $fetch("/api/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: { email: "test@gmail.com" },
