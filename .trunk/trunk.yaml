@@ -39,7 +39,6 @@ lint:
       paths:
         - env.d.ts
         - worker-configuration.d.ts
-        - scripts/test.ts
 actions:
   definitions:
     - id: bun-install
