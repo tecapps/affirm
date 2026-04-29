@@ -76,7 +76,7 @@
     "lint:trunk": "bun run trunk check -a",
     "lint:trunk:fix": "bun run trunk check -a --fix",
     "lint:types": "bun run tsc --noEmit",
-    "postinstall": "bun run-s postinstall:trunk:install postinstall:trunk:upgrade postinstall:prepare types format",
+    "postinstall": "bun run-s postinstall:prepare types format",
     "postinstall:prepare": "bun run nuxt prepare",
     "postinstall:trunk:install": "bun run trunk install --ci",
     "postinstall:trunk:upgrade": "bun run trunk upgrade --ci",
