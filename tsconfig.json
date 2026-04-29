@@ -19,6 +19,9 @@
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "types": ["node"],
-    "target": "es2025"
+    "target": "esnext",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "esModuleInterop": true
   }
 }
