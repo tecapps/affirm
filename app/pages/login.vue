@@ -1,9 +1,10 @@
 <script setup lang="ts">
+//Browser has the console logs not the server
 async function handleLogin() {
   const email = document.getElementById("email") as HTMLInputElement;
   const password = document.getElementById("password") as HTMLInputElement;
   try {
-    console.log("Start Fetch"); //Browser has these
+    console.log("Start Fetch");
     if (email?.value && password?.value) {
       const res = await $fetch("/api/login", {
         method: "POST",
@@ -27,7 +28,7 @@ async function handleLogin() {
       <input id="email" type="text" class="input" placeholder="email@example.com" />
 
       <label class="label">Password</label>
-      <input id="password" type="text" class="input" placeholder="password" />
+      <input id="password" type="password" class="input" placeholder="password" />
 
       <button class="btn">Login</button>
     </fieldset>

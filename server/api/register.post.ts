@@ -21,18 +21,31 @@ dotenv.config();
 */
 
 export default defineEventHandler(async (event) => {
+  const db = useDB(event);
   console.log("----------------------------------------------");
   const body = await readBody(event);
+  const select = (await db.select().from(users).where(eq(users.email, body.email)))?.[0];
+  console.log(select);
+  if (select) {
+    console.log("Already registered");
+    return {
+      message: capitalize("hello from the server! You are already registered!"),
+    };
+  } else {
+    console.log("no such email");
+    const hash = await argon2.hash(body.password, {
+      type: argon2.argon2id,
+      memoryCost: 2 ** 16,
+      timeCost: 4,
+      secret: Buffer.from(process.env.SECRET),
+    });
+    const insert = await db.insert(users).values({ name: body.name, email: body.email, password: hash });
+    if (insert) {
+      console.log("Insert complete " + insert);
+    }
+  }
 
-  const hash = await argon2.hash(body.password, {
-    type: argon2.argon2id,
-    memoryCost: 2 ** 16,
-    timeCost: 4,
-    secret: Buffer.from(process.env.SECRET),
-  });
-
-  console.log(hash);
-  console.log("Finished login");
+  console.log("registration finished");
   return {
     message: capitalize("hello from the server! This was returned from the API. SUCCESS!"),
   };
