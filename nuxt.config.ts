@@ -24,7 +24,15 @@ export default defineNuxtConfig({
     },
     plugins: [tailwindcss()],
   },
-  modules: ["@nuxt/eslint", "@nuxt/fonts", "@nuxt/icon", "@nuxt/image", "@nuxt/scripts", "nitro-cloudflare-dev"],
+  modules: [
+    "@nuxt/eslint",
+    "@nuxt/fonts",
+    "@nuxt/icon",
+    "@nuxt/image",
+    "@nuxt/scripts",
+    "nitro-cloudflare-dev",
+    "nuxt-auth-utils",
+  ],
   $env: {
     production: {
       nitro: {
