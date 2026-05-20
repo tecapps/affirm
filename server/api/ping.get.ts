@@ -1,5 +1,7 @@
+import type { ApiResponse } from "~~/shared/types";
+
 /**
- * GET /api/hello
+ * GET /api/ping
  *
  * A sample Nitro API route. The `.get.ts` suffix restricts this handler to
  * HTTP GET requests only. Nuxt auto-registers every file under `server/api/`
@@ -7,6 +9,7 @@
  */
 export default defineEventHandler(() => {
   return {
-    message: capitalize("hello from the server! This was returned from the API."),
-  };
+    error: false,
+    message: "pong",
+  } as ApiResponse;
 });

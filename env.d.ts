@@ -1,3 +1,3 @@
-/// <reference path="./shared/cloudflare.d.ts" />
+import "./shared/cloudflare";
 
 export {};

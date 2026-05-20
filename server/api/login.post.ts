@@ -6,9 +6,8 @@
  */
 import { users } from "#server/database/schema";
 import { eq } from "drizzle-orm";
-import * as argon2 from "argon2";
-import * as dotenv from "dotenv";
-dotenv.config();
+import { argon2Verify } from "hash-wasm";
+import type { ApiResponse } from "~~/shared/types";
 
 //const dataBaseHash = await query();
 /*try {
@@ -25,17 +24,20 @@ export default defineEventHandler(async (request) => {
   const db = useDB(request);
   const body = await readBody(request);
   const result = (await db.select().from(users).where(eq(users.email, body.email)))[0];
-  console.log(result);
   if (result?.password) {
-    const check = await argon2.verify(result.password, body.password, {
-      secret: Buffer.from(process.env.SECRET),
+    const check = await argon2Verify({
+      password: body.password,
+      hash: result.password,
     });
-    console.log(check);
     if (check) {
-      return { Message: "success, login was validated , you are a user" };
-    } else return { Message: "Wrong password try again" };
+      return {
+        error: false,
+        message: `${body.email} logged in`,
+      } as ApiResponse;
+    }
   }
   return {
-    message: capitalize("No login found try again"),
-  };
+    error: true,
+    message: `${body.email} failed login`,
+  } as ApiResponse;
 });
