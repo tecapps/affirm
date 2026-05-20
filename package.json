@@ -33,7 +33,7 @@
     "nitro-cloudflare-dev": "^0.2.2",
     "nitropack": "^2.13.3",
     "node-gyp": "^12.3.0",
-    "npm-run-all2": "^8.0.4",
+    "npm-run-all2": "^9.0.0",
     "playwright": "^1.59.1",
     "prettier": "^3.8.3",
     "vitest": "^4.1.5",
