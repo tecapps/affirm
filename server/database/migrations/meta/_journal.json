@@ -8,6 +8,13 @@
       "when": 1770502878439,
       "tag": "0000_opposite_oracle",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1774386589056,
+      "tag": "0001_steep_revanche",
+      "breakpoints": true
     }
   ]
 }

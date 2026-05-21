@@ -137,7 +137,7 @@ This project follows the **Nuxt 4** directory structure (source in `app/`).
   - **`middleware/`**: Route middleware.
   - **`assets/`**: CSS and static assets (Tailwind entry point).
 - **`server/`**: Nitro server backend.
-  - **`api/`**: API endpoints (e.g., `/api/hello`).
+  - **`api/`**: API endpoints (e.g., `/api/ping`).
   - **`database/`**: Drizzle schema and migrations.
   - **`utils/`**: Auto-imported server utilities (e.g., `useDB`).
 - **`shared/`**: Code shared between client and server.
@@ -162,7 +162,7 @@ This project follows the **Nuxt 4** directory structure (source in `app/`).
 
 - Use **`useFetch`** for data fetching in pages/components. It handles SSR hydration automatically.
   ```ts
-  const { data } = await useFetch("/api/hello");
+  const { data } = await useFetch("/api/ping");
   ```
 
 #### Server API
