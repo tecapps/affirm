@@ -25,6 +25,7 @@ export default defineEventHandler(async (event) => {
   const body = await readBody(event);
   const select = (await db.select().from(users).where(eq(users.email, body.email)))?.[0];
   if (!select) {
+    console.log("inserting new user");
     const salt = new Uint8Array(16); // allocate salt buffer of 16 bytes
     crypto.getRandomValues(salt); // fill salt with random bytes
     const hash = await argon2id({
@@ -36,7 +37,8 @@ export default defineEventHandler(async (event) => {
       hashLength: 32, // output size = 32 bytes
       outputType: "encoded", // return standard encoded string containing parameters needed to verify the key
     });
-    const _insert = db.insert(users).values({ name: body.name, email: body.email, password: hash });
+    const _insert = await db.insert(users).values({ name: body.name, email: body.email, password: hash });
+    console.log("inserted inserted");
   }
   return {
     error: undefined,
