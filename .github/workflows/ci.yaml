@@ -10,7 +10,7 @@ jobs:
       - name: checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
       - name: node
-        uses: actions/setup-node@670825a89dc0abd596e7a3abd0f5e3f6e5faf37c
+        uses: actions/setup-node@ad1b57eb8159e2fd3cc753317dd4a4016287218f
         with:
           node-version: 24
       - name: bun
