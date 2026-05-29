@@ -21,16 +21,19 @@ async function handleLogin() {
 </script>
 
 <template>
-  <form @submit.prevent="handleLogin">
-    <fieldset class="fieldset">
-      <legend class="fieldset-legend">Login Page</legend>
-      <label class="label">Email</label>
-      <input id="email" type="text" class="input" placeholder="email@example.com" />
+  <form @submit.prevent="handleLogin" class="card card-border card-sm mb-8">
+    <div class="card-body">
+      <fieldset class="fieldset">
+        <legend class="fieldset-legend">Login Page</legend>
+        <label class="label">Email</label>
+        <input id="email" type="text" class="input" placeholder="email@example.com" />
 
-      <label class="label">Password</label>
-      <input id="password" type="password" class="input" placeholder="password" />
+        <label class="label">Password</label>
+        <input id="password" type="password" class="input" placeholder="password" />
 
-      <button class="btn">Login</button>
-    </fieldset>
+        <UiButton isSubmit type="primary" class="mt-8">Login</UiButton>
+      </fieldset>
+    </div>
   </form>
+  <UiButton to="/register" type="secondary">New? Create an account</UiButton>
 </template>
