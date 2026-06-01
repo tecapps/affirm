@@ -26,8 +26,8 @@ lint:
     - trunk-toolbox@0.7.0
     - oxipng@10.1.1
     - actionlint@1.7.12
-    - checkov@3.2.529
-    - eslint@10.4.0
+    - checkov@3.2.531
+    - eslint@10.4.1
     - git-diff-check
     - markdownlint@0.48.0
     - prettier@3.8.3
