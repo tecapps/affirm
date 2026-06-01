@@ -23,7 +23,7 @@ async function handleLogin() {
 <template>
   <div class="flex flex-col items-center justify-center gap-4 mt-4">
     <h1 class="text-xl my-8">Login to your account</h1>
-    <form @submit.prevent="handleLogin" class="w-full">
+    <form class="w-full" @submit.prevent="handleLogin">
       <fieldset
         class="fieldset bg-base-200 border-base-300 border rounded-box w-full p-4 flex flex-col justify-stretch gap-4"
       >

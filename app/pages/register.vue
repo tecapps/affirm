@@ -25,7 +25,7 @@ async function handleRegister() {
 <template>
   <div class="flex flex-col items-center justify-center gap-4 mt-4">
     <h1 class="text-xl my-8">Create an account</h1>
-    <form @submit.prevent="handleRegister" class="w-full">
+    <form class="w-full" @submit.prevent="handleRegister">
       <fieldset
         class="fieldset bg-base-200 border-base-300 border rounded-box w-full p-4 flex flex-col justify-stretch gap-4"
       >
