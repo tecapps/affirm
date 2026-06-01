@@ -1,14 +1,8 @@
 <script setup lang="ts">
-//Browser has the console logs not the server
+const email = ref("");
+const password = ref("");
+const name = ref("");
 async function handleRegister() {
-  const email = document.getElementById("email") as HTMLInputElement;
-  const password = document.getElementById("password") as HTMLInputElement;
-  const name =
-    (document.getElementById("name") as HTMLInputElement)?.value != null
-      ? (document.getElementById("name") as HTMLInputElement)
-      : { value: "noname" };
-  console.log(email?.value);
-  console.log(password?.value);
   try {
     console.log("Start Fetch");
     if (email?.value && password?.value) {
@@ -29,19 +23,21 @@ async function handleRegister() {
 </script>
 
 <template>
-  <form @submit.prevent="handleRegister">
-    <fieldset class="fieldset">
-      <legend class="fieldset-legend">Register Page</legend>
-      <label class="label">Email</label>
-      <input id="email" type="text" class="input" placeholder="email@example.com" />
+  <div class="flex flex-col items-center justify-center gap-4 mt-4">
+    <h1 class="text-xl my-8">Create an account</h1>
+    <form @submit.prevent="handleRegister" class="w-full">
+      <fieldset
+        class="fieldset bg-base-200 border-base-300 border rounded-box w-full p-4 flex flex-col justify-stretch gap-4"
+      >
+        <legend class="sr-only">Register Page</legend>
+        <UiInput v-model="email" label="Email" placeholder="email@example.com" />
+        <UiInput v-model="name" label="Name" placeholder="Socks Smith" />
+        <UiInput v-model="password" label="Password" type="password" placeholder="password" />
 
-      <label class="label">Name</label>
-      <input id="name" type="text" class="input" placeholder="Socks Smith" />
-
-      <label class="label">Password</label>
-      <input id="password" type="password" class="input" placeholder="password" />
-
-      <button class="btn">Register</button>
-    </fieldset>
-  </form>
+        <UiButton isSubmit type="primary" class="mt-8">Register</UiButton>
+      </fieldset>
+    </form>
+    <span class="text-secondary-content text-xs">or</span>
+    <UiButton to="/login" type="secondary">Already have an account? Login</UiButton>
+  </div>
 </template>
