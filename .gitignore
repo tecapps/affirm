@@ -40,3 +40,6 @@ logs
 # Gemini
 .gemini/
 
+
+*storybook.log
+storybook-static
