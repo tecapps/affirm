@@ -1,8 +1,8 @@
 <script setup lang="ts">
-//Browser has the console logs not the server
+const email = ref("");
+const password = ref("");
+
 async function handleLogin() {
-  const email = document.getElementById("email") as HTMLInputElement;
-  const password = document.getElementById("password") as HTMLInputElement;
   try {
     console.log("Start Fetch");
     if (email?.value && password?.value) {
@@ -21,19 +21,21 @@ async function handleLogin() {
 </script>
 
 <template>
-  <form @submit.prevent="handleLogin" class="card card-border card-sm mb-8">
-    <div class="card-body">
-      <fieldset class="fieldset">
-        <legend class="fieldset-legend">Login Page</legend>
-        <label class="label">Email</label>
-        <input id="email" type="text" class="input" placeholder="email@example.com" />
+  <div class="flex flex-col items-center justify-center gap-4 mt-4">
+    <h1 class="text-xl my-8">Login to your account</h1>
+    <form @submit.prevent="handleLogin" class="w-full">
+      <fieldset
+        class="fieldset bg-base-200 border-base-300 border rounded-box w-full p-4 flex flex-col justify-stretch gap-4"
+      >
+        <legend class="sr-only">Login Page</legend>
 
-        <label class="label">Password</label>
-        <input id="password" type="password" class="input" placeholder="password" />
+        <UiInput v-model="email" label="Email" placeholder="email@example.com" />
+        <UiInput v-model="password" label="Password" type="password" placeholder="password" />
 
         <UiButton isSubmit type="primary" class="mt-8">Login</UiButton>
       </fieldset>
-    </div>
-  </form>
-  <UiButton to="/register" type="secondary">New? Create an account</UiButton>
+    </form>
+    <span class="text-secondary-content text-xs">or</span>
+    <UiButton to="/register" type="secondary">New? Create an account</UiButton>
+  </div>
 </template>
