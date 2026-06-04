@@ -32,7 +32,7 @@ async function handleLogin() {
         <UiInput v-model="email" label="Email" placeholder="email@example.com" />
         <UiInput v-model="password" label="Password" type="password" placeholder="password" />
 
-        <UiButton isSubmit type="primary" class="mt-8">Login</UiButton>
+        <UiButton is-submit type="primary" class="mt-8">Login</UiButton>
       </fieldset>
     </form>
     <span class="text-secondary-content text-xs">or</span>

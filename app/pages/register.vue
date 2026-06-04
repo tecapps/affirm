@@ -34,7 +34,7 @@ async function handleRegister() {
         <UiInput v-model="name" label="Name" placeholder="Socks Smith" />
         <UiInput v-model="password" label="Password" type="password" placeholder="password" />
 
-        <UiButton isSubmit type="primary" class="mt-8">Register</UiButton>
+        <UiButton is-submit type="primary" class="mt-8">Register</UiButton>
       </fieldset>
     </form>
     <span class="text-secondary-content text-xs">or</span>
