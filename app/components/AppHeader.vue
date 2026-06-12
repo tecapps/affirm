@@ -5,8 +5,15 @@
     </div>
     <nav class="flex-none">
       <ul class="menu menu-horizontal px-1">
-        <li><NuxtLink to="/">Home</NuxtLink></li>
-        <li><NuxtLink to="/about">About</NuxtLink></li>
+        <li>
+          <NuxtLink to="/">Home</NuxtLink>
+        </li>
+        <li>
+          <NuxtLink to="/about">About</NuxtLink>
+        </li>
+        <li>
+          <NuxtLink to="/list">List</NuxtLink>
+        </li>
       </ul>
     </nav>
   </header>
