@@ -32,6 +32,7 @@ export default defineNuxtConfig({
     "@nuxt/scripts",
     "nitro-cloudflare-dev",
     "nuxt-auth-utils",
+    "@nuxtjs/storybook",
   ],
   $env: {
     production: {
