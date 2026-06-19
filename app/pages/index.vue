@@ -7,7 +7,7 @@
  * on the client — no loading spinners needed for the initial render.
  */
 const { version } = useAppInfo();
-const { data: hello } = await useFetch("/api/hello");
+const { data: hello } = await useFetch("/api/ping");
 </script>
 
 <template>

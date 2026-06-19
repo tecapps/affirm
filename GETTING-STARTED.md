@@ -301,7 +301,7 @@ affirm/
 │   └── pages/                  #    File-based routing
 │
 ├── server/                     # ⚙️ Nitro server backend
-│   ├── api/                    #    API endpoints (e.g. /api/hello)
+│   ├── api/                    #    API endpoints (e.g. /api/ping)
 │   ├── database/               #    Drizzle schema and migrations
 │   └── utils/                  #    Auto-imported server utilities (e.g. useDB)
 │
@@ -378,7 +378,7 @@ All Vue components should use the **Composition API** with `<script setup lang="
 
 ```vue
 <script setup lang="ts">
-const { data } = await useFetch("/api/hello");
+const { data } = await useFetch("/api/ping");
 </script>
 
 <template>
@@ -411,7 +411,7 @@ Refer to the [DaisyUI documentation](https://daisyui.com/) for available compone
 Use `useFetch` for all data fetching in pages and components. It handles SSR hydration automatically:
 
 ```typescript
-const { data, pending, error } = await useFetch("/api/hello");
+const { data, pending, error } = await useFetch("/api/ping");
 ```
 
 ### Server API Routes
@@ -419,7 +419,7 @@ const { data, pending, error } = await useFetch("/api/hello");
 Create API endpoints in `server/api/`. Export a default event handler:
 
 ```typescript
-// server/api/hello.ts
+// server/api/ping.ts
 export default defineEventHandler((event) => {
   return { message: "Hello from the server" };
 });
