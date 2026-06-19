@@ -1,9 +1,9 @@
 <template>
   <NuxtLink v-if="isLink" :to="to" :class="buttonClasses" v-bind="$attrs">
-    <slot></slot>
+    <slot />
   </NuxtLink>
-  <button v-else="isLink" :class="buttonClasses" v-bind="$attrs" :type="buttonType">
-    <slot></slot>
+  <button v-else :class="buttonClasses" v-bind="$attrs" :type="buttonType">
+    <slot />
   </button>
 </template>
 
