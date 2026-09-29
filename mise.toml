@@ -6,8 +6,8 @@ env_file = ".env"
 disable_tools = ["npm", "pnpm", "yarn"]
 
 [tools]
-bun = { version = "1.3.14" }
-node = { version = "24.16.0" }
+aube = { version = "2.2.17" }
+node = { version = "26.10.0" }
 rust = { version = "1.96.0" }
 
 [tasks]
