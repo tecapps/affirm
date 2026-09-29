@@ -43,10 +43,10 @@ lint:
         - worker-configuration.d.ts
 actions:
   definitions:
-    - id: bun-install
-      display_name: Install dependencies with bun
-      description: Run bun install to ensure dependencies are up to date
-      run: bun install
+    - id: aube-install
+      display_name: Install dependencies with aube
+      description: Run aube install to ensure dependencies are up to date
+      run: aube install
       triggers:
         - git_hooks:
             - pre-commit
@@ -55,4 +55,4 @@ actions:
     - trunk-check-pre-push
     - trunk-fmt-pre-commit
     - trunk-upgrade-available
-    - bun-install
+    - aube-install
