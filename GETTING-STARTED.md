@@ -89,7 +89,7 @@ Then add the same public key to your GitHub account under **Settings → SSH and
 
 ### Optional but Recommended
 
-- **Trunk CLI** — installed globally if you prefer, otherwise it's available as a dev dependency via `pnpm run trunk`. See the [Trunk docs](https://docs.trunk.io/code-quality/overview/initialize-trunk).
+- **Trunk CLI** — installed globally if you prefer, otherwise it's available as a dev dependency via `pnpm exec trunk`. See the [Trunk docs](https://docs.trunk.io/code-quality/overview/initialize-trunk).
 
 ---
 
@@ -600,9 +600,8 @@ There are a few things that can catch you out. Keep these in mind:
 - **This is Nuxt 4, not Nuxt 3.** The Nuxt 3 docs may differ significantly, especially regarding the `app/` directory structure. Always refer to the [Nuxt 4 documentation](https://nuxt.com/docs/4.x).
 - **D1 bindings exist in two places.** Both the Wrangler config files and `nuxt.config.ts` define D1 bindings (because Nitro generates a separate Wrangler config at build time). Keep them in sync.
 - **Always use `--envName` for builds.** A bare `nuxt build` produces no D1 binding. The `build` and `build:staging` scripts handle this for you — use them.
-- **`pnpm run build`, not `pnpm build`.** The latter clashes with `pnpm`'s internal build command. Always use `pnpm run build`.
 - **Auto-imports are your friend.** Don't manually import Vue composables or components from `app/components/`. Nuxt handles this.
-- **Trunk is a dev dependency, not global.** Invoke it via `pnpm run trunk`, or install it globally by following [the Trunk docs](https://docs.trunk.io/code-quality/overview/initialize-trunk).
+- **Trunk is a dev dependency, not global.** Invoke it via `pnpm exec trunk`, or install it globally by following [the Trunk docs](https://docs.trunk.io/code-quality/overview/initialize-trunk).
 
 ---
 

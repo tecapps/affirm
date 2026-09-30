@@ -97,7 +97,7 @@ pnpm run dev
 ## Development
 
 This repository hosts a **Nuxt 4** web application deployed to **Cloudflare Workers**. It uses **pnpm** as the package
-manager and runtime for development scripts.
+manager and **Node.js 26** as the runtime environment.
 
 ### Essential Commands
 
@@ -117,7 +117,7 @@ Run these commands with `pnpm`.
   - `pnpm run build:staging` (builds for staging — uses `--envName=staging`)
 - **Deploy** (prefer Workers Builds — see [Deployment](#deployment)):
   - `pnpm run deploy` (build + deploy to production via `wrangler.jsonc`)
-  - `pnpm run deploy:staging` (build staging + upload version via `wrangler.staging.jsonc`)
+  - `pnpm run deploy:staging` (build staging + upload version + promote to staging via `wrangler.staging.jsonc`)
 - **Database**:
   - `pnpm run db:generate` (generate migrations after schema changes)
   - `pnpm run db:migrate` (apply migrations to local D1)

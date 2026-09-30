@@ -48,8 +48,8 @@ Deployment is handled by **Cloudflare Workers Builds** — there is no GitHub Ac
 
 For manual/local deploys (rarely needed):
 
-- **Deploy to Production**: `pnpm run deploy` (builds + `wrangler deploy -c wrangler.jsonc`)
-- **Deploy to Staging**: `pnpm run deploy:staging` (builds + `wrangler versions upload -c wrangler.staging.jsonc`)
+- **Deploy to Production**: `pnpm run deploy` (builds + `pnpm exec wrangler deploy -c wrangler.jsonc`)
+- **Deploy to Staging**: `pnpm run deploy:staging` (builds + `pnpm exec wrangler deploy -c wrangler.staging.jsonc`)
 
 ## Code Structure
 
