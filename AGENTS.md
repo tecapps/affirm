@@ -16,27 +16,27 @@ This document outlines the development workflow, commands, and patterns for work
 
 ### Development
 
-- **Start Dev Server**: `aube run dev` (Runs Nuxt dev server with Cloudflare binding proxies)
-- **Lint & Fix**: `aube run lint:fix` (Runs ESLint and Trunk)
-- **Format**: `aube run format` (Runs Prettier and Trunk)
-- **Type Check**: `aube run lint:types`
+- **Start Dev Server**: `pnpm run dev` (Runs Nuxt dev server with Cloudflare binding proxies)
+- **Lint & Fix**: `pnpm run lint:fix` (Runs ESLint and Trunk)
+- **Format**: `pnpm run format` (Runs Prettier and Trunk)
+- **Type Check**: `pnpm run lint:types`
 
 ### Database (Drizzle & D1)
 
-- **Generate Migrations**: `aube run db:generate` (Run after changing `server/database/schema.ts`)
-- **Migrate Local**: `aube run db:migrate` (Applies migrations to local D1 instance)
-- **Migrate Staging**: `aube run db:migrate:staging` (Applies to `affirm-staging` DB via `wrangler.staging.jsonc`)
-- **Migrate Production**: `aube run db:migrate:prod` (Applies to `affirm` DB via `wrangler.jsonc`)
+- **Generate Migrations**: `pnpm run db:generate` (Run after changing `server/database/schema.ts`)
+- **Migrate Local**: `pnpm run db:migrate` (Applies migrations to local D1 instance)
+- **Migrate Staging**: `pnpm run db:migrate:staging` (Applies to `affirm-staging` DB via `wrangler.staging.jsonc`)
+- **Migrate Production**: `pnpm run db:migrate:prod` (Applies to `affirm` DB via `wrangler.jsonc`)
 - **Drizzle Studio**:
-  - Staging: `aube run db:studio:staging`
-  - Production: `aube run db:studio:prod`
+  - Staging: `pnpm run db:studio:staging`
+  - Production: `pnpm run db:studio:prod`
 
 ### Testing
 
-- **Run All Tests**: `aube run test`
-- **Unit Tests**: `aube run test:unit`
-- **Nuxt Tests**: `aube run test:nuxt`
-- **E2E Tests**: `aube run test:e2e` (Playwright)
+- **Run All Tests**: `pnpm run test`
+- **Unit Tests**: `pnpm run test:unit`
+- **Nuxt Tests**: `pnpm run test:nuxt`
+- **E2E Tests**: `pnpm run test:e2e` (Playwright)
 
 ### Deployment
 
@@ -48,8 +48,8 @@ Deployment is handled by **Cloudflare Workers Builds** — there is no GitHub Ac
 
 For manual/local deploys (rarely needed):
 
-- **Deploy to Production**: `aube run deploy` (builds + `wrangler deploy -c wrangler.jsonc`)
-- **Deploy to Staging**: `aube run deploy:staging` (builds + `wrangler versions upload -c wrangler.staging.jsonc`)
+- **Deploy to Production**: `pnpm run deploy` (builds + `wrangler deploy -c wrangler.jsonc`)
+- **Deploy to Staging**: `pnpm run deploy:staging` (builds + `wrangler versions upload -c wrangler.staging.jsonc`)
 
 ## Code Structure
 
@@ -93,15 +93,15 @@ export default defineEventHandler(async (event) => {
 
 - **`wrangler.jsonc`**: Production Cloudflare Workers config. Includes the production D1 binding (`affirm`).
 - **`wrangler.staging.jsonc`**: Staging Cloudflare Workers config. Includes the staging D1 binding (`affirm-staging`).
-- **`wrangler.dev.jsonc`**: Local dev Cloudflare Workers config. Used by `aube run dev` and local migrations.
+- **`wrangler.dev.jsonc`**: Local dev Cloudflare Workers config. Used by `pnpm run dev` and local migrations.
 - **`nuxt.config.ts`**: Main Nuxt configuration. Uses `$env` to inject the correct D1 binding at build time.
 - **`drizzle.config.ts`**: Drizzle Kit configuration (for `db:push` and `db:studio` commands).
 
 ## Gotchas & Guidelines
 
 1. **Environment Variables**: Managed via wrangler config bindings for runtime. For local dev, `.dev.vars` is used.
-2. **Migrations**: Always run `aube run db:generate` after modifying schema. Do not modify SQL files manually. Remote migrations use the D1 binding from the appropriate wrangler config file.
-3. **Bindings**: The application relies on Cloudflare bindings (`DB`, `ASSETS`). Ensure `aube run dev` is used to properly proxy these during development.
+2. **Migrations**: Always run `pnpm run db:generate` after modifying schema. Do not modify SQL files manually. Remote migrations use the D1 binding from the appropriate wrangler config file.
+3. **Bindings**: The application relies on Cloudflare bindings (`DB`, `ASSETS`). Ensure `pnpm run dev` is used to properly proxy these during development.
 4. **Imports**: Use `~` alias for project root (e.g., `~/server/utils/db`).
 5. **Wrangler Configs**: Each environment has its own wrangler config. Migration and deploy scripts use `-c <config>` to target the right D1 database. Never pass `--database-id` to wrangler — it's not a valid flag for `d1 migrations apply`.
 6. **Workers Builds**: Deployment is handled by Cloudflare Workers Builds, not GitHub Actions. The `ci.yaml` workflow only runs lint/typecheck/build checks.

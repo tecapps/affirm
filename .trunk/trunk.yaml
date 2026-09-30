@@ -43,10 +43,10 @@ lint:
         - worker-configuration.d.ts
 actions:
   definitions:
-    - id: aube-install
-      display_name: Install dependencies with aube
-      description: Run aube install to ensure dependencies are up to date
-      run: aube install
+    - id: pnpm-install
+      display_name: Install dependencies with pnpm
+      description: Run pnpm install to ensure dependencies are up to date
+      run: pnpm install
       triggers:
         - git_hooks:
             - pre-commit
@@ -55,4 +55,4 @@ actions:
     - trunk-check-pre-push
     - trunk-fmt-pre-commit
     - trunk-upgrade-available
-    - aube-install
+    - pnpm-install

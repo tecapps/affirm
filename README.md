@@ -53,12 +53,12 @@ submitting a PR and save everyone a bunch of time.
 
 ## Setup
 
-Install [`aube`](https://aube.jdx.dev) if you haven't already. I suggest using [`mise`](https://mise.jdx.dev), which you can also use to manage Node versions and a bunch of other stuff too.
+Install [`pnpm`](https://pnpm.jdx.dev) if you haven't already. I suggest using [`mise`](https://mise.jdx.dev), which you can also use to manage Node versions and a bunch of other stuff too.
 
 There is a `mise.toml` file included in this repo. It will install everything you need.
 
 The only exception is `trunk` which is a _massive_ pain in the arse to manage using `mise`. It'll be installed as a dev
-dependency and can be invoked through `aube exec trunk`, or read
+dependency and can be invoked through `pnpm exec trunk`, or read
 the [installation documentation](https://docs.trunk.io/code-quality/overview/initialize-trunk) to install it globally if
 you prefer.
 
@@ -82,8 +82,8 @@ mise install
 When everything is set up, install dependencies:
 
 ```bash
-# we are using aube for package management
-aube install
+# we are using pnpm for package management
+pnpm install
 ```
 
 ## Development Server
@@ -91,45 +91,45 @@ aube install
 Start the development server on `http://localhost:3000`:
 
 ```bash
-aube run dev
+pnpm run dev
 ```
 
 ## Development
 
-This repository hosts a **Nuxt 4** web application deployed to **Cloudflare Workers**. It uses **Aube** as the package
+This repository hosts a **Nuxt 4** web application deployed to **Cloudflare Workers**. It uses **pnpm** as the package
 manager and runtime for development scripts.
 
 ### Essential Commands
 
 > [!NOTE]
 >
-> `aube run <command>` : run script defined in `package.json`. For example `aube run dev`.
-> `aube exec <command>` : invoke a binary, like `aube exec wrangler deploy -c wrangler.jsonc`
+> `pnpm run <command>` : run script defined in `package.json`. For example `pnpm run dev`.
+> `pnpm exec <command>` : invoke a binary, like `pnpm exec wrangler deploy -c wrangler.jsonc`
 >
 > Make sure you use the right one, though you can always just try again with the other one!
 
-Run these commands with `aube`.
+Run these commands with `pnpm`.
 
-- **Install dependencies**: `aube install` (or `aube run postinstall` to setup Trunk)
-- **Development Server**: `aube run dev` (starts Nuxt dev server with local D1)
+- **Install dependencies**: `pnpm install` (or `pnpm run postinstall` to setup Trunk)
+- **Development Server**: `pnpm run dev` (starts Nuxt dev server with local D1)
 - **Build**:
-  - `aube run build` (builds for production — uses `--envName=production`)
-  - `aube run build:staging` (builds for staging — uses `--envName=staging`)
+  - `pnpm run build` (builds for production — uses `--envName=production`)
+  - `pnpm run build:staging` (builds for staging — uses `--envName=staging`)
 - **Deploy** (prefer Workers Builds — see [Deployment](#deployment)):
-  - `aube run deploy` (build + deploy to production via `wrangler.jsonc`)
-  - `aube run deploy:staging` (build staging + upload version via `wrangler.staging.jsonc`)
+  - `pnpm run deploy` (build + deploy to production via `wrangler.jsonc`)
+  - `pnpm run deploy:staging` (build staging + upload version via `wrangler.staging.jsonc`)
 - **Database**:
-  - `aube run db:generate` (generate migrations after schema changes)
-  - `aube run db:migrate` (apply migrations to local D1)
-  - `aube run db:migrate:staging` (apply migrations to staging D1 via `wrangler.staging.jsonc`)
-  - `aube run db:migrate:prod` (apply migrations to production D1 via `wrangler.jsonc`)
-  - `aube run db:studio:staging` / `aube run db:studio:prod` (Drizzle Studio)
+  - `pnpm run db:generate` (generate migrations after schema changes)
+  - `pnpm run db:migrate` (apply migrations to local D1)
+  - `pnpm run db:migrate:staging` (apply migrations to staging D1 via `wrangler.staging.jsonc`)
+  - `pnpm run db:migrate:prod` (apply migrations to production D1 via `wrangler.jsonc`)
+  - `pnpm run db:studio:staging` / `pnpm run db:studio:prod` (Drizzle Studio)
 - **Lint & Format**:
-  - `aube run lint:fix` (Run all linters and fix issues)
-  - `aube run format` (Format code with Prettier and Trunk)
+  - `pnpm run lint:fix` (Run all linters and fix issues)
+  - `pnpm run format` (Format code with Prettier and Trunk)
 - **Testing**:
-  - `aube run test` (Unit tests via Vitest)
-  - `aube run test:e2e` (E2E tests via Playwright)
+  - `pnpm run test` (Unit tests via Vitest)
+  - `pnpm run test:e2e` (E2E tests via Playwright)
 
 ### Project Structure
 
@@ -204,9 +204,9 @@ D1 bindings are **also** in `nuxt.config.ts` using Nuxt's `$env` overrides, beca
 generates a separate wrangler config at build time. The `$env` mechanism builds a flat config targeting exactly one
 database.
 
-- `aube run build` → production D1 binding (`--envName=production`)
-- `aube run build:staging` → staging D1 binding (`--envName=staging`)
-- `aube run dev` → local D1 via `wrangler.dev.jsonc`
+- `pnpm run build` → production D1 binding (`--envName=production`)
+- `pnpm run build:staging` → staging D1 binding (`--envName=staging`)
+- `pnpm run dev` → local D1 via `wrangler.dev.jsonc`
 
 > [!WARNING]
 > Every build **must** specify an `--envName`. A build without one produces no D1 binding. The `build` and
@@ -215,13 +215,13 @@ database.
 #### Schema changes
 
 1. Edit `server/database/schema.ts`
-2. Run `aube run db:generate` to create a migration
-3. Run `aube run db:migrate` to apply it locally
-4. Commit the migration files — `aube run db:migrate:staging` and `aube run db:migrate:prod` handle staging/production migrations on deploy
+2. Run `pnpm run db:generate` to create a migration
+3. Run `pnpm run db:migrate` to apply it locally
+4. Commit the migration files — `pnpm run db:migrate:staging` and `pnpm run db:migrate:prod` handle staging/production migrations on deploy
 
 ### Tooling & Configuration
 
-- **Trunk**: Manages linting and formatting tools. Use `aube run lint:fix` to ensure compliance.
+- **Trunk**: Manages linting and formatting tools. Use `pnpm run lint:fix` to ensure compliance.
 - **Wrangler**: Handles Cloudflare deployment. Each environment has its own config file.
 - **Nuxt Config**: Located in `nuxt.config.ts`. D1 environment overrides use the `$env` key.
 - **TypeScript**: Strict mode is enabled. Ensure types are valid.
@@ -240,13 +240,13 @@ database.
 Build the application for production:
 
 ```bash
-aube run build
+pnpm run build
 ```
 
 Locally preview production build:
 
 ```bash
-aube run preview
+pnpm run preview
 ```
 
 ## Deployment
@@ -259,8 +259,8 @@ There are two separate Cloudflare Workers, each connected to this Git repo:
 
 | Worker           | Production branch | Build command                            | Deploy command                                                                                |
 | ---------------- | ----------------- | ---------------------------------------- | --------------------------------------------------------------------------------------------- |
-| `affirm`         | `production`      | `aube install && aube run build`         | `aube run db:migrate:prod && aube exec wrangler deploy -c wrangler.jsonc`                     |
-| `affirm-staging` | `staging`         | `aube install && aube run build:staging` | `aube run db:migrate:staging && aube exec wrangler versions upload -c wrangler.staging.jsonc` |
+| `affirm`         | `production`      | `pnpm install && pnpm run build`         | `pnpm run db:migrate:prod && pnpm exec wrangler deploy -c wrangler.jsonc`                     |
+| `affirm-staging` | `staging`         | `pnpm install && pnpm run build:staging` | `pnpm run db:migrate:staging && pnpm exec wrangler versions upload -c wrangler.staging.jsonc` |
 
 - **Push to `staging`**: Workers Builds triggers on `affirm-staging`, runs migrations on the staging D1, uploads a new version.
 - **Push to `production`**: Workers Builds triggers on `affirm`, runs migrations on the production D1, deploys to live traffic.
@@ -276,10 +276,10 @@ If you need to deploy outside of Workers Builds:
 
 ```bash
 # Production: build + promote
-aube run deploy
+pnpm run deploy
 
 # Staging: build + upload version
-aube run deploy:staging
+pnpm run deploy:staging
 ```
 
 Eventually, we'll point a domain. Currently we don't configure any routing, adding a domain is a simple enough change
