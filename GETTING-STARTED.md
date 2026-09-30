@@ -6,21 +6,21 @@ A developer's guide to setting up the [tecapps/affirm](https://github.com/tecapp
 
 ## Overview
 
-Affirm is a **Nuxt 4** web application deployed to **Cloudflare Workers**. It uses **Bun** as its package manager, **Tailwind CSS v4** with **DaisyUI** for styling, **Drizzle ORM** with **Cloudflare D1** (SQLite) for the database, and **Trunk** for linting/formatting.
+Affirm is a **Nuxt 4** web application deployed to **Cloudflare Workers**. It uses **`pnpm`** as its package manager, **Tailwind CSS v4** with **DaisyUI** for styling, **Drizzle ORM** with **Cloudflare D1** (SQLite) for the database, and **Trunk** for linting/formatting.
 
 ### Stack at a Glance
 
-| Layer      | Technology                      | Notes                                     |
-| ---------- | ------------------------------- | ----------------------------------------- |
-| Framework  | Nuxt 4                          | Source in `app/` directory                |
-| UI Library | Vue 3 (Composition API)         | `<script setup lang="ts">`                |
-| Styling    | Tailwind CSS v4 + DaisyUI       | Catppuccin Mocha theme                    |
-| Content    | Nuxt Content                    | Markdown-based copywriting                |
-| Runtime    | Bun                             | Package manager and dev scripts           |
-| Database   | Cloudflare D1 + Drizzle ORM     | SQLite on the edge                        |
-| Hosting    | Cloudflare Workers              | Separate prod & staging workers           |
-| Linting    | Trunk + ESLint                  | Multi-tool orchestration                  |
-| CI         | GitHub Actions + Workers Builds | CI checks only; deployment via Cloudflare |
+| Layer           | Technology                      | Notes                                     |
+| --------------- | ------------------------------- | ----------------------------------------- |
+| Framework       | Nuxt 4                          | Source in `app/` directory                |
+| UI Library      | Vue 3 (Composition API)         | `<script setup lang="ts">`                |
+| Styling         | Tailwind CSS v4 + DaisyUI       | Catppuccin Mocha theme                    |
+| Content         | Nuxt Content                    | Markdown-based copywriting                |
+| Package Manager | `pnpm`                          | Handles project dependencies and scripts  |
+| Database        | Cloudflare D1 + Drizzle ORM     | SQLite on the edge                        |
+| Hosting         | Cloudflare Workers              | Separate prod & staging workers           |
+| Linting         | Trunk + ESLint                  | Multi-tool orchestration                  |
+| CI              | GitHub Actions + Workers Builds | CI checks only; deployment via Cloudflare |
 
 ```mermaid
 ---
@@ -42,7 +42,7 @@ graph LR
     end
 
     subgraph "Tooling"
-        H["Bun"]
+        H["pnpm"]
         I["Trunk"]
         J["Wrangler"]
     end
@@ -83,13 +83,13 @@ git config --global commit.gpgsign true
 Then add the same public key to your GitHub account under **Settings → SSH and GPG keys → New SSH key** (select _Signing Key_ as the type).
 
 </details>
-- **mise** — the recommended version manager. Install it from [mise.jdx.dev](https://mise.jdx.dev). mise will handle installing Bun, Node.js, and other tools for you.
+- **mise** — the recommended version manager. Install it from [mise.jdx.dev](https://mise.jdx.dev). mise will handle installing `pnpm`, Node.js, and other tools for you.
 
 - **GitHub Access** — ensure you have push access to [tecapps/affirm](https://github.com/tecapps/affirm). If you can see the repo but can't push, contact Dave.
 
 ### Optional but Recommended
 
-- **Trunk CLI** — installed globally if you prefer, otherwise it's available as a dev dependency via `bun run trunk`. See the [Trunk docs](https://docs.trunk.io/code-quality/overview/initialize-trunk).
+- **Trunk CLI** — installed globally if you prefer, otherwise it's available as a dev dependency via `pnpm run trunk`. See the [Trunk docs](https://docs.trunk.io/code-quality/overview/initialize-trunk).
 
 ---
 
@@ -103,7 +103,7 @@ config:
 flowchart TD
     A["Clone the repository"] --> B["Trust the mise config"]
     B --> C["Install toolchain via mise"]
-    C --> D["Install dependencies via Bun"]
+    C --> D["Install dependencies via pnpm"]
     D --> E["Copy environment files"]
     E --> F["Start the dev server"]
 
@@ -132,16 +132,16 @@ The repository includes a `mise.toml` that defines all required tools and their 
 # Trust the mise configuration for this repo
 mise trust
 
-# Install all tools (Bun, Node.js, and others)
+# Install all tools (pnpm, Node.js, and others)
 mise install
 ```
 
-This will install Bun, Node.js, and a few extras (coding agent CLIs, Rust for potential future WASM use). Feel free to customise `mise.toml` for your own needs, but be aware changes affect everyone.
+This will install pnpm, Node.js, and a few extras (coding agent CLIs, Rust for potential future WASM use). Feel free to customise `mise.toml` for your own needs, but be aware changes affect everyone.
 
 ### 3. Install Dependencies
 
 ```bash
-bun install
+pnpm install
 ```
 
 This also runs the `postinstall` hook, which sets up Trunk (the linter/formatter orchestrator).
@@ -160,7 +160,7 @@ Edit these files with any required local values. Ask Dave if you're unsure what 
 ### 5. Run the Dev Server
 
 ```bash
-bun dev
+pnpm dev
 ```
 
 The development server will start at [http://localhost:3000](http://localhost:3000). It runs with hot-module replacement and a local D1 database via `wrangler.dev.jsonc`.
@@ -168,7 +168,7 @@ The development server will start at [http://localhost:3000](http://localhost:30
 If you've pulled changes that include new database migrations, apply them to your local D1 before starting work:
 
 ```bash
-bun run db:migrate
+pnpm run db:migrate
 ```
 
 ---
@@ -252,9 +252,9 @@ WebStorm 2025.1+ has excellent built-in support for Nuxt 4, Vue 3, and Tailwind 
 
 Go to **Preferences → Languages & Frameworks → TypeScript** and ensure the TypeScript version is set to the project's `node_modules/typescript`. WebStorm usually detects this automatically.
 
-#### Configure Bun
+#### Configure `pnpm`
 
-Go to **Preferences → Languages & Frameworks → Node.js** and set the package manager to **bun**. Point the interpreter to the mise shim for Bun (typically `~/.local/share/mise/shims/bun`).
+Go to **Preferences → Languages & Frameworks → Node.js** and set the package manager to **`pnpm`**.
 
 > 💡 **Tip:** WebStorm natively supports Nuxt's auto-imports. If auto-completion for composables like `useFetch` isn't working, try **File → Invalidate Caches → Restart**.
 
@@ -277,7 +277,7 @@ flowchart TD
         W1["Open project in WebStorm"]
         W2["Verify Node.js runtime"]
         W3["Check built-in plugins"]
-        W4["Set Bun as package manager"]
+        W4["Set `pnpm` as package manager"]
         W5["Ready to develop"]
 
         W1 --> W2 --> W3 --> W4 --> W5
@@ -318,7 +318,7 @@ affirm/
 ├── eslint.config.mjs           #    ESLint configuration
 ├── tsconfig.json               #    TypeScript configuration
 ├── package.json                #    Dependencies and scripts
-├── bun.lock                    #    Bun lockfile
+├── pnpm-lock.yaml              #    `pnpm` lockfile
 ├── mise.toml                   #    mise tool version definitions
 │
 ├── wrangler.jsonc              #    Cloudflare Workers config (production)
@@ -429,22 +429,22 @@ export default defineEventHandler((event) => {
 
 ## Essential Commands
 
-All commands are run with `bun`. Here's your cheat sheet:
+All commands are run with `pnpm`. Here's your cheat sheet:
 
-| Command                  | Purpose                                     |
-| ------------------------ | ------------------------------------------- |
-| `bun install`            | Install dependencies                        |
-| `bun dev`                | Start development server (localhost:3000)   |
-| `bun run build`          | Build for production                        |
-| `bun run build:staging`  | Build for staging                           |
-| `bun run lint:fix`       | Run all linters and auto-fix                |
-| `bun run format`         | Format code (Prettier + Trunk)              |
-| `bun run test`           | Run unit tests (Vitest)                     |
-| `bun run test:e2e`       | Run end-to-end tests (Playwright)           |
-| `bun run db:generate`    | Generate DB migrations after schema changes |
-| `bun run db:migrate`     | Apply migrations to local D1                |
-| `bun run deploy`         | Manual deploy to production                 |
-| `bun run deploy:staging` | Manual deploy to staging                    |
+| Command                   | Purpose                                     |
+| ------------------------- | ------------------------------------------- |
+| `pnpm install`            | Install dependencies                        |
+| `pnpm dev`                | Start development server (localhost:3000)   |
+| `pnpm run build`          | Build for production                        |
+| `pnpm run build:staging`  | Build for staging                           |
+| `pnpm run lint:fix`       | Run all linters and auto-fix                |
+| `pnpm run format`         | Format code (Prettier + Trunk)              |
+| `pnpm run test`           | Run unit tests (Vitest)                     |
+| `pnpm run test:e2e`       | Run end-to-end tests (Playwright)           |
+| `pnpm run db:generate`    | Generate DB migrations after schema changes |
+| `pnpm run db:migrate`     | Apply migrations to local D1                |
+| `pnpm run deploy`         | Manual deploy to production                 |
+| `pnpm run deploy:staging` | Manual deploy to staging                    |
 
 ---
 
@@ -540,10 +540,10 @@ If you ever need to deploy outside of Workers Builds:
 
 ```bash
 # Production
-bun run deploy
+pnpm run deploy
 
 # Staging
-bun run deploy:staging
+pnpm run deploy:staging
 ```
 
 ---
@@ -572,8 +572,8 @@ flowchart TD
 
     subgraph "Workflow"
         S1["Edit server/database/schema.ts"]
-        S2["bun run db:generate"]
-        S3["bun run db:migrate"]
+        S2["pnpm run db:generate"]
+        S3["pnpm run db:migrate"]
         S4["Commit migration files"]
         S5["Workers Builds handles\nstaging/production migrations"]
     end
@@ -587,8 +587,8 @@ flowchart TD
 ### Schema Changes
 
 1. Edit `server/database/schema.ts`.
-2. Run `bun run db:generate` to create a migration.
-3. Run `bun run db:migrate` to apply it locally.
+2. Run `pnpm run db:generate` to create a migration.
+3. Run `pnpm run db:migrate` to apply it locally.
 4. Commit the migration files — Workers Builds handles staging and production migrations on deploy.
 
 ---
@@ -600,9 +600,9 @@ There are a few things that can catch you out. Keep these in mind:
 - **This is Nuxt 4, not Nuxt 3.** The Nuxt 3 docs may differ significantly, especially regarding the `app/` directory structure. Always refer to the [Nuxt 4 documentation](https://nuxt.com/docs/4.x).
 - **D1 bindings exist in two places.** Both the Wrangler config files and `nuxt.config.ts` define D1 bindings (because Nitro generates a separate Wrangler config at build time). Keep them in sync.
 - **Always use `--envName` for builds.** A bare `nuxt build` produces no D1 binding. The `build` and `build:staging` scripts handle this for you — use them.
-- **`bun run build`, not `bun build`.** The latter clashes with Bun's internal build command. Always use `bun run build`.
+- **`pnpm run build`, not `pnpm build`.** The latter clashes with `pnpm`'s internal build command. Always use `pnpm run build`.
 - **Auto-imports are your friend.** Don't manually import Vue composables or components from `app/components/`. Nuxt handles this.
-- **Trunk is a dev dependency, not global.** Invoke it via `bun run trunk`, or install it globally by following [the Trunk docs](https://docs.trunk.io/code-quality/overview/initialize-trunk).
+- **Trunk is a dev dependency, not global.** Invoke it via `pnpm run trunk`, or install it globally by following [the Trunk docs](https://docs.trunk.io/code-quality/overview/initialize-trunk).
 
 ---
 
@@ -612,14 +612,14 @@ Tick off each item as you complete it:
 
 - [ ] Install mise and run `mise trust && mise install`
 - [ ] Clone the repo and `cd affirm`
-- [ ] Run `bun install`
+- [ ] Run `pnpm install`
 - [ ] Copy `.env.example → .env` and `.dev.vars.example → .dev.vars`
 - [ ] Set up your IDE (extensions/plugins configured)
-- [ ] Run `bun dev` and open localhost:3000
-- [ ] Run `bun run db:migrate` to set up local D1
+- [ ] Run `pnpm dev` and open localhost:3000
+- [ ] Run `pnpm run db:migrate` to set up local D1
 - [ ] Set up SSH commit signing
 - [ ] Create a test branch `yourname/test-setup`
-- [ ] Run `bun run lint:fix` to verify linting works
+- [ ] Run `pnpm run lint:fix` to verify linting works
 
 ---
 

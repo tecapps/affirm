@@ -192,7 +192,7 @@ Hooks are shell commands that run at lifecycle events. Defined in project config
 ```toml
 # Install dependencies when creating a worktree
 [post-create]
-install = "bun install"
+install = "pnpm install"
 
 # Copy build caches in the background
 [post-start]
@@ -200,19 +200,19 @@ copy = "wt step copy-ignored"
 
 # Lint before commit, test before merge
 [pre-commit]
-lint = "bun run lint:fix"
-typecheck = "bun run lint:types"
+lint = "pnpm run lint:fix"
+typecheck = "pnpm run lint:types"
 
 [pre-merge]
-test = "bun run test"
-build = "bun run build"
+test = "pnpm run test"
+build = "pnpm run build"
 ```
 
 ### Template Variables in Hooks
 
 ```toml
 [post-start]
-server = "bun run dev -- --port {{ branch | hash_port }}"
+server = "pnpm run dev -- --port {{ branch | hash_port }}"
 
 [post-remove]
 kill = "lsof -ti :{{ branch | hash_port }} -sTCP:LISTEN | xargs kill 2>/dev/null || true"
