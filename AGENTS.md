@@ -7,7 +7,7 @@ This document outlines the development workflow, commands, and patterns for work
 - **Framework**: Nuxt 4 (Vue 3)
 - **Runtime**: Cloudflare Workers (Compatibility Date: 2026-02-01)
 - **Database**: Cloudflare D1 (SQLite) with Drizzle ORM
-- **Package Manager**: Bun
+- **Package Manager**: `pnpm`
 - **Styling**: Tailwind CSS v4 + DaisyUI
 - **Tooling**: Trunk (lint/format), Vitest (testing), Playwright (e2e)
 - **Deployment**: Cloudflare Workers Builds (CI/CD triggered on push)
