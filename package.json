@@ -37,10 +37,18 @@
     "vitest": "^5.0.1",
     "wrangler": "^4.137.0"
   },
+  "devEngines": {
+    "runtime": {
+      "name": "node",
+      "onFail": "download",
+      "version": "^26.10.0"
+    }
+  },
   "engines": {
     "node": "^26.10.0"
   },
   "name": "affirm",
+  "packageManager": "pnpm@12.8.1",
   "private": true,
   "scripts": {
     "build": "pnpm exec nuxt build --envName=production",
@@ -88,12 +96,5 @@
     "types": "pnpm exec wrangler types"
   },
   "type": "module",
-  "version": "0.0.0-dev.0",
-  "devEngines": {
-    "runtime": {
-      "name": "node",
-      "version": "^26.10.0",
-      "onFail": "download"
-    }
-  }
+  "version": "0.0.0-dev.0"
 }
