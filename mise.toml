@@ -12,3 +12,4 @@ rust = { version = "1.96.0" }
 
 [tasks]
 start = "pnpm run dev"
+pr = "gh pr create --fill-verbose --draft --base staging"
