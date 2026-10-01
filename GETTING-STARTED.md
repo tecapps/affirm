@@ -143,7 +143,7 @@ mise install
 pnpm install
 ```
 
-`pnpm install` also runs the `postinstall` script, which runs `nuxt prepare`, generates the Wrangler types, and then runs `pnpm run format`. The format step rewrites files with Prettier and Trunk and then stages every change with `git add -A .`, so check `git status` afterwards.
+`pnpm install` also runs the `postinstall` script, which runs `nuxt prepare` and generates the Wrangler types.
 
 ### 4. Set up environment variables
 
@@ -434,20 +434,20 @@ export default defineEventHandler((event) => {
 
 Here's your cheat sheet. Run every command with `pnpm`.
 
-| Command                   | Purpose                                                               |
-| ------------------------- | --------------------------------------------------------------------- |
-| `pnpm install`            | Install dependencies                                                  |
-| `pnpm run dev`            | Start the dev server on `http://localhost:3000`                       |
-| `pnpm run build`          | Build for production                                                  |
-| `pnpm run build:staging`  | Build for staging                                                     |
-| `pnpm run lint:fix`       | Run all linters and fix what they can                                 |
-| `pnpm run format`         | Format code with Prettier and Trunk, then stage every change with Git |
-| `pnpm run test`           | Run tests using the single Vitest configuration                       |
-| `pnpm run test:e2e`       | Run end-to-end tests with Playwright                                  |
-| `pnpm run db:generate`    | Generate database migrations after schema changes                     |
-| `pnpm run db:migrate`     | Apply migrations to your local D1 database                            |
-| `pnpm run deploy`         | Build and deploy to production by hand, without applying migrations   |
-| `pnpm run deploy:staging` | Build and deploy to staging by hand, without applying migrations      |
+| Command                   | Purpose                                                             |
+| ------------------------- | ------------------------------------------------------------------- |
+| `pnpm install`            | Install dependencies                                                |
+| `pnpm run dev`            | Start the dev server on `http://localhost:3000`                     |
+| `pnpm run build`          | Build for production                                                |
+| `pnpm run build:staging`  | Build for staging                                                   |
+| `pnpm run lint:fix`       | Run all linters and fix what they can                               |
+| `pnpm run format`         | Format code with Prettier and Trunk (it doesn't stage anything)     |
+| `pnpm run test`           | Run tests using the single Vitest configuration                     |
+| `pnpm run test:e2e`       | Run end-to-end tests with Playwright                                |
+| `pnpm run db:generate`    | Generate database migrations after schema changes                   |
+| `pnpm run db:migrate`     | Apply migrations to your local D1 database                          |
+| `pnpm run deploy`         | Build and deploy to production by hand, without applying migrations |
+| `pnpm run deploy:staging` | Build and deploy to staging by hand, without applying migrations    |
 
 No Vitest test files are checked in. Use `pnpm run test --run --passWithNoTests` to check test discovery without
 failing on an empty suite.

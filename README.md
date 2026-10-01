@@ -92,23 +92,23 @@ Node.js 26 for builds and tooling.
 `pnpm run <script>` runs a script from `package.json`, such as `pnpm run dev`. `pnpm exec <binary>` runs a binary from
 `node_modules/.bin`, such as `pnpm exec wrangler --version`.
 
-| Task                           | Command                                                   | Notes                                                                                    |
-| ------------------------------ | --------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
-| Install dependencies           | `pnpm install`                                            | Also runs `postinstall`, which runs `nuxt prepare`, `wrangler types`, and `format`       |
-| Start the dev server           | `pnpm run dev`                                            | Uses a local D1 database                                                                 |
-| Build for production           | `pnpm run build`                                          | Passes `--envName=production`                                                            |
-| Build for staging              | `pnpm run build:staging`                                  | Passes `--envName=staging`                                                               |
-| Deploy to production           | `pnpm run deploy`                                         | Prefer [Workers Builds](#deployment); this skips [migrations](#manual-deployment)        |
-| Deploy to staging              | `pnpm run deploy:staging`                                 | Prefer [Workers Builds](#deployment); this skips [migrations](#manual-deployment)        |
-| Generate migrations            | `pnpm run db:generate`                                    | Run after changing the schema                                                            |
-| Apply migrations locally       | `pnpm run db:migrate`                                     | Uses `wrangler.dev.jsonc`                                                                |
-| Apply migrations to staging    | `pnpm run db:migrate:staging`                             | Uses `wrangler.staging.jsonc`                                                            |
-| Apply migrations to production | `pnpm run db:migrate:prod`                                | Uses `wrangler.jsonc`                                                                    |
-| Open Drizzle Studio            | `pnpm run db:studio:staging` or `pnpm run db:studio:prod` | Needs `CLOUDFLARE_STAGING_DATABASE_ID` or `CLOUDFLARE_PRODUCTION_DATABASE_ID` set        |
-| Lint and fix                   | `pnpm run lint:fix`                                       | Runs ESLint and Trunk with fixes                                                         |
-| Format                         | `pnpm run format`                                         | Runs Prettier and Trunk, then stages all changes in the working tree with `git add -A .` |
-| Run Vitest tests               | `pnpm run test`                                           | Uses the single configuration in `vitest.config.ts`                                      |
-| Run end-to-end tests           | `pnpm run test:e2e`                                       | Uses Playwright                                                                          |
+| Task                           | Command                                                   | Notes                                                                             |
+| ------------------------------ | --------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| Install dependencies           | `pnpm install`                                            | Also runs `postinstall`, which runs `nuxt prepare` and `wrangler types`           |
+| Start the dev server           | `pnpm run dev`                                            | Uses a local D1 database                                                          |
+| Build for production           | `pnpm run build`                                          | Passes `--envName=production`                                                     |
+| Build for staging              | `pnpm run build:staging`                                  | Passes `--envName=staging`                                                        |
+| Deploy to production           | `pnpm run deploy`                                         | Prefer [Workers Builds](#deployment); this skips [migrations](#manual-deployment) |
+| Deploy to staging              | `pnpm run deploy:staging`                                 | Prefer [Workers Builds](#deployment); this skips [migrations](#manual-deployment) |
+| Generate migrations            | `pnpm run db:generate`                                    | Run after changing the schema                                                     |
+| Apply migrations locally       | `pnpm run db:migrate`                                     | Uses `wrangler.dev.jsonc`                                                         |
+| Apply migrations to staging    | `pnpm run db:migrate:staging`                             | Uses `wrangler.staging.jsonc`                                                     |
+| Apply migrations to production | `pnpm run db:migrate:prod`                                | Uses `wrangler.jsonc`                                                             |
+| Open Drizzle Studio            | `pnpm run db:studio:staging` or `pnpm run db:studio:prod` | Needs `CLOUDFLARE_STAGING_DATABASE_ID` or `CLOUDFLARE_PRODUCTION_DATABASE_ID` set |
+| Lint and fix                   | `pnpm run lint:fix`                                       | Runs ESLint and Trunk with fixes                                                  |
+| Format                         | `pnpm run format`                                         | Runs Prettier and Trunk; review and stage the changes yourself                    |
+| Run Vitest tests               | `pnpm run test`                                           | Uses the single configuration in `vitest.config.ts`                               |
+| Run end-to-end tests           | `pnpm run test:e2e`                                       | Uses Playwright                                                                   |
 
 No Vitest test files are checked in. To check test discovery without failing on an empty suite, run
 `pnpm run test --run --passWithNoTests`.
