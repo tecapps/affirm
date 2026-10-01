@@ -48,6 +48,26 @@ cargo install worktrunk && wt config shell install
 
 ---
 
+## Configure Worktrunk for Affirm
+
+Affirm's default branch on GitHub is `production`, but feature work branches from `staging` and merges back into it
+through pull requests. Worktrunk detects `production` as the default branch, so out of the box `wt switch -c` bases new
+branches on `production`, `^` means `production`, and `wt list` counts commits against `production`. Point it at
+`staging` once per clone:
+
+```bash
+wt config state default-branch set staging
+```
+
+Worktrunk stores the override in the clone's local Git config, so it applies to every worktree of that clone. Until you
+set it, pass `-b staging` to `wt switch -c`.
+
+Don't use `wt merge` in this repository. Rulesets protect `staging` and `production`, so changes reach them only
+through pull requests. Push your branch and run `mise run pr` to open a draft PR against `staging` instead, then run
+`wt remove` once the PR has merged.
+
+---
+
 ## Core commands
 
 ### `wt switch`
@@ -237,7 +257,7 @@ dev servers in different worktrees don't collide:
 
 ```toml
 [post-start]
-server = "pnpm run dev -- --port {{ branch | hash_port }}"
+server = "pnpm run dev --port {{ branch | hash_port }}"
 
 [post-remove]
 kill = "lsof -ti :{{ branch | hash_port }} -sTCP:LISTEN | xargs kill 2>/dev/null || true"
