@@ -51,6 +51,8 @@ For manual/local deploys (rarely needed):
 - **Deploy to Production**: `pnpm run deploy` (builds + `pnpm exec wrangler deploy -c wrangler.jsonc`)
 - **Deploy to Staging**: `pnpm run deploy:staging` (builds + `pnpm exec wrangler deploy -c wrangler.staging.jsonc`)
 
+Manual deploy scripts don't apply D1 migrations; only the Workers Builds deploy commands do. Run `pnpm run db:migrate:prod` or `pnpm run db:migrate:staging` before a manual deploy, or new code goes live against the old schema.
+
 ## Code Structure
 
 - **`app/`**: Nuxt 4 application source (pages, components, composables).

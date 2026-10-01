@@ -217,7 +217,7 @@ database.
 1. Edit `server/database/schema.ts`
 2. Run `pnpm run db:generate` to create a migration
 3. Run `pnpm run db:migrate` to apply it locally
-4. Commit the migration files — `pnpm run db:migrate:staging` and `pnpm run db:migrate:prod` handle staging/production migrations on deploy
+4. Commit the migration files. When you push to `staging` or `production`, Workers Builds applies them to that environment's D1 database before deploying. The manual deploy scripts don't, so read [Manual deployment](#manual-deployment) before you deploy by hand.
 
 ### Tooling & Configuration
 
@@ -274,13 +274,22 @@ The `ci.yaml` GitHub Action runs on all pushes and PRs. It performs lint, typech
 
 If you need to deploy outside of Workers Builds:
 
+> [!WARNING]
+> The `deploy` and `deploy:staging` scripts only build and run `wrangler deploy`. They don't apply D1 migrations, so
+> run the matching `db:migrate:*` script first, or the new code goes live against the old schema.
+
 ```bash
-# Production: build + promote
+# Production: migrate, then build + deploy
+pnpm run db:migrate:prod
 pnpm run deploy
 
-# Staging: build + upload version
+# Staging: migrate, then build + deploy
+pnpm run db:migrate:staging
 pnpm run deploy:staging
 ```
+
+`deploy:staging` sends the new version straight to live staging traffic. Workers Builds only uploads a version for
+staging. To do that by hand, use `pnpm run deploy:snapshot`, which also skips migrations.
 
 Eventually, we'll point a domain. Currently we don't configure any routing, adding a domain is a simple enough change
 to [`wrangler.jsonc`](wrangler.jsonc). If someone else handles it, remember to point at `www.domain.tld` as well as the
