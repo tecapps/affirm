@@ -452,6 +452,10 @@ Here's your cheat sheet. Run every command with `pnpm`.
 No Vitest test files are checked in. Use `pnpm run test --run --passWithNoTests` to check test discovery without
 failing on an empty suite.
 
+The Playwright end-to-end tests live in `tests/e2e/`. `pnpm run test:e2e` applies your local D1 migrations and starts
+its own dev server on port 3010, so you don't need `pnpm run dev` running. Before the first run, install the browser
+with `pnpm exec playwright install chromium`.
+
 ---
 
 ## Branching model

@@ -34,7 +34,7 @@ This document outlines the development workflow, commands, and patterns for work
 ### Testing
 
 - **Run All Tests**: `pnpm run test`
-- **E2E Tests**: `pnpm run test:e2e` (Playwright)
+- **E2E Tests**: `pnpm run test:e2e` (Playwright; specs in `tests/e2e/`, config in `playwright.config.ts`). It applies local D1 migrations and starts `nuxt dev` on port 3010. Install the browser once with `pnpm exec playwright install chromium`.
 
 Vitest uses a single configuration with no named projects. No Vitest test files are checked in; `pnpm run test --run --passWithNoTests` checks test discovery without failing on an empty suite.
 

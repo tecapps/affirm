@@ -18,6 +18,15 @@ export default defineNuxtConfig({
       },
     },
   },
+  typescript: {
+    nodeTsConfig: {
+      compilerOptions: {
+        types: ["node"],
+      },
+      // Type-check the Playwright config and end-to-end tests with the other Node-side files.
+      include: ["../playwright.config.ts", "../tests/**/*.ts"],
+    },
+  },
   vite: {
     optimizeDeps: {
       include: ["@vue/devtools-core", "@vue/devtools-kit"],

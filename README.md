@@ -113,6 +113,9 @@ Node.js 26 for builds and tooling.
 No Vitest test files are checked in. To check test discovery without failing on an empty suite, run
 `pnpm run test --run --passWithNoTests`.
 
+Playwright end-to-end tests live in `tests/e2e/`. `pnpm run test:e2e` applies local D1 migrations and starts its own
+dev server on port 3010. Before the first run, install the browser with `pnpm exec playwright install chromium`.
+
 ### Project structure
 
 The project follows the Nuxt 4 directory structure, with the application source in `app/`.
