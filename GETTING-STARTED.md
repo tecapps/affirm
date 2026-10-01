@@ -488,8 +488,8 @@ Changes reach either branch only through pull requests.
 
 1. Create a branch from `staging` named `username/purpose`, for example `synmux/fix-header`.
 2. Do your work, and sign every commit.
-3. Push your branch. The push uploads a preview version to the `affirm-staging` Worker, so you can check your changes before you open a pull request (PR).
-4. Open a pull request that targets `staging`.
+3. Push your branch.
+4. Open a pull request (PR) that targets `staging`. Opening or updating the PR uploads a preview version to the `affirm-staging` Worker, so you can check your changes before they merge.
 5. Get one approval. syn ([@synmux](https://github.com/synmux)) tries to review every PR, but if syn isn't around, any other team member can approve it. A PR from `staging` into `production` needs two approvals.
 6. Merge into `staging` once a reviewer approves it. Workers Builds then runs the staging migrations and uploads a new version of `affirm-staging`.
 
