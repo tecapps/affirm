@@ -107,8 +107,11 @@ Node.js 26 for builds and tooling.
 | Open Drizzle Studio            | `pnpm run db:studio:staging` or `pnpm run db:studio:prod` | Needs `CLOUDFLARE_STAGING_DATABASE_ID` or `CLOUDFLARE_PRODUCTION_DATABASE_ID` set        |
 | Lint and fix                   | `pnpm run lint:fix`                                       | Runs ESLint and Trunk with fixes                                                         |
 | Format                         | `pnpm run format`                                         | Runs Prettier and Trunk, then stages all changes in the working tree with `git add -A .` |
-| Run the Vitest suites          | `pnpm run test`                                           | Runs both the unit and Nuxt projects                                                     |
+| Run Vitest tests               | `pnpm run test`                                           | Uses the single configuration in `vitest.config.ts`                                      |
 | Run end-to-end tests           | `pnpm run test:e2e`                                       | Uses Playwright                                                                          |
+
+No Vitest test files are checked in. To check test discovery without failing on an empty suite, run
+`pnpm run test --run --passWithNoTests`.
 
 ### Project structure
 

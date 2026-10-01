@@ -442,12 +442,15 @@ Here's your cheat sheet. Run every command with `pnpm`.
 | `pnpm run build:staging`  | Build for staging                                                     |
 | `pnpm run lint:fix`       | Run all linters and fix what they can                                 |
 | `pnpm run format`         | Format code with Prettier and Trunk, then stage every change with Git |
-| `pnpm run test`           | Run the unit and Nuxt test projects with Vitest                       |
+| `pnpm run test`           | Run tests using the single Vitest configuration                       |
 | `pnpm run test:e2e`       | Run end-to-end tests with Playwright                                  |
 | `pnpm run db:generate`    | Generate database migrations after schema changes                     |
 | `pnpm run db:migrate`     | Apply migrations to your local D1 database                            |
 | `pnpm run deploy`         | Build and deploy to production by hand, without applying migrations   |
 | `pnpm run deploy:staging` | Build and deploy to staging by hand, without applying migrations      |
+
+No Vitest test files are checked in. Use `pnpm run test --run --passWithNoTests` to check test discovery without
+failing on an empty suite.
 
 ---
 

@@ -89,8 +89,6 @@
     "test:coverage": "pnpm exec vitest --coverage",
     "test:e2e": "pnpm exec playwright test",
     "test:e2e:ui": "pnpm exec playwright test --ui",
-    "test:nuxt": "pnpm exec vitest --project nuxt",
-    "test:unit": "pnpm exec vitest --project unit",
     "test:watch": "pnpm exec vitest --watch",
     "types": "pnpm exec wrangler types"
   },

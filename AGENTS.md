@@ -34,9 +34,9 @@ This document outlines the development workflow, commands, and patterns for work
 ### Testing
 
 - **Run All Tests**: `pnpm run test`
-- **Unit Tests**: `pnpm run test:unit`
-- **Nuxt Tests**: `pnpm run test:nuxt`
 - **E2E Tests**: `pnpm run test:e2e` (Playwright)
+
+Vitest uses a single configuration with no named projects. No Vitest test files are checked in; `pnpm run test --run --passWithNoTests` checks test discovery without failing on an empty suite.
 
 ### Deployment
 
