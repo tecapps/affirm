@@ -2,74 +2,63 @@
 
 ![CI status](https://github.com/tecapps/affirm/actions/workflows/ci.yaml/badge.svg) ![DevSkim status](https://github.com/tecapps/affirm/actions/workflows/devskim.yaml/badge.svg)
 
-Your first port of call should be the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn
-more.
+Start with the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction).
 
 > [!IMPORTANT]
-> Opinions ahead! The following are recommendations. Feel free to ignore them if you have better ideas.
+> Opinions ahead. The following are recommendations, so ignore them if you have better ideas.
 
-All Nuxt modules except [NuxtUI](https://ui.nuxt.com) are installed and enabled. Notably, this
-includes [Nuxt Content](https://content.nuxtjs.org/), which will make our lives easier for copywriting by letting them
-write Markdown instead of HTML/Vue.
+The app uses the first-party Nuxt ESLint, Fonts, Icon, Image, and Scripts modules, but not [NuxtUI](https://ui.nuxt.com). [Nuxt Content](https://content.nuxt.com) is installed as a dependency, but it isn't in the
+`modules` list in `nuxt.config.ts` yet. Once it's enabled, our copywriters can write Markdown instead of HTML or Vue.
 
-But what are we going to use if not [NuxtUI](https://ui.nuxt.com)? Simple. [Tailwind](https://tailwindcss.com/)
-with [DaisyUI](https://daisyui.com/). This gives us a lot of flexibility while still providing a component library to
-speed up development.
+In place of NuxtUI, we use [Tailwind](https://tailwindcss.com/) with [DaisyUI](https://daisyui.com/). Tailwind gives us
+flexibility, and DaisyUI adds a component library on top so we aren't building every button from scratch.
 
-The benefit of [DaisyUI](https://daisyui.com/) is that they don't dick about by having a "pro" version. The open-source
-version of DaisyUI is the full package.
+DaisyUI also doesn't dick about with a paid pro tier; the open-source version is the full package.
 
-I'm not a frontend developer but I'd encourage use of the [Catppuccin](https://github.com/catppuccin) palette. There are
-dedicated packages
-for [the palette](https://github.com/catppuccin/palette), [DaisyUI](https://github.com/catppuccin/daisyui),
-and [Tailwind](https://github.com/catppuccin/tailwindcss).
+I'm not a frontend developer, but I'd encourage you to stick with the app's [Catppuccin](https://github.com/catppuccin)
+Mocha palette. Catppuccin publishes dedicated packages for [the palette itself](https://github.com/catppuccin/palette),
+[DaisyUI](https://github.com/catppuccin/daisyui), and [Tailwind](https://github.com/catppuccin/tailwindcss).
 
-Recommended VS Code extensions are configured for this workspace. Check the extensions view's _Recommended_ section.
-Feel free to add any you find useful.
+The workspace recommends a set of Visual Studio Code extensions, listed in the _Recommended_ section of the Extensions
+view. Add any others you find useful.
 
 > [!IMPORTANT]
-> Opinions end here. It's objectivity from here on. Mostly.
+> Opinions end here, and it's objectivity from here on. Mostly.
 
 ## Branch protections
 
-The `staging` branch is the integration branch. The `production` branch is the live deployment. Both are protected;
-changes can only come from pull requests.
+`staging` is the integration branch and `production` is the live deployment. Rulesets protect both, so changes reach
+them only through pull requests.
 
-Do your work in a branch named `username/purpose`; eg `daveio/fix-header`.
+Do your work in a branch named `username/purpose`, for example `synmux/fix-header`.
 
-When it's ready to merge, submit a pull request targeting `staging`. Two approvals are required on each PR.
-I ([@synmux](https://github.com/synmux)) will try to review all PRs and you can function as the other approver if you
-like. If I'm unavailable to review a PR, ask another team member to review it for you. Anyone can.
+When it's ready, open a pull request against `staging`. `mise run pr` opens a draft PR against `staging` for you. A PR
+into `staging` needs one approval, and a PR into `production` needs two. I ([@synmux](https://github.com/synmux)) try to
+review every PR, but if I'm not around, any other team member can review it.
 
-The purpose of this isn't to be a pain in the arse, it's to minimise the possibility of broken code reaching production.
-Your pushes to branches generate preview versions on the `affirm-staging` Worker, so you can validate things before
-submitting a PR and save everyone a bunch of time.
+I know this is a bit of a pain in the arse. It keeps broken code out of production. Every push to a branch uploads a
+preview version to the `affirm-staging` Worker, so you can check your changes there before you open a PR.
 
 > [!TIP]
-> Please **sign your commits**. It's a major security win and it's not enormous hassle. You don't need a GnuPG key any
-> more; Git supports signing with SSH keys now, and you probably use one of those to push anyway.
-> See [the documentation](https://docs.github.com/en/authentication/managing-commit-signature-verification/signing-commits)
-> for more information.
+> Please sign your commits. It's a big security win for little effort. You don't need a GnuPG key any more, because
+> Git can sign with the SSH key you probably already push with. GitHub's guide to
+> [signing commits](https://docs.github.com/en/authentication/managing-commit-signature-verification/signing-commits)
+> covers the setup.
 
 ## Setup
 
-Install `pnpm` if you haven't already. I suggest using [`mise`](https://mise.jdx.dev), which you can also use to manage Node versions and a bunch of other stuff too.
+If you haven't already, install `pnpm`. I suggest [`mise`](https://mise.jdx.dev), which also manages Node versions and
+plenty of other tools.
 
-There is a `mise.toml` file included in this repo. It will install everything you need.
+The repository's `mise.toml` installs `pnpm`, Node.js, and `rust`. Rust is there in case we ever use `wasm`. You can
+edit the file, but your changes apply to everyone. The `.tool-versions` and `.node-version` files
+exist mainly for Workers Builds, so treat `mise.toml` as the source of truth.
 
-The only exception is `trunk` which is a _massive_ pain in the arse to manage using `mise`. It'll be installed as a dev
-dependency and can be invoked through `pnpm exec trunk`, or read
-the [installation documentation](https://docs.trunk.io/code-quality/overview/initialize-trunk) to install it globally if
-you prefer.
+The one tool `mise` doesn't handle is `trunk`, which is a _massive_ pain in the arse to manage that way. It comes in as
+a dev dependency instead, so you can run it with `pnpm exec trunk`, or follow the
+[Trunk installation guide](https://docs.trunk.io/code-quality/overview/initialize-trunk) to install it globally.
 
-> [!NOTE]
-> It will also install a few extras; the CLIs for the major coding agents, and `rust` in case we decide to use `wasm` in
-> the future. Feel free to edit it if you need to, just be aware you'll be changing it for everyone else too.
->
-> There are also `.tool-versions` and `.node-version` files, but they're more for Workers Builds. `mise` should be
-> treated as the source of truth.
-
-If you are using `mise`, simply run:
+If you use `mise`, run:
 
 ```bash
 # trust the mise.toml file
@@ -79,16 +68,16 @@ mise trust
 mise install
 ```
 
-When everything is set up, install dependencies:
+Then install the dependencies:
 
 ```bash
 # we are using pnpm for package management
 pnpm install
 ```
 
-## Development Server
+## Development server
 
-Start the development server on `http://localhost:3000`:
+`pnpm run dev` serves the app at `http://localhost:3000`, backed by a local D1 database:
 
 ```bash
 pnpm run dev
@@ -96,94 +85,89 @@ pnpm run dev
 
 ## Development
 
-This repository hosts a **Nuxt 4** web application deployed to **Cloudflare Workers**. It uses **pnpm** as the package
-manager and **Node.js 26** as the runtime environment.
+This repository holds a Nuxt 4 web application that runs on Cloudflare Workers. It uses pnpm as the package manager and
+Node.js 26 for builds and tooling.
 
-### Essential Commands
+### Essential commands
 
-> [!NOTE]
->
-> `pnpm run <command>` : run script defined in `package.json`. For example `pnpm run dev`.
-> `pnpm exec <command>` : invoke a binary, like `pnpm exec wrangler deploy -c wrangler.jsonc`
->
-> Make sure you use the right one, though you can always just try again with the other one!
+`pnpm run <script>` runs a script from `package.json`, such as `pnpm run dev`. `pnpm exec <binary>` runs a binary from
+`node_modules/.bin`, such as `pnpm exec wrangler --version`. If you pick the wrong one, nothing breaks, so try the
+other.
 
-Run these commands with `pnpm`.
+| Task                           | Command                                                   | Notes                                                                                    |
+| ------------------------------ | --------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| Install dependencies           | `pnpm install`                                            | Also runs `postinstall`, which runs `nuxt prepare`, `wrangler types`, and `format`       |
+| Start the dev server           | `pnpm run dev`                                            | Uses a local D1 database                                                                 |
+| Build for production           | `pnpm run build`                                          | Passes `--envName=production`                                                            |
+| Build for staging              | `pnpm run build:staging`                                  | Passes `--envName=staging`                                                               |
+| Deploy to production           | `pnpm run deploy`                                         | Prefer [Workers Builds](#deployment); this skips [migrations](#manual-deployment)        |
+| Deploy to staging              | `pnpm run deploy:staging`                                 | Prefer [Workers Builds](#deployment); this skips [migrations](#manual-deployment)        |
+| Generate migrations            | `pnpm run db:generate`                                    | Run after changing the schema                                                            |
+| Apply migrations locally       | `pnpm run db:migrate`                                     | Uses `wrangler.dev.jsonc`                                                                |
+| Apply migrations to staging    | `pnpm run db:migrate:staging`                             | Uses `wrangler.staging.jsonc`                                                            |
+| Apply migrations to production | `pnpm run db:migrate:prod`                                | Uses `wrangler.jsonc`                                                                    |
+| Open Drizzle Studio            | `pnpm run db:studio:staging` or `pnpm run db:studio:prod` | Needs `CLOUDFLARE_STAGING_DATABASE_ID` or `CLOUDFLARE_PRODUCTION_DATABASE_ID` set        |
+| Lint and fix                   | `pnpm run lint:fix`                                       | Runs ESLint and Trunk with fixes                                                         |
+| Format                         | `pnpm run format`                                         | Runs Prettier and Trunk, then stages all changes in the working tree with `git add -A .` |
+| Run the Vitest suites          | `pnpm run test`                                           | Runs both the unit and Nuxt projects                                                     |
+| Run end-to-end tests           | `pnpm run test:e2e`                                       | Uses Playwright                                                                          |
 
-- **Install dependencies**: `pnpm install` (or `pnpm run postinstall` to setup Trunk)
-- **Development Server**: `pnpm run dev` (starts Nuxt dev server with local D1)
-- **Build**:
-  - `pnpm run build` (builds for production — uses `--envName=production`)
-  - `pnpm run build:staging` (builds for staging — uses `--envName=staging`)
-- **Deploy** (prefer Workers Builds — see [Deployment](#deployment)):
-  - `pnpm run deploy` (build + deploy to production via `wrangler.jsonc`)
-  - `pnpm run deploy:staging` (build staging + upload version + promote to staging via `wrangler.staging.jsonc`)
-- **Database**:
-  - `pnpm run db:generate` (generate migrations after schema changes)
-  - `pnpm run db:migrate` (apply migrations to local D1)
-  - `pnpm run db:migrate:staging` (apply migrations to staging D1 via `wrangler.staging.jsonc`)
-  - `pnpm run db:migrate:prod` (apply migrations to production D1 via `wrangler.jsonc`)
-  - `pnpm run db:studio:staging` / `pnpm run db:studio:prod` (Drizzle Studio)
-- **Lint & Format**:
-  - `pnpm run lint:fix` (Run all linters and fix issues)
-  - `pnpm run format` (Format code with Prettier and Trunk)
-- **Testing**:
-  - `pnpm run test` (Unit tests via Vitest)
-  - `pnpm run test:e2e` (E2E tests via Playwright)
+### Project structure
 
-### Project Structure
+The project follows the Nuxt 4 directory structure, with the application source in `app/`.
 
-This project follows the **Nuxt 4** directory structure (source in `app/`).
+| Path               | Contents                                                                       |
+| ------------------ | ------------------------------------------------------------------------------ |
+| `app/`             | Vue application source                                                         |
+| `app/pages/`       | File-based routes                                                              |
+| `app/components/`  | Auto-imported Vue components                                                   |
+| `app/composables/` | Auto-imported state and logic                                                  |
+| `app/layouts/`     | Page layouts                                                                   |
+| `app/middleware/`  | Route middleware                                                               |
+| `app/plugins/`     | Nuxt plugins                                                                   |
+| `app/assets/`      | CSS and static assets, including the Tailwind entry point                      |
+| `server/`          | Nitro server backend                                                           |
+| `server/api/`      | API endpoints, such as `/api/ping`                                             |
+| `server/database/` | Drizzle schema and migrations                                                  |
+| `server/utils/`    | Auto-imported server utilities, such as `useDB`                                |
+| `shared/`          | Code shared between client and server                                          |
+| `public/`          | Static files served from the site root, such as `favicon.ico` and `robots.txt` |
 
-- **`app/`**: Main Vue application source.
-  - **`pages/`**: File-based routing.
-  - **`components/`**: Auto-imported Vue components.
-  - **`composables/`**: Auto-imported state/logic.
-  - **`layouts/`**: Page layouts.
-  - **`middleware/`**: Route middleware.
-  - **`assets/`**: CSS and static assets (Tailwind entry point).
-- **`server/`**: Nitro server backend.
-  - **`api/`**: API endpoints (e.g., `/api/ping`).
-  - **`database/`**: Drizzle schema and migrations.
-  - **`utils/`**: Auto-imported server utilities (e.g., `useDB`).
-- **`shared/`**: Code shared between client and server.
-- **`public/`**: Static files served at root (favicon, robots.txt).
+### Development patterns
 
-### Development Patterns
+#### Vue and TypeScript
 
-#### Vue & TypeScript
-
-- Use **Composition API** with `<script setup lang="ts">`.
-- Rely on **auto-imports** for Nuxt composables (`useFetch`, `useRouter`) and directory-based imports (components,
-  composables).
-- Do not manually import components found in `app/components`.
+- Use the Composition API with `<script setup lang="ts">`.
+- Rely on auto-imports for Nuxt composables such as `useFetch` and `useRouter`, and for anything in the `components`
+  and `composables` directories.
+- Don't import components from `app/components` by hand.
 
 #### Styling
 
-- **Tailwind CSS v4**: Use utility classes for layout and spacing.
-- **DaisyUI**: Use component classes (e.g., `btn`, `card`) for UI elements.
-- **Catppuccin Theme**: The app uses the Catppuccin Mocha theme.
+Use Tailwind CSS v4 utility classes for layout and spacing, and DaisyUI component classes such as `btn` and `card` for
+UI elements. The app's theme is Catppuccin Mocha.
 
-#### Data Fetching
+#### Data fetching
 
-- Use **`useFetch`** for data fetching in pages/components. It handles SSR hydration automatically.
-  ```ts
-  const { data } = await useFetch("/api/ping");
-  ```
+Fetch data in pages and components with `useFetch`. It handles hydration after server-side rendering for you:
+
+```ts
+const { data } = await useFetch("/api/ping");
+```
 
 #### Server API
 
-- Create API routes in `server/api/`.
-- Export a default event handler:
-  ```ts
-  export default defineEventHandler((event) => {
-    return { message: "Hello" };
-  });
-  ```
+Create API routes in `server/api/`, each exporting a default event handler:
+
+```ts
+export default defineEventHandler((event) => {
+  return { message: "Hello" };
+});
+```
 
 ### Database
 
-The app uses Cloudflare D1 (SQLite) with Drizzle ORM. There are two Workers and two D1 databases:
+The app uses Cloudflare D1, which is built on SQLite, with Drizzle ORM. Each Worker has its own D1 database:
 
 | Worker           | Database         | Branch       | Purpose         |
 | ---------------- | ---------------- | ------------ | --------------- |
@@ -200,40 +184,38 @@ Each environment has its own wrangler config file with the correct D1 binding:
 | `wrangler.staging.jsonc` | `affirm-staging` | `affirm-staging` | Staging builds and migrations    |
 | `wrangler.dev.jsonc`     | (local)          | `affirm-local`   | Dev server and local migrations  |
 
-D1 bindings are **also** in `nuxt.config.ts` using Nuxt's `$env` overrides, because Nitro's `deployConfig: true`
-generates a separate wrangler config at build time. The `$env` mechanism builds a flat config targeting exactly one
-database.
+The D1 bindings also live in `nuxt.config.ts`, as Nuxt `$env` overrides, so keep the two in sync. Nitro's
+`deployConfig: true` generates its own wrangler config at build time, and the `$env` overrides make that generated
+config target exactly one database:
 
-- `pnpm run build` → production D1 binding (`--envName=production`)
-- `pnpm run build:staging` → staging D1 binding (`--envName=staging`)
-- `pnpm run dev` → local D1 via `wrangler.dev.jsonc`
+- `pnpm run build` passes `--envName=production` to get the production D1 binding.
+- `pnpm run build:staging` passes `--envName=staging` to get the staging D1 binding.
+- `pnpm run dev` uses the local D1 database from `wrangler.dev.jsonc`.
 
 > [!WARNING]
-> Every build **must** specify an `--envName`. A build without one produces no D1 binding. The `build` and
-> `build:staging` scripts handle this automatically.
+> Every build must pass `--envName`, or it ends up with no D1 binding at all. The `build` and `build:staging` scripts
+> pass it for you, so use them instead of a bare `nuxt build`.
 
 #### Schema changes
 
-1. Edit `server/database/schema.ts`
-2. Run `pnpm run db:generate` to create a migration
-3. Run `pnpm run db:migrate` to apply it locally
+1. Edit `server/database/schema.ts`.
+2. Run `pnpm run db:generate` to create a migration.
+3. Run `pnpm run db:migrate` to apply it locally.
 4. Commit the migration files. When you push to `staging` or `production`, Workers Builds applies them to that environment's D1 database before deploying. The manual deploy scripts don't, so read [Manual deployment](#manual-deployment) before you deploy by hand.
 
-### Tooling & Configuration
+### Tools and configuration
 
-- **Trunk**: Manages linting and formatting tools. Use `pnpm run lint:fix` to ensure compliance.
-- **Wrangler**: Handles Cloudflare deployment. Each environment has its own config file.
-- **Nuxt Config**: Located in `nuxt.config.ts`. D1 environment overrides use the `$env` key.
-- **TypeScript**: Strict mode is enabled. Ensure types are valid.
+- Trunk manages the linters and formatters, and `pnpm run lint:fix` applies their fixes.
+- Wrangler handles deployment and D1 migrations, with one config file per environment.
+- `nuxt.config.ts` holds the Nuxt configuration, including the `$env` D1 overrides.
+- TypeScript runs in strict mode, and `pnpm run lint:types` checks it.
 
 ### Gotchas
 
-- **Nuxt 4**: This project uses Nuxt 4. Nuxt 3 documentation might differ significantly (e.g., `app/` directory usage).
-- **D1 in both places**: D1 bindings exist in both the wrangler config files (for wrangler CLI commands like migrations
-  and deploys) and in `nuxt.config.ts` (for Nuxt/Nitro build-time config). Keep them in sync.
-- **Always use `--envName`**: Bare `nuxt build` produces no D1 binding. Use the `build` / `build:staging` scripts.
-- **No `--database-id` flag**: Wrangler's `d1 migrations apply` reads the database ID from the config file's
-  `d1_databases` binding. There is no `--database-id` CLI flag.
+- Nuxt 3 differs from Nuxt 4 in places, such as how it uses the `app/` directory. When you read the Nuxt documentation,
+  check which version a page covers.
+- Wrangler's `d1 migrations apply` has no `--database-id` flag. It reads the database ID from the `d1_databases` binding
+  in the config file.
 
 ## Production
 
@@ -243,7 +225,7 @@ Build the application for production:
 pnpm run build
 ```
 
-Locally preview production build:
+To build it and preview it locally with `wrangler dev`, run:
 
 ```bash
 pnpm run preview
@@ -251,32 +233,37 @@ pnpm run preview
 
 ## Deployment
 
-Deployment is handled by [**Cloudflare Workers Builds**](https://developers.cloudflare.com/workers/ci-cd/builds/) — Cloudflare's built-in CI/CD that triggers on push. There is no GitHub Actions deployment workflow.
+[Cloudflare Workers Builds](https://developers.cloudflare.com/workers/ci-cd/builds/), Cloudflare's built-in CI/CD,
+deploys the app when you push. GitHub Actions doesn't deploy anything.
 
 ### How it works
 
-There are two separate Cloudflare Workers, each connected to this Git repo:
+Each of the two Workers is connected to this repository:
 
 | Worker           | Production branch | Build command                            | Deploy command                                                                                |
 | ---------------- | ----------------- | ---------------------------------------- | --------------------------------------------------------------------------------------------- |
 | `affirm`         | `production`      | `pnpm install && pnpm run build`         | `pnpm run db:migrate:prod && pnpm exec wrangler deploy -c wrangler.jsonc`                     |
 | `affirm-staging` | `staging`         | `pnpm install && pnpm run build:staging` | `pnpm run db:migrate:staging && pnpm exec wrangler versions upload -c wrangler.staging.jsonc` |
 
-- **Push to `staging`**: Workers Builds triggers on `affirm-staging`, runs migrations on the staging D1, uploads a new version.
-- **Push to `production`**: Workers Builds triggers on `affirm`, runs migrations on the production D1, deploys to live traffic.
-- **PR targeting `staging`**: `affirm-staging` uploads a preview version (no migrations — the preview uses the existing staging D1 schema).
+- A push to `staging` builds `affirm-staging`, applies migrations to the staging D1 database, and uploads a new
+  version.
+- A push to `production` builds `affirm`, applies migrations to the production D1 database, and deploys to live
+  traffic.
+- A pull request against `staging` makes `affirm-staging` upload a preview version. Previews don't run migrations, so
+  they use the existing staging schema.
 
 ### CI workflow
 
-The `ci.yaml` GitHub Action runs on all pushes and PRs. It performs lint, typecheck, and build checks only — it does **not** deploy.
+The `ci.yaml` GitHub Actions workflow runs on every push and pull request. It runs Trunk, a type check, and a build, and
+it doesn't deploy.
 
 ### Manual deployment
-
-If you need to deploy outside of Workers Builds:
 
 > [!WARNING]
 > The `deploy` and `deploy:staging` scripts only build and run `wrangler deploy`. They don't apply D1 migrations, so
 > run the matching `db:migrate:*` script first, or the new code goes live against the old schema.
+
+To deploy without Workers Builds, apply the migrations and then deploy:
 
 ```bash
 # Production: migrate, then build + deploy
@@ -291,10 +278,11 @@ pnpm run deploy:staging
 `deploy:staging` sends the new version straight to live staging traffic. Workers Builds only uploads a version for
 staging. To do that by hand, use `pnpm run deploy:snapshot`, which also skips migrations.
 
-Eventually, we'll point a domain. Currently we don't configure any routing, adding a domain is a simple enough change
-to [`wrangler.jsonc`](wrangler.jsonc). If someone else handles it, remember to point at `www.domain.tld` as well as the
-bare `domain.tld`.
+### Custom domain
 
-## Everything Else
+The Workers have no custom domain or routes configured and serve only on `workers.dev`. Adding a domain is a small
+change to [`wrangler.jsonc`](wrangler.jsonc). When you add one, route both the bare `domain.tld` and `www.domain.tld`.
 
-If you have further questions, just contact Dave. I'm more than happy to help.
+## Questions
+
+If you have questions, ask syn. I'm happy to help.
