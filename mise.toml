@@ -3,12 +3,13 @@ AFFIRM_MISE_ACTIVE = "true"
 
 [settings]
 env_file = ".env"
-disable_tools = ["npm", "pnpm", "yarn"]
+disable_tools = ["aube", "bun", "npm", "yarn"]
 
 [tools]
-bun = { version = "1.3.14" }
-node = { version = "24.16.0" }
+pnpm = { version = "12.8.1" }
+node = { version = "26.10.0" }
 rust = { version = "1.96.0" }
 
 [tasks]
-start = "bun dev"
+start = "pnpm run dev"
+pr = "gh pr create --fill-verbose --draft --base staging"

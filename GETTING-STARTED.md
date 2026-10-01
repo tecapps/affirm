@@ -1,26 +1,26 @@
-# Getting Started with Affirm
+# Get started with Affirm
 
-A developer's guide to setting up the [tecapps/affirm](https://github.com/tecapps/affirm) Nuxt 4 project for frontend development, covering both **VS Code** and **JetBrains WebStorm**.
+This guide walks you through setting up the [tecapps/affirm](https://github.com/tecapps/affirm) Nuxt 4 project for frontend development in Visual Studio Code (VS Code) or JetBrains WebStorm.
 
 ---
 
 ## Overview
 
-Affirm is a **Nuxt 4** web application deployed to **Cloudflare Workers**. It uses **Bun** as its package manager, **Tailwind CSS v4** with **DaisyUI** for styling, **Drizzle ORM** with **Cloudflare D1** (SQLite) for the database, and **Trunk** for linting/formatting.
+Affirm is a Nuxt 4 web application that runs on Cloudflare Workers. It uses `pnpm` to manage packages, Tailwind CSS v4 and DaisyUI for styling, and Drizzle ORM over Cloudflare D1 (SQLite) for data. Trunk runs the linters and formatters.
 
-### Stack at a Glance
+### Stack at a glance
 
-| Layer      | Technology                      | Notes                                     |
-| ---------- | ------------------------------- | ----------------------------------------- |
-| Framework  | Nuxt 4                          | Source in `app/` directory                |
-| UI Library | Vue 3 (Composition API)         | `<script setup lang="ts">`                |
-| Styling    | Tailwind CSS v4 + DaisyUI       | Catppuccin Mocha theme                    |
-| Content    | Nuxt Content                    | Markdown-based copywriting                |
-| Runtime    | Bun                             | Package manager and dev scripts           |
-| Database   | Cloudflare D1 + Drizzle ORM     | SQLite on the edge                        |
-| Hosting    | Cloudflare Workers              | Separate prod & staging workers           |
-| Linting    | Trunk + ESLint                  | Multi-tool orchestration                  |
-| CI         | GitHub Actions + Workers Builds | CI checks only; deployment via Cloudflare |
+| Layer           | Technology                        | Notes                                       |
+| --------------- | --------------------------------- | ------------------------------------------- |
+| Framework       | Nuxt 4                            | Source in the `app/` directory              |
+| UI library      | Vue 3 with the Composition API    | `<script setup lang="ts">`                  |
+| Styling         | Tailwind CSS v4 and DaisyUI       | Catppuccin Mocha theme                      |
+| Content         | Nuxt Content                      | Installed, but not enabled in `modules` yet |
+| Package manager | `pnpm`                            | Handles project dependencies and scripts    |
+| Database        | Cloudflare D1 and Drizzle ORM     | SQLite on the edge                          |
+| Hosting         | Cloudflare Workers                | Separate production and staging Workers     |
+| Linting         | Trunk and ESLint                  | Trunk manages most linters and formatters   |
+| CI              | GitHub Actions and Workers Builds | Actions runs checks; Workers Builds deploys |
 
 ```mermaid
 ---
@@ -42,7 +42,7 @@ graph LR
     end
 
     subgraph "Tooling"
-        H["Bun"]
+        H["pnpm"]
         I["Trunk"]
         J["Wrangler"]
     end
@@ -60,11 +60,13 @@ graph LR
 
 ## Prerequisites
 
-Before you begin, you'll need the following installed on your machine.
+Sort out the following before you begin.
 
 ### Required
 
-- **Git** — with commit signing configured (SSH key signing is fine; GPG is not required). See the [GitHub docs on signing commits](https://docs.github.com/en/authentication/managing-commit-signature-verification/signing-commits).
+- Git, set up to sign your commits. An SSH key works, so you don't need GnuPG (GPG). The GitHub guide to [signing commits](https://docs.github.com/en/authentication/managing-commit-signature-verification/signing-commits) has the details.
+- [mise](https://mise.jdx.dev), the version manager this repository uses. It installs `pnpm`, Node.js, and Rust for you.
+- Push access to [tecapps/affirm](https://github.com/tecapps/affirm). If you can see the repository but can't push to it, contact syn.
 
 <details>
 <summary>Quick setup: SSH commit signing</summary>
@@ -80,16 +82,13 @@ git config --global user.signingkey ~/.ssh/id_ed25519.pub
 git config --global commit.gpgsign true
 ```
 
-Then add the same public key to your GitHub account under **Settings → SSH and GPG keys → New SSH key** (select _Signing Key_ as the type).
+Then add the same public key to your GitHub account. Go to **Settings** > **SSH and GPG keys** > **New SSH key** and set the key type to **Signing Key**.
 
 </details>
-- **mise** — the recommended version manager. Install it from [mise.jdx.dev](https://mise.jdx.dev). mise will handle installing Bun, Node.js, and other tools for you.
 
-- **GitHub Access** — ensure you have push access to [tecapps/affirm](https://github.com/tecapps/affirm). If you can see the repo but can't push, contact Dave.
+### Optional
 
-### Optional but Recommended
-
-- **Trunk CLI** — installed globally if you prefer, otherwise it's available as a dev dependency via `bun run trunk`. See the [Trunk docs](https://docs.trunk.io/code-quality/overview/initialize-trunk).
+- A global install of the Trunk CLI. Trunk ships as a dev dependency that you run with `pnpm exec trunk`, so you only need a global copy if you prefer one. The [Trunk installation docs](https://docs.trunk.io/code-quality/overview/initialize-trunk) cover it.
 
 ---
 
@@ -103,8 +102,8 @@ config:
 flowchart TD
     A["Clone the repository"] --> B["Trust the mise config"]
     B --> C["Install toolchain via mise"]
-    C --> D["Install dependencies via Bun"]
-    D --> E["Copy environment files"]
+    C --> D["Install dependencies via pnpm"]
+    D --> E["Create .env from the example"]
     E --> F["Start the dev server"]
 
     style A fill:#cba6f7,color:#1e1e2e
@@ -115,95 +114,97 @@ flowchart TD
     style F fill:#a6e3a1,color:#1e1e2e
 ```
 
-### 1. Clone the Repository
+### 1. Clone the repository
 
 ```bash
 git clone git@github.com:tecapps/affirm.git
 cd affirm
 ```
 
-The default branch is `production`. You won't work on this branch directly — more on that in the [Branching Model](#branching-model) section.
+The default branch is `production`, but you don't work on it directly. The [Branching model](#branching-model) section explains how changes reach it.
 
-### 2. Set Up Tooling with mise
+### 2. Set up tooling with mise
 
-The repository includes a `mise.toml` that defines all required tools and their versions. This is the **source of truth** for tooling — ignore `.tool-versions` and `.node-version`, which exist primarily for Cloudflare Workers Builds.
+The `mise.toml` file in the repository defines every tool you need and its version. Treat it as the source of truth for tooling. The `.tool-versions` and `.node-version` files exist mainly for Cloudflare Workers Builds, so ignore them.
 
 ```bash
 # Trust the mise configuration for this repo
 mise trust
 
-# Install all tools (Bun, Node.js, and others)
+# Install all tools (pnpm, Node.js, and others)
 mise install
 ```
 
-This will install Bun, Node.js, and a few extras (coding agent CLIs, Rust for potential future WASM use). Feel free to customise `mise.toml` for your own needs, but be aware changes affect everyone.
+`mise install` sets up `pnpm`, Node.js, and Rust. Rust is there in case we use WebAssembly later. You can edit `mise.toml` to suit your needs, but your changes affect everyone else too.
 
-### 3. Install Dependencies
+### 3. Install dependencies
 
 ```bash
-bun install
+pnpm install
 ```
 
-This also runs the `postinstall` hook, which sets up Trunk (the linter/formatter orchestrator).
+`pnpm install` also runs the `postinstall` script, which runs `nuxt prepare` and generates the Wrangler types.
 
-### 4. Set Up Environment Variables
+### 4. Set up environment variables
 
 ```bash
 cp .env.example .env
-cp .dev.vars.example .dev.vars
 ```
 
-Edit these files with any required local values. Ask Dave if you're unsure what values to use.
+Fill in `.env` with the values from [tecapps/secrets](https://github.com/tecapps/secrets). If you're unsure which values you need, ask syn.
 
-> ⚠️ **Warning:** The `.dev.vars` file contains Cloudflare-specific secrets for local development. Never commit it — it's already in `.gitignore`.
+> [!WARNING]
+> `.dev.vars` is a committed symlink to `.env`, so Wrangler reads the same values. Git ignores `.env` itself, which keeps your secrets out of the repository. Leave the symlink alone: if you replace it with a real file, Git sees a change to a tracked file, and your secrets can end up in a commit.
 
-### 5. Run the Dev Server
+### 5. Run the dev server
+
+Apply the database migrations to your local D1 database before the first run, and again whenever you pull changes that add migrations:
 
 ```bash
-bun dev
+pnpm run db:migrate
 ```
 
-The development server will start at [http://localhost:3000](http://localhost:3000). It runs with hot-module replacement and a local D1 database via `wrangler.dev.jsonc`.
-
-If you've pulled changes that include new database migrations, apply them to your local D1 before starting work:
+Then start the dev server:
 
 ```bash
-bun run db:migrate
+pnpm run dev
 ```
+
+The dev server starts at `http://localhost:3000`. It reloads your changes in the browser as you save, and it uses a local D1 database that `wrangler.dev.jsonc` configures.
 
 ---
 
-## IDE Setup
+## IDE setup
 
-Choose your fighter. Both editors work well with this stack; the choice is yours.
+Choose your fighter. Both editors work well with this stack.
 
 ### VS Code
 
-The repository includes a `.vscode` directory with recommended extensions and workspace settings. When you first open the project, VS Code will prompt you to install the recommended extensions — **do it**.
+The `.vscode` directory holds the workspace's recommended extensions and a small `settings.json`. When VS Code prompts you to install the recommended extensions on first open, say yes.
 
-You can also view them manually:
+To find them later, follow these steps:
 
-1. Open the **Extensions** panel (`Ctrl+Shift+X` / `Cmd+Shift+X`).
-2. Type `@recommended` in the search bar.
-3. Install everything listed there.
+1. Open the **Extensions** view with `Ctrl+Shift+X`, or `Cmd+Shift+X` on macOS.
+2. In the search box, type `@recommended`.
+3. Install every extension in the list.
 
-#### Key Extensions You'll Want
+#### Extensions to install
 
-At a minimum, ensure you have:
+You need at least the extensions in this table. The workspace recommendations cover Vue - Official, Nuxtr, and Trunk, so add the other four yourself.
 
-| Extension                                                   | Purpose                                                |
-| ----------------------------------------------------------- | ------------------------------------------------------ |
-| **Vue - Official** (`Vue.volar`)                            | Vue 3 / Nuxt language support, template type-checking  |
-| **Tailwind CSS IntelliSense** (`bradlc.vscode-tailwindcss`) | Autocomplete for Tailwind utility classes              |
-| **ESLint** (`dbaeumer.vscode-eslint`)                       | Linting integration                                    |
-| **Prettier** (`esbenp.prettier-vscode`)                     | Code formatting                                        |
-| **Nuxtr** (`nuxtr.nuxtr-vscode`)                            | Nuxt-specific tooling (file generators, etc.)          |
-| **EditorConfig** (`editorconfig.editorconfig`)              | Consistent editor settings from `.editorconfig`        |
-| **Trunk** (`trunk.io`)                                      | Integrates Trunk's multi-linter toolchain into VS Code |
+| Extension                 | ID                          | Purpose                                                |
+| ------------------------- | --------------------------- | ------------------------------------------------------ |
+| Vue - Official            | `vue.volar`                 | Vue 3 and Nuxt language support, template type checks  |
+| Tailwind CSS IntelliSense | `bradlc.vscode-tailwindcss` | Autocomplete for Tailwind utility classes              |
+| ESLint                    | `dbaeumer.vscode-eslint`    | Linting integration                                    |
+| Prettier                  | `esbenp.prettier-vscode`    | Code formatting                                        |
+| Nuxtr                     | `nuxtr.nuxtr-vscode`        | Nuxt file generators and other Nuxt tooling            |
+| EditorConfig              | `editorconfig.editorconfig` | Consistent editor settings from `.editorconfig`        |
+| Trunk                     | `trunk.io`                  | Integrates Trunk's multi-linter toolchain into VS Code |
 
-#### Recommended Settings
+#### Recommended settings
 
-The workspace `.vscode/settings.json` should handle most of this, but verify these are present:
+The workspace `.vscode/settings.json` only maps `wrangler.json` to JSON with comments (JSONC). The committed Wrangler configs use the `.jsonc` extension, which VS Code already treats as JSONC. For format-on-save and ESLint fixes, add these to your own VS Code settings:
 
 ```json
 {
@@ -222,41 +223,42 @@ The workspace `.vscode/settings.json` should handle most of this, but verify the
 
 ### JetBrains WebStorm
 
-WebStorm 2025.1+ has excellent built-in support for Nuxt 4, Vue 3, and Tailwind CSS v4. No additional plugins are strictly required beyond the defaults, but check the following.
+WebStorm 2025.1 or later supports Nuxt 4, Vue 3, and Tailwind CSS v4 with its bundled plugins, so you don't need extra plugins. Work through the settings below.
 
-#### Initial Setup
+#### Initial setup
 
-1. **Open the project** — use `File → Open` and select the `affirm` directory.
-2. **Verify built-in plugins are enabled** — go to `Settings → Plugins → Installed` and ensure these are active:
+1. Select **File** > **Open** and choose the `affirm` directory.
+2. Go to **Settings** > **Plugins** > **Installed** and make sure you've enabled these bundled plugins:
    - Vue.js
    - JavaScript Debugger
    - Tailwind CSS
    - EditorConfig
-3. **Trust the project** — when prompted about running project scripts, trust the project.
+3. When WebStorm asks whether to trust the project, click **Trust Project**.
 
-#### Optional Plugins
+#### Optional plugins
 
-| Plugin                  | Purpose                                                    |
-| ----------------------- | ---------------------------------------------------------- |
-| **Catppuccin Theme**    | Visual consistency with the app's Catppuccin Mocha palette |
-| **.env files support**  | Syntax highlighting for `.env` and `.dev.vars`             |
-| **Conventional Commit** | Helps write conventional commit messages                   |
+| Plugin              | Purpose                                                    |
+| ------------------- | ---------------------------------------------------------- |
+| Catppuccin Theme    | Visual consistency with the app's Catppuccin Mocha palette |
+| .env files support  | Syntax highlighting for `.env` and `.dev.vars`             |
+| Conventional Commit | Helps write conventional commit messages                   |
 
 #### Configure ESLint
 
-1. Go to **Preferences → Languages & Frameworks → JavaScript → Code Quality Tools → ESLint**.
-2. Select **"Automatic ESLint configuration"** — WebStorm will detect the flat config in `eslint.config.mjs` automatically.
-3. Enable **"Run eslint --fix on save"** — this ensures code is automatically formatted and linted when you save.
+1. Go to **Settings** > **Languages & Frameworks** > **JavaScript** > **Code Quality Tools** > **ESLint**.
+2. Select **Automatic ESLint configuration**. WebStorm finds the flat config in `eslint.config.mjs` by itself.
+3. Turn on **Run eslint --fix on save** so WebStorm lints and fixes each file when you save it.
 
 #### Configure TypeScript
 
-Go to **Preferences → Languages & Frameworks → TypeScript** and ensure the TypeScript version is set to the project's `node_modules/typescript`. WebStorm usually detects this automatically.
+Go to **Settings** > **Languages & Frameworks** > **TypeScript** and check that the TypeScript version points at the project's `node_modules/typescript`. WebStorm usually picks it up automatically.
 
-#### Configure Bun
+#### Configure Node.js and `pnpm`
 
-Go to **Preferences → Languages & Frameworks → Node.js** and set the package manager to **bun**. Point the interpreter to the mise shim for Bun (typically `~/.local/share/mise/shims/bun`).
+Go to **Settings** > **Languages & Frameworks** > **Node.js**. Set **Node interpreter** to the Node.js 26.10.0 that mise installs, which lives at `~/.local/share/mise/installs/node/26.10.0/bin/node`, and set **Package manager** to `pnpm`.
 
-> 💡 **Tip:** WebStorm natively supports Nuxt's auto-imports. If auto-completion for composables like `useFetch` isn't working, try **File → Invalidate Caches → Restart**.
+> [!TIP]
+> WebStorm understands Nuxt's auto-imports. If completion for composables such as `useFetch` stops working, select **File** > **Invalidate Caches**, then click **Invalidate and Restart**.
 
 ```mermaid
 ---
@@ -267,7 +269,7 @@ flowchart TD
     subgraph "VS Code Setup"
         V1["Open project in VS Code"]
         V2["Install recommended extensions"]
-        V3["Verify workspace settings"]
+        V3["Add recommended settings"]
         V4["Ready to develop"]
 
         V1 --> V2 --> V3 --> V4
@@ -275,20 +277,21 @@ flowchart TD
 
     subgraph "WebStorm Setup"
         W1["Open project in WebStorm"]
-        W2["Verify Node.js runtime"]
-        W3["Check built-in plugins"]
-        W4["Set Bun as package manager"]
-        W5["Ready to develop"]
+        W2["Enable bundled plugins"]
+        W3["Configure ESLint"]
+        W4["Check TypeScript version"]
+        W5["Set Node.js interpreter and `pnpm`"]
+        W6["Ready to develop"]
 
-        W1 --> W2 --> W3 --> W4 --> W5
+        W1 --> W2 --> W3 --> W4 --> W5 --> W6
     end
 ```
 
 ---
 
-## Project Structure
+## Project structure
 
-Affirm follows the **Nuxt 4** directory convention. The key difference from Nuxt 3 is that application source code lives under the `app/` directory, providing a clear separation between client-side and server-side code.
+Affirm uses the Nuxt 4 directory layout. The application source lives in `app/`, apart from the server code in `server/`.
 
 ```plaintext
 affirm/
@@ -297,8 +300,9 @@ affirm/
 │   ├── components/             #    Auto-imported Vue components
 │   ├── composables/            #    Auto-imported state/logic (Composition API)
 │   ├── layouts/                #    Page layouts
-│   ├── middleware/              #    Route middleware
-│   └── pages/                  #    File-based routing
+│   ├── middleware/             #    Route middleware
+│   ├── pages/                  #    File-based routing
+│   └── plugins/                #    Nuxt plugins
 │
 ├── server/                     # ⚙️ Nitro server backend
 │   ├── api/                    #    API endpoints (e.g. /api/ping)
@@ -318,7 +322,7 @@ affirm/
 ├── eslint.config.mjs           #    ESLint configuration
 ├── tsconfig.json               #    TypeScript configuration
 ├── package.json                #    Dependencies and scripts
-├── bun.lock                    #    Bun lockfile
+├── pnpm-lock.yaml              #    `pnpm` lockfile
 ├── mise.toml                   #    mise tool version definitions
 │
 ├── wrangler.jsonc              #    Cloudflare Workers config (production)
@@ -370,11 +374,11 @@ graph LR
 
 ---
 
-## Development Patterns
+## Development patterns
 
-### Vue & TypeScript
+### Vue and TypeScript
 
-All Vue components should use the **Composition API** with `<script setup lang="ts">`:
+Write every Vue component with the Composition API and `<script setup lang="ts">`. The following component shows the pattern:
 
 ```vue
 <script setup lang="ts">
@@ -386,11 +390,11 @@ const { data } = await useFetch("/api/ping");
 </template>
 ```
 
-Nuxt 4 **auto-imports** composables (`useFetch`, `useRouter`, `ref`, `computed`, etc.) and components from `app/components/`. Do not manually import these — if you find yourself writing `import { ref } from 'vue'` or importing a component from `~/components/`, you're doing it wrong.
+Nuxt 4 auto-imports composables such as `useFetch`, `useRouter`, `ref`, and `computed`, along with the components in `app/components/`. Don't import them by hand. If you catch yourself writing `import { ref } from 'vue'` or importing a component from `~/components/`, you're doing it wrong.
 
 ### Styling
 
-The project uses **Tailwind CSS v4** with **DaisyUI** component classes and the **Catppuccin Mocha** theme.
+The project uses Tailwind CSS v4 with DaisyUI component classes and the Catppuccin Mocha theme.
 
 ```vue
 <template>
@@ -404,22 +408,22 @@ The project uses **Tailwind CSS v4** with **DaisyUI** component classes and the 
 </template>
 ```
 
-Refer to the [DaisyUI documentation](https://daisyui.com/) for available component classes and the [Tailwind CSS documentation](https://tailwindcss.com/) for utility classes.
+For the full list of classes, see the [DaisyUI documentation](https://daisyui.com/) for components and the [Tailwind CSS documentation](https://tailwindcss.com/) for utilities.
 
-### Data Fetching
+### Data fetching
 
-Use `useFetch` for all data fetching in pages and components. It handles SSR hydration automatically:
+Fetch data in pages and components with `useFetch`, which handles server-side rendering (SSR) hydration for you:
 
 ```typescript
 const { data, pending, error } = await useFetch("/api/ping");
 ```
 
-### Server API Routes
+### Server API routes
 
-Create API endpoints in `server/api/`. Export a default event handler:
+Create API endpoints in `server/api/`. Each file exports a default event handler, and a method suffix such as `.get.ts` limits the route to that HTTP method:
 
 ```typescript
-// server/api/ping.ts
+// server/api/hello.get.ts
 export default defineEventHandler((event) => {
   return { message: "Hello from the server" };
 });
@@ -427,30 +431,42 @@ export default defineEventHandler((event) => {
 
 ---
 
-## Essential Commands
+## Essential commands
 
-All commands are run with `bun`. Here's your cheat sheet:
+Here's your cheat sheet. Run every command with `pnpm`.
 
-| Command                  | Purpose                                     |
-| ------------------------ | ------------------------------------------- |
-| `bun install`            | Install dependencies                        |
-| `bun dev`                | Start development server (localhost:3000)   |
-| `bun run build`          | Build for production                        |
-| `bun run build:staging`  | Build for staging                           |
-| `bun run lint:fix`       | Run all linters and auto-fix                |
-| `bun run format`         | Format code (Prettier + Trunk)              |
-| `bun run test`           | Run unit tests (Vitest)                     |
-| `bun run test:e2e`       | Run end-to-end tests (Playwright)           |
-| `bun run db:generate`    | Generate DB migrations after schema changes |
-| `bun run db:migrate`     | Apply migrations to local D1                |
-| `bun run deploy`         | Manual deploy to production                 |
-| `bun run deploy:staging` | Manual deploy to staging                    |
+| Command                   | Purpose                                                             |
+| ------------------------- | ------------------------------------------------------------------- |
+| `pnpm install`            | Install dependencies                                                |
+| `pnpm run dev`            | Start the dev server on `http://localhost:3000`                     |
+| `pnpm run build`          | Build for production                                                |
+| `pnpm run build:staging`  | Build for staging                                                   |
+| `pnpm run lint:fix`       | Run all linters and fix what they can                               |
+| `pnpm run format`         | Format code with Prettier and Trunk without staging the changes     |
+| `pnpm run test`           | Run tests using the single Vitest configuration                     |
+| `pnpm run test:e2e`       | Run end-to-end tests with Playwright                                |
+| `pnpm run db:generate`    | Generate database migrations after schema changes                   |
+| `pnpm run db:migrate`     | Apply migrations to your local D1 database                          |
+| `pnpm run deploy`         | Build and deploy to production by hand, without applying migrations |
+| `pnpm run deploy:staging` | Build and deploy to staging by hand, without applying migrations    |
+
+No Vitest test files are checked in. Use `pnpm run test --run --passWithNoTests` to check test discovery without
+failing on an empty suite.
+
+The Playwright end-to-end tests live in `tests/e2e/`. `pnpm run test:e2e` applies your local D1 migrations and starts
+its own dev server on port 3010, so you don't need `pnpm run dev` running. Before the first run, install the browser
+with `pnpm exec playwright install chromium`.
 
 ---
 
-## Branching Model
+## Branching model
 
 ```mermaid
+---
+config:
+  gitGraph:
+    mainBranchName: production
+---
 gitGraph
     commit id: "initial"
     branch staging
@@ -465,39 +481,39 @@ gitGraph
     merge "username/feature" id: "PR merge"
     commit id: "more-work"
 
-    checkout main
+    checkout production
     merge staging id: "release"
 ```
 
-The project uses two protected branches:
+The project has two protected branches:
 
-- **`staging`** — the integration branch. All feature work merges here first.
-- **`production`** — the live deployment branch. Only receives merges from `staging`.
+- `staging` is the integration branch. All feature work merges here first.
+- `production` is the live deployment branch. It receives merges only from `staging`.
 
-Both branches are protected; changes can only arrive via pull requests.
+Changes reach either branch only through pull requests.
 
-### Your Workflow
+### Your workflow
 
-1. **Create a branch** from `staging` named `username/purpose`, e.g. `daveio/fix-header`.
-2. **Do your work**, committing with signed commits.
-3. **Push your branch** — this triggers a preview deployment on the `affirm-staging` Worker automatically, so you can validate before raising a PR.
-4. **Open a pull request** targeting `staging`.
-5. **Get two approvals** — Dave ([@daveio](https://github.com/daveio)) will try to review all PRs; you'll need one other reviewer as well.
-6. **Merge** — once approved, merge to `staging`. Cloudflare Workers Builds handles the deployment.
+1. Create a branch from `staging` named `username/purpose`, for example `synmux/fix-header`.
+2. Do your work, and sign every commit.
+3. Push your branch. Each push uploads a preview version to the `affirm-staging` Worker, so you can check your changes before they merge.
+4. Open a pull request (PR) that targets `staging`. `mise run pr` opens a draft PR for you, and the PR shows each preview build as a check.
+5. Get one approval. syn ([@synmux](https://github.com/synmux)) tries to review every PR, but if syn isn't around, any other team member can approve it. A PR from `staging` into `production` needs two approvals.
+6. Merge into `staging` once a reviewer approves it. Workers Builds then runs the staging migrations and deploys the new version of `affirm-staging`.
 
-### Commit Conventions
+### Commit conventions
 
-The project uses a `.fastconventional.yaml` config for commit message conventions. Use prefixes like `feat:`, `fix:`, `chore:`, `docs:`, `refactor:`, `test:`, `style:`, etc.
+Commit messages follow Angular-style Conventional Commits, checked against `.fastconventional.yaml`. Every commit needs a scope, as in `feat(frontend): add login form`. The allowed scopes are `backend`, `bothends`, `ci`, `docs`, `frontend`, `ops`, and `tests`. Use the standard types such as `feat`, `fix`, `docs`, `refactor`, and `test`, plus the custom `experiment` type.
 
-### Commit Signing
+### Commit signing
 
-Please **sign your commits**. Git supports SSH key signing now, so you don't need GPG. If you already push via SSH, you likely have a suitable key. See the [GitHub documentation](https://docs.github.com/en/authentication/managing-commit-signature-verification/signing-commits) for setup instructions.
+Git can sign commits with an SSH key, so if you already push over SSH you probably have a key that works. The [Prerequisites](#prerequisites) section has the setup commands.
 
 ---
 
 ## Deployment
 
-Deployment is handled entirely by **Cloudflare Workers Builds** — there is no GitHub Actions deployment workflow. CI (`ci.yaml`) runs lint, typecheck, and build checks only.
+Cloudflare Workers Builds handles deployment, and no GitHub Actions workflow deploys anything. The `ci.yaml` workflow only runs lint, typecheck, and build checks.
 
 ```mermaid
 ---
@@ -522,39 +538,47 @@ flowchart LR
     DEV --> CI
     DEV -->|"push to staging"| STG
     DEV -->|"push to production"| PROD
+    DEV -->|"push to other branches: preview"| STG
     PR --> CI
 
     style STG fill:#f9e2af,color:#1e1e2e
     style PROD fill:#a6e3a1,color:#1e1e2e
 ```
 
-| Trigger                | Worker           | Effect                                                    |
-| ---------------------- | ---------------- | --------------------------------------------------------- |
-| Push to `staging`      | `affirm-staging` | Runs migrations on staging D1, uploads new version        |
-| Push to `production`   | `affirm`         | Runs migrations on production D1, deploys to live traffic |
-| PR targeting `staging` | `affirm-staging` | Uploads a preview version (no migrations)                 |
+| Trigger                  | Worker           | Effect                                                               |
+| ------------------------ | ---------------- | -------------------------------------------------------------------- |
+| Push to `staging`        | `affirm-staging` | Runs migrations on the staging D1 database, deploys to live staging  |
+| Push to `production`     | `affirm`         | Runs migrations on the production D1 database, deploys to live       |
+| Push to any other branch | `affirm-staging` | Uploads a preview version without deploying it or running migrations |
 
-### Manual Deployment (Escape Hatch)
+### Manual deployment (escape hatch)
 
-If you ever need to deploy outside of Workers Builds:
+If you need to deploy outside of Workers Builds, apply the migrations yourself first.
+
+> [!WARNING]
+> The `deploy` and `deploy:staging` scripts only build and run `wrangler deploy`. They don't apply D1 migrations, so run the matching `db:migrate:*` script first, or the new code goes live against the old schema.
 
 ```bash
 # Production
-bun run deploy
+pnpm run db:migrate:prod
+pnpm run deploy
 
 # Staging
-bun run deploy:staging
+pnpm run db:migrate:staging
+pnpm run deploy:staging
 ```
+
+`deploy:staging` sends the new version straight to live staging traffic, as a push to `staging` does. To upload a version without deploying it, as Workers Builds does for other branches, use `pnpm run deploy:snapshot`. It skips migrations too.
 
 ---
 
 ## Database
 
-The app uses **Cloudflare D1** (SQLite) with **Drizzle ORM**. There are three environments:
+The app uses Cloudflare D1 (SQLite) with Drizzle ORM across three environments:
 
-| Environment | Wrangler Config          | D1 Database    | Worker         |
+| Environment | Wrangler config          | D1 database    | Worker         |
 | ----------- | ------------------------ | -------------- | -------------- |
-| Local dev   | `wrangler.dev.jsonc`     | affirm-local   | —              |
+| Local dev   | `wrangler.dev.jsonc`     | affirm-local   | (local)        |
 | Staging     | `wrangler.staging.jsonc` | affirm-staging | affirm-staging |
 | Production  | `wrangler.jsonc`         | affirm         | affirm         |
 
@@ -572,8 +596,8 @@ flowchart TD
 
     subgraph "Workflow"
         S1["Edit server/database/schema.ts"]
-        S2["bun run db:generate"]
-        S3["bun run db:migrate"]
+        S2["pnpm run db:generate"]
+        S3["pnpm run db:migrate"]
         S4["Commit migration files"]
         S5["Workers Builds handles\nstaging/production migrations"]
     end
@@ -584,47 +608,43 @@ flowchart TD
     S5 --> PROD_DB
 ```
 
-### Schema Changes
+### Schema changes
 
 1. Edit `server/database/schema.ts`.
-2. Run `bun run db:generate` to create a migration.
-3. Run `bun run db:migrate` to apply it locally.
-4. Commit the migration files — Workers Builds handles staging and production migrations on deploy.
+2. To create a migration, run `pnpm run db:generate`.
+3. To apply it locally, run `pnpm run db:migrate`.
+4. Commit the migration files. When you push to `staging` or `production`, Workers Builds applies them to that environment's D1 database before deploying. The manual deploy scripts don't, so read [Manual deployment](#manual-deployment-escape-hatch) before you deploy by hand.
 
 ---
 
 ## Gotchas
 
-There are a few things that can catch you out. Keep these in mind:
+A few things in this project catch people out.
 
-- **This is Nuxt 4, not Nuxt 3.** The Nuxt 3 docs may differ significantly, especially regarding the `app/` directory structure. Always refer to the [Nuxt 4 documentation](https://nuxt.com/docs/4.x).
-- **D1 bindings exist in two places.** Both the Wrangler config files and `nuxt.config.ts` define D1 bindings (because Nitro generates a separate Wrangler config at build time). Keep them in sync.
-- **Always use `--envName` for builds.** A bare `nuxt build` produces no D1 binding. The `build` and `build:staging` scripts handle this for you — use them.
-- **`bun run build`, not `bun build`.** The latter clashes with Bun's internal build command. Always use `bun run build`.
-- **Auto-imports are your friend.** Don't manually import Vue composables or components from `app/components/`. Nuxt handles this.
-- **Trunk is a dev dependency, not global.** Invoke it via `bun run trunk`, or install it globally by following [the Trunk docs](https://docs.trunk.io/code-quality/overview/initialize-trunk).
+- This project uses Nuxt 4. The Nuxt 3 docs differ in places, especially around the `app/` directory, so use the [Nuxt 4 documentation](https://nuxt.com/docs/4.x).
+- The Wrangler config files and `nuxt.config.ts` both define the D1 bindings. Nitro, the server engine under Nuxt, generates its own Wrangler config at build time from `nuxt.config.ts`. Keep the two in sync.
+- Every build needs an `--envName` because a bare `nuxt build` produces no D1 binding. Use the `build` and `build:staging` scripts, which pass it for you.
 
 ---
 
-## Setup Checklist
+## Setup checklist
 
 Tick off each item as you complete it:
 
-- [ ] Install mise and run `mise trust && mise install`
-- [ ] Clone the repo and `cd affirm`
-- [ ] Run `bun install`
-- [ ] Copy `.env.example → .env` and `.dev.vars.example → .dev.vars`
-- [ ] Set up your IDE (extensions/plugins configured)
-- [ ] Run `bun dev` and open localhost:3000
-- [ ] Run `bun run db:migrate` to set up local D1
 - [ ] Set up SSH commit signing
-- [ ] Create a test branch `yourname/test-setup`
-- [ ] Run `bun run lint:fix` to verify linting works
+- [ ] Install mise
+- [ ] Clone the repository and `cd affirm`
+- [ ] Run `mise trust && mise install`
+- [ ] Run `pnpm install`, then check `git status`
+- [ ] Copy `.env.example` to `.env` and fill in the values from `tecapps/secrets`
+- [ ] Run `pnpm run db:migrate` to set up your local D1 database
+- [ ] Run `pnpm run dev` and open `http://localhost:3000`
+- [ ] Set up your IDE extensions or plugins
+- [ ] Create a test branch called `yourname/test-setup`
+- [ ] Run `pnpm run lint:fix` to check that linting works
 
 ---
 
-## Getting Help
+## Get help
 
-If you're stuck, have questions, or something isn't working as expected — just ask Dave. He's more than happy to help.
-
-Happy coding! 🎉
+If you're stuck or something isn't working, ask syn ([@synmux](https://github.com/synmux)), who's more than happy to help.
