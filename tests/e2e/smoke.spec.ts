@@ -7,6 +7,17 @@ test("home page renders the hero with the server-fetched ping message", async ({
   await expect(page.getByText("pong", { exact: true })).toBeVisible();
 });
 
+test("login form labels are associated with their own inputs", async ({ page }) => {
+  await page.goto("/login");
+
+  const emailInput = page.getByLabel("Email");
+  const passwordInput = page.getByLabel("Password");
+
+  await expect(emailInput).toHaveAttribute("type", "text");
+  await expect(passwordInput).toHaveAttribute("type", "password");
+  expect(await emailInput.getAttribute("id")).not.toBe(await passwordInput.getAttribute("id"));
+});
+
 test("GET /api/ping answers with pong", async ({ request }) => {
   const response = await request.get("/api/ping");
 
