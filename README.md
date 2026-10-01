@@ -36,8 +36,7 @@ When it's ready, open a pull request against `staging`. `mise run pr` opens a dr
 into `staging` needs one approval, and a PR into `production` needs two. I ([@synmux](https://github.com/synmux)) try to
 review every PR, but if I'm not around, any other team member can review it.
 
-I know this is a bit of a pain in the arse. It keeps broken code out of production. Every push to a branch uploads a
-preview version to the `affirm-staging` Worker, so you can check your changes there before you open a PR.
+Opening or updating a pull request against `staging` uploads a preview version to the `affirm-staging` Worker, so you can check your changes before they merge.
 
 > [!TIP]
 > Please sign your commits. It's a big security win for little effort. You don't need a GnuPG key any more, because
