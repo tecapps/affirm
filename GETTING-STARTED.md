@@ -204,7 +204,7 @@ You need at least the extensions in this table. The workspace recommendations co
 
 #### Recommended settings
 
-The workspace `.vscode/settings.json` does one thing: it tells VS Code to treat `wrangler.json` as JSON with comments (JSONC). For format-on-save and ESLint fixes, add these to your own VS Code settings:
+The workspace `.vscode/settings.json` only maps `wrangler.json` to JSON with comments (JSONC). The committed Wrangler configs use the `.jsonc` extension, which VS Code already treats as JSONC. For format-on-save and ESLint fixes, add these to your own VS Code settings:
 
 ```json
 {
@@ -253,9 +253,9 @@ WebStorm 2025.1 or later supports Nuxt 4, Vue 3, and Tailwind CSS v4 with its bu
 
 Go to **Settings** > **Languages & Frameworks** > **TypeScript** and check that the TypeScript version points at the project's `node_modules/typescript`. WebStorm usually picks it up automatically.
 
-#### Configure `pnpm`
+#### Configure Node.js and `pnpm`
 
-Go to **Settings** > **Languages & Frameworks** > **Node.js** and set **Package manager** to `pnpm`.
+Go to **Settings** > **Languages & Frameworks** > **Node.js**. Set **Node interpreter** to the Node.js 26.10.0 that mise installs, which lives at `~/.local/share/mise/installs/node/26.10.0/bin/node`, and set **Package manager** to `pnpm`.
 
 > [!TIP]
 > WebStorm understands Nuxt's auto-imports. If completion for composables such as `useFetch` stops working, select **File** > **Invalidate Caches**, then click **Invalidate and Restart**.
@@ -269,7 +269,7 @@ flowchart TD
     subgraph "VS Code Setup"
         V1["Open project in VS Code"]
         V2["Install recommended extensions"]
-        V3["Verify workspace settings"]
+        V3["Add recommended settings"]
         V4["Ready to develop"]
 
         V1 --> V2 --> V3 --> V4
@@ -277,12 +277,13 @@ flowchart TD
 
     subgraph "WebStorm Setup"
         W1["Open project in WebStorm"]
-        W2["Verify Node.js runtime"]
-        W3["Check built-in plugins"]
-        W4["Set `pnpm` as package manager"]
-        W5["Ready to develop"]
+        W2["Enable bundled plugins"]
+        W3["Configure ESLint"]
+        W4["Check TypeScript version"]
+        W5["Set Node.js interpreter and `pnpm`"]
+        W6["Ready to develop"]
 
-        W1 --> W2 --> W3 --> W4 --> W5
+        W1 --> W2 --> W3 --> W4 --> W5 --> W6
     end
 ```
 
@@ -441,7 +442,7 @@ Here's your cheat sheet. Run every command with `pnpm`.
 | `pnpm run build`          | Build for production                                                |
 | `pnpm run build:staging`  | Build for staging                                                   |
 | `pnpm run lint:fix`       | Run all linters and fix what they can                               |
-| `pnpm run format`         | Format code with Prettier and Trunk (it doesn't stage anything)     |
+| `pnpm run format`         | Format code with Prettier and Trunk without staging the changes     |
 | `pnpm run test`           | Run tests using the single Vitest configuration                     |
 | `pnpm run test:e2e`       | Run end-to-end tests with Playwright                                |
 | `pnpm run db:generate`    | Generate database migrations after schema changes                   |
@@ -495,10 +496,10 @@ Changes reach either branch only through pull requests.
 
 1. Create a branch from `staging` named `username/purpose`, for example `synmux/fix-header`.
 2. Do your work, and sign every commit.
-3. Push your branch.
-4. Open a pull request (PR) that targets `staging`. Opening or updating the PR uploads a preview version to the `affirm-staging` Worker, so you can check your changes before they merge.
+3. Push your branch. Each push uploads a preview version to the `affirm-staging` Worker, so you can check your changes before they merge.
+4. Open a pull request (PR) that targets `staging`. `mise run pr` opens a draft PR for you, and the PR shows each preview build as a check.
 5. Get one approval. syn ([@synmux](https://github.com/synmux)) tries to review every PR, but if syn isn't around, any other team member can approve it. A PR from `staging` into `production` needs two approvals.
-6. Merge into `staging` once a reviewer approves it. Workers Builds then runs the staging migrations and uploads a new version of `affirm-staging`.
+6. Merge into `staging` once a reviewer approves it. Workers Builds then runs the staging migrations and deploys the new version of `affirm-staging`.
 
 ### Commit conventions
 
@@ -537,17 +538,18 @@ flowchart LR
     DEV --> CI
     DEV -->|"push to staging"| STG
     DEV -->|"push to production"| PROD
+    DEV -->|"push to other branches: preview"| STG
     PR --> CI
 
     style STG fill:#f9e2af,color:#1e1e2e
     style PROD fill:#a6e3a1,color:#1e1e2e
 ```
 
-| Trigger                | Worker           | Effect                                                         |
-| ---------------------- | ---------------- | -------------------------------------------------------------- |
-| Push to `staging`      | `affirm-staging` | Runs migrations on the staging D1 database, uploads a version  |
-| Push to `production`   | `affirm`         | Runs migrations on the production D1 database, deploys to live |
-| PR targeting `staging` | `affirm-staging` | Uploads a preview version without running migrations           |
+| Trigger                  | Worker           | Effect                                                               |
+| ------------------------ | ---------------- | -------------------------------------------------------------------- |
+| Push to `staging`        | `affirm-staging` | Runs migrations on the staging D1 database, deploys to live staging  |
+| Push to `production`     | `affirm`         | Runs migrations on the production D1 database, deploys to live       |
+| Push to any other branch | `affirm-staging` | Uploads a preview version without deploying it or running migrations |
 
 ### Manual deployment (escape hatch)
 
@@ -566,7 +568,7 @@ pnpm run db:migrate:staging
 pnpm run deploy:staging
 ```
 
-`deploy:staging` sends the new version straight to live staging traffic. Workers Builds only uploads a version for staging, and `pnpm run deploy:snapshot` does the same by hand. It skips migrations too.
+`deploy:staging` sends the new version straight to live staging traffic, as a push to `staging` does. To upload a version without deploying it, as Workers Builds does for other branches, use `pnpm run deploy:snapshot`. It skips migrations too.
 
 ---
 

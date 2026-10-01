@@ -30,11 +30,12 @@ This document outlines the development workflow, commands, and patterns for work
 - **Drizzle Studio**:
   - Staging: `pnpm run db:studio:staging`
   - Production: `pnpm run db:studio:prod`
+  - Studio and `db:push:*` need `CLOUDFLARE_ACCOUNT_ID`, `CLOUDFLARE_D1_TOKEN`, and the matching `CLOUDFLARE_*_DATABASE_ID` in the environment, and mise loads them from `.env`.
 
 ### Testing
 
 - **Run All Tests**: `pnpm run test`
-- **E2E Tests**: `pnpm run test:e2e` (Playwright; specs in `tests/e2e/`, config in `playwright.config.ts`). It applies local D1 migrations and starts `nuxt dev` on port 3010. Install the browser once with `pnpm exec playwright install chromium`.
+- **E2E Tests**: `pnpm run test:e2e` (Playwright). Specs live in `tests/e2e/` and the config in `playwright.config.ts`. The script applies local D1 migrations and starts `nuxt dev` on port 3010. Install the browser once with `pnpm exec playwright install chromium`.
 
 Vitest uses a single configuration with no named projects. No Vitest test files are checked in; `pnpm run test --run --passWithNoTests` checks test discovery without failing on an empty suite.
 
@@ -44,7 +45,7 @@ Deployment is handled by **Cloudflare Workers Builds** — there is no GitHub Ac
 
 - Pushing to `staging` triggers a build+deploy of the `affirm-staging` Worker.
 - Pushing to `production` triggers a build+deploy of the `affirm` Worker.
-- PRs targeting `staging` get preview versions uploaded to `affirm-staging`.
+- Pushing to any other branch uploads a preview version to `affirm-staging` without deploying it or running migrations. The PR shows the build as a check.
 
 For manual/local deploys (rarely needed):
 

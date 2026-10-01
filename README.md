@@ -36,7 +36,8 @@ When it's ready, open a pull request against `staging`. `mise run pr` opens a dr
 into `staging` needs one approval, and a PR into `production` needs two. I ([@synmux](https://github.com/synmux)) try to
 review every PR, but if I'm not around, any other team member can review it.
 
-Opening or updating a pull request against `staging` uploads a preview version to the `affirm-staging` Worker, so you can check your changes before they merge.
+Every push to your branch uploads a preview version to the `affirm-staging` Worker, so you can check your changes
+before they merge. The pull request shows each preview build as a check.
 
 > [!TIP]
 > Please sign your commits. It's a big security win for little effort. You don't need a GnuPG key any more, because
@@ -104,7 +105,7 @@ Node.js 26 for builds and tooling.
 | Apply migrations locally       | `pnpm run db:migrate`                                     | Uses `wrangler.dev.jsonc`                                                         |
 | Apply migrations to staging    | `pnpm run db:migrate:staging`                             | Uses `wrangler.staging.jsonc`                                                     |
 | Apply migrations to production | `pnpm run db:migrate:prod`                                | Uses `wrangler.jsonc`                                                             |
-| Open Drizzle Studio            | `pnpm run db:studio:staging` or `pnpm run db:studio:prod` | Needs `CLOUDFLARE_STAGING_DATABASE_ID` or `CLOUDFLARE_PRODUCTION_DATABASE_ID` set |
+| Open Drizzle Studio            | `pnpm run db:studio:staging` or `pnpm run db:studio:prod` | Needs Cloudflare credentials in the environment, as described after this table    |
 | Lint and fix                   | `pnpm run lint:fix`                                       | Runs ESLint and Trunk with fixes                                                  |
 | Format                         | `pnpm run format`                                         | Runs Prettier and Trunk; review and stage the changes yourself                    |
 | Run Vitest tests               | `pnpm run test`                                           | Uses the single configuration in `vitest.config.ts`                               |
@@ -112,6 +113,10 @@ Node.js 26 for builds and tooling.
 
 No Vitest test files are checked in. To check test discovery without failing on an empty suite, run
 `pnpm run test --run --passWithNoTests`.
+
+Drizzle Studio and the `db:push:*` scripts read `CLOUDFLARE_ACCOUNT_ID`, `CLOUDFLARE_D1_TOKEN`, and
+`CLOUDFLARE_STAGING_DATABASE_ID` or `CLOUDFLARE_PRODUCTION_DATABASE_ID` from the environment. mise loads them from `.env`;
+without mise, export them yourself.
 
 Playwright end-to-end tests live in `tests/e2e/`. `pnpm run test:e2e` applies local D1 migrations and starts its own
 dev server on port 3010. Before the first run, install the browser with `pnpm exec playwright install chromium`.
@@ -242,19 +247,21 @@ deploys the app when you push. GitHub Actions doesn't deploy anything.
 
 ### How it works
 
-Each of the two Workers is connected to this repository:
+Workers Builds triggers connect both Workers to this repository. Workers Builds installs the dependencies with pnpm,
+then runs these commands:
 
-| Worker           | Production branch | Build command                            | Deploy command                                                                                |
-| ---------------- | ----------------- | ---------------------------------------- | --------------------------------------------------------------------------------------------- |
-| `affirm`         | `production`      | `pnpm install && pnpm run build`         | `pnpm run db:migrate:prod && pnpm exec wrangler deploy -c wrangler.jsonc`                     |
-| `affirm-staging` | `staging`         | `pnpm install && pnpm run build:staging` | `pnpm run db:migrate:staging && pnpm exec wrangler versions upload -c wrangler.staging.jsonc` |
+| Worker           | Branches                      | Build command            | Deploy command                                                    |
+| ---------------- | ----------------------------- | ------------------------ | ----------------------------------------------------------------- |
+| `affirm`         | `production`                  | `pnpm run build`         | `pnpm run db:migrate:prod && pnpm run deploy:wrangler`            |
+| `affirm-staging` | `staging`                     | `pnpm run build:staging` | `pnpm run db:migrate:staging && pnpm run deploy:staging:wrangler` |
+| `affirm-staging` | every branch except `staging` | `pnpm run build:staging` | `pnpm run deploy:snapshot:wrangler`                               |
 
-- A push to `staging` builds `affirm-staging`, applies migrations to the staging D1 database, and uploads a new
-  version.
+- A push to `staging` builds `affirm-staging`, applies migrations to the staging D1 database, and deploys to live
+  staging traffic.
 - A push to `production` builds `affirm`, applies migrations to the production D1 database, and deploys to live
   traffic.
-- A pull request against `staging` makes `affirm-staging` upload a preview version. Previews don't run migrations, so
-  they use the existing staging schema.
+- A push to any other branch builds with the staging configuration and uploads a preview version to `affirm-staging`
+  without deploying it. Previews don't run migrations, so they use the existing staging schema.
 
 ### CI workflow
 
@@ -279,8 +286,9 @@ pnpm run db:migrate:staging
 pnpm run deploy:staging
 ```
 
-`deploy:staging` sends the new version straight to live staging traffic. Workers Builds only uploads a version for
-staging. To do that by hand, use `pnpm run deploy:snapshot`, which also skips migrations.
+`deploy:staging` sends the new version straight to live staging traffic, as a push to `staging` does. To upload a
+version without deploying it, as Workers Builds does for other branches, use `pnpm run deploy:snapshot`, which also
+skips migrations.
 
 ### Custom domain
 
