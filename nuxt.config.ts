@@ -9,13 +9,22 @@ export default defineNuxtConfig({
     preset: "cloudflare_module",
     cloudflare: {
       deployConfig: true,
+      dev: {
+        configPath: "./wrangler.dev.jsonc",
+      },
       nodeCompat: true,
       wrangler: {
         d1_databases: [],
       },
     },
-    cloudflareDev: {
-      configPath: "./wrangler.dev.jsonc",
+  },
+  typescript: {
+    nodeTsConfig: {
+      compilerOptions: {
+        types: ["node"],
+      },
+      // Type-check the Playwright config and end-to-end tests with the other Node-side files.
+      include: ["../playwright.config.ts", "../tests/**/*.ts"],
     },
   },
   vite: {
@@ -24,16 +33,7 @@ export default defineNuxtConfig({
     },
     plugins: [tailwindcss()],
   },
-  modules: [
-    "@nuxt/eslint",
-    "@nuxt/fonts",
-    "@nuxt/icon",
-    "@nuxt/image",
-    "@nuxt/scripts",
-    "nitro-cloudflare-dev",
-    "nuxt-auth-utils",
-    "@nuxtjs/storybook",
-  ],
+  modules: ["@nuxt/eslint", "@nuxt/fonts", "@nuxt/icon", "@nuxt/image", "@nuxt/scripts", "nuxt-auth-utils"],
   $env: {
     production: {
       nitro: {

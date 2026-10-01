@@ -30,6 +30,9 @@
     "mode": "smart",
   },
   "preview_urls": true,
+  "secrets": {
+    "required": ["NUXT_SESSION_PASSWORD"],
+  },
   "send_metrics": true,
   "upload_source_maps": true,
   "version_metadata": {

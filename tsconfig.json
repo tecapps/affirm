@@ -14,14 +14,5 @@
     {
       "path": "./.nuxt/tsconfig.node.json"
     }
-  ],
-  "compilerOptions": {
-    "strict": true,
-    "forceConsistentCasingInFileNames": true,
-    "types": ["nodenext", "@nuxt/types"],
-    "target": "esnext",
-    "module": "nodenext",
-    "moduleResolution": "nodenext",
-    "esModuleInterop": true
-  }
+  ]
 }
