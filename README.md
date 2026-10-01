@@ -91,8 +91,7 @@ Node.js 26 for builds and tooling.
 ### Essential commands
 
 `pnpm run <script>` runs a script from `package.json`, such as `pnpm run dev`. `pnpm exec <binary>` runs a binary from
-`node_modules/.bin`, such as `pnpm exec wrangler --version`. If you pick the wrong one, nothing breaks, so try the
-other.
+`node_modules/.bin`, such as `pnpm exec wrangler --version`.
 
 | Task                           | Command                                                   | Notes                                                                                    |
 | ------------------------------ | --------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
