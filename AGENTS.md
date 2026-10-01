@@ -19,7 +19,7 @@ This document outlines the development workflow, commands, and patterns for work
 - **Start Dev Server**: `pnpm run dev` (Runs Nuxt dev server with Cloudflare binding proxies)
 - **Lint & Fix**: `pnpm run lint:fix` (Runs ESLint and Trunk)
 - **Format**: `pnpm run format` (Runs Prettier and Trunk)
-- **Type Check**: `pnpm run lint:types`
+- **Type Check**: `pnpm run lint:types` (runs `nuxt typecheck`, which uses `vue-tsc` and covers `.vue` files)
 
 ### Database (Drizzle & D1)
 

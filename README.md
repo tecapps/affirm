@@ -209,7 +209,7 @@ config target exactly one database:
 - Trunk manages the linters and formatters, and `pnpm run lint:fix` applies their fixes.
 - Wrangler handles deployment and D1 migrations, with one config file per environment.
 - `nuxt.config.ts` holds the Nuxt configuration, including the `$env` D1 overrides.
-- TypeScript runs in strict mode, and `pnpm run lint:types` checks it.
+- TypeScript runs in strict mode. `pnpm run lint:types` runs `nuxt typecheck`, which uses `vue-tsc` to check `.ts` and `.vue` files.
 
 ### Gotchas
 

@@ -33,6 +33,7 @@
     "prettier": "^3.9.9",
     "typescript": "^6.0.3",
     "vitest": "^5.0.1",
+    "vue-tsc": "^3.3.11",
     "wrangler": "^4.137.0"
   },
   "devEngines": {
@@ -76,7 +77,7 @@
     "lint:fix": "pnpm exec run-s lint:eslint:fix lint:trunk:fix",
     "lint:trunk": "pnpm exec trunk check -a",
     "lint:trunk:fix": "pnpm exec trunk check -a --fix",
-    "lint:types": "pnpm exec tsc --noEmit",
+    "lint:types": "pnpm exec nuxt typecheck",
     "postinstall": "pnpm exec run-s postinstall:prepare types",
     "postinstall:prepare": "pnpm exec nuxt prepare",
     "postinstall:trunk:install": "pnpm exec trunk install --ci",
