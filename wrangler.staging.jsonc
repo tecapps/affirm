@@ -39,6 +39,9 @@
     "mode": "smart",
   },
   "preview_urls": true,
+  // TODO: declare "secrets": { "required": ["NUXT_SESSION_PASSWORD"] } here once the secret is set on
+  // affirm-staging (`pnpm exec wrangler secret put NUXT_SESSION_PASSWORD -c wrangler.staging.jsonc`).
+  // Declaring it before then makes every staging deploy and preview upload fail.
   "send_metrics": true,
   "upload_source_maps": true,
   "version_metadata": {

@@ -101,7 +101,7 @@ export default defineEventHandler(async (event) => {
 
 ## Gotchas & Guidelines
 
-1. **Environment Variables**: Managed via wrangler config bindings for runtime. For local dev, `.dev.vars` is used.
+1. **Environment Variables**: Managed via wrangler config bindings for runtime. For local dev, `.dev.vars` (a symlink to `.env`) is used. Declare every Worker secret in `secrets.required` in `wrangler.jsonc` and `wrangler.dev.jsonc`. `wrangler types` builds `Env` from that list, not from local `.env` files, so `worker-configuration.d.ts` comes out the same on every machine. `wrangler deploy` also refuses to deploy if a listed secret isn't set on the Worker.
 2. **Migrations**: Always run `pnpm run db:generate` after modifying schema. Do not modify SQL files manually. Remote migrations use the D1 binding from the appropriate wrangler config file.
 3. **Bindings**: The application relies on Cloudflare bindings (`DB`, `ASSETS`). Ensure `pnpm run dev` is used to properly proxy these during development.
 4. **Imports**: Use `~` alias for project root (e.g., `~/server/utils/db`).
