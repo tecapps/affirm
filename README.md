@@ -53,7 +53,7 @@ submitting a PR and save everyone a bunch of time.
 
 ## Setup
 
-Install [`pnpm`] if you haven't already. I suggest using [`mise`](https://mise.jdx.dev), which you can also use to manage Node versions and a bunch of other stuff too.
+Install `pnpm` if you haven't already. I suggest using [`mise`](https://mise.jdx.dev), which you can also use to manage Node versions and a bunch of other stuff too.
 
 There is a `mise.toml` file included in this repo. It will install everything you need.
 
