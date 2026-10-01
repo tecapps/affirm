@@ -9,13 +9,13 @@ export default defineNuxtConfig({
     preset: "cloudflare_module",
     cloudflare: {
       deployConfig: true,
+      dev: {
+        configPath: "./wrangler.dev.jsonc",
+      },
       nodeCompat: true,
       wrangler: {
         d1_databases: [],
       },
-    },
-    cloudflareDev: {
-      configPath: "./wrangler.dev.jsonc",
     },
   },
   vite: {
@@ -24,15 +24,7 @@ export default defineNuxtConfig({
     },
     plugins: [tailwindcss()],
   },
-  modules: [
-    "@nuxt/eslint",
-    "@nuxt/fonts",
-    "@nuxt/icon",
-    "@nuxt/image",
-    "@nuxt/scripts",
-    "nitro-cloudflare-dev",
-    "nuxt-auth-utils",
-  ],
+  modules: ["@nuxt/eslint", "@nuxt/fonts", "@nuxt/icon", "@nuxt/image", "@nuxt/scripts", "nuxt-auth-utils"],
   $env: {
     production: {
       nitro: {
