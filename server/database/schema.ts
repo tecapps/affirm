@@ -23,10 +23,10 @@ export const businesses = sqliteTable("businesses", {
   id: integer("id").primaryKey({ autoIncrement: true }),
 });
 
-export const tags = sqliteTable("tags", {});
+// export const tags = sqliteTable("tags", {});
 
-export const locations = sqliteTable("locations", {});
+// export const locations = sqliteTable("locations", {});
 
-export const responses = sqliteTable("responses", {});
+// export const responses = sqliteTable("responses", {});
 
-export const questions = sqliteTable("questions", {});
+// export const questions = sqliteTable("questions", {});
