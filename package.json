@@ -4,10 +4,10 @@
     "@nuxt/fonts": "^0.14.0",
     "@nuxt/icon": "^2.5.1",
     "@nuxt/image": "^2.1.0",
-    "@nuxt/scripts": "^1.3.10",
+    "@nuxt/scripts": "^1.3.9",
     "@tailwindcss/vite": "^4.3.3",
-    "@unhead/vue": "^3.4.2",
-    "daisyui": "^5.7.47",
+    "@unhead/vue": "^3.4.1",
+    "daisyui": "^5.7.46",
     "drizzle-orm": "^0.45.3",
     "eslint": "^10.11.0",
     "hash-wasm": "^4.12.0",
@@ -20,7 +20,7 @@
   "devDependencies": {
     "@catppuccin/daisyui": "^2.1.1",
     "@iconify-json/heroicons": "^1.2.3",
-    "@iconify-json/logos": "^1.2.15",
+    "@iconify-json/logos": "^1.2.14",
     "@playwright/test": "^1.63.0",
     "@trunkio/launcher": "^1.3.4",
     "@types/node": "^26.6.3",
@@ -30,9 +30,9 @@
     "npm-run-all2": "^9.0.3",
     "prettier": "^3.9.9",
     "typescript": "^6.0.3",
-    "vitest": "^5.0.3",
+    "vitest": "^5.0.2",
     "vue-tsc": "^3.3.11",
-    "wrangler": "^4.146.0"
+    "wrangler": "^4.142.0"
   },
   "devEngines": {
     "runtime": {
