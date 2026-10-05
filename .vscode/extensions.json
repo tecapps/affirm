@@ -15,5 +15,6 @@
     "redhat.vscode-yaml",
     "ms-azuretools.vscode-containers",
     "pflannery.vscode-versionlens"
-  ]
+  ],
+  "unwantedRecommendations": ["ms-toolsai.jupyter"]
 }
