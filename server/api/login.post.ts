@@ -30,7 +30,7 @@ export default defineEventHandler(async (request) => {
       hash: result.password,
     });
     if (check) {
-      let message = { ...result };
+      const message = { ...result };
       delete message.password;
 
       await setUserSession(request, {
