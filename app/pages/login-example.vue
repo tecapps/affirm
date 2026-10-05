@@ -1,24 +1,28 @@
 <script setup lang="ts">
-const { fetch: refreshSession } = useUserSession();
-const credentials = reactive({
-  email: "",
-  password: "",
+declare module "nuxt/app" {
+  interface NuxtLayouts {
+    custom: unknown;
+  }
+}
+// ---cut---
+definePageMeta({
+  layout: "blank",
 });
+
+const email = ref("");
+const password = ref("");
 
 async function handleLogin() {
   try {
     console.log("Start Fetch");
-    if (credentials.email && credentials.password) {
+    if (email?.value && password?.value) {
       const res = await $fetch("/api/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: credentials,
+        body: { email: email.value, password: password.value },
       });
       console.log("Fetch Complete");
       console.log(res);
-      // Refresh the session on client-side and redirect to the home page
-      await refreshSession();
-      await navigateTo("/me");
     } else console.log("Login Failed, empty input");
   } catch (error) {
     console.error("Login failed:", error);
@@ -34,8 +38,8 @@ async function handleLogin() {
         <fieldset class="fieldset border-base-300 border rounded-box w-full p-4 flex flex-col justify-stretch gap-4">
           <legend class="sr-only">Login Page</legend>
 
-          <UiInput v-model="credentials.email" label="Email" placeholder="email@example.com" />
-          <UiInput v-model="credentials.password" label="Password" type="password" placeholder="password" />
+          <UiInput v-model="email" label="Email" placeholder="email@example.com" />
+          <UiInput v-model="password" label="Password" type="password" placeholder="password" />
 
           <UiButton is-submit type="primary" class="mt-8">Login</UiButton>
         </fieldset>
