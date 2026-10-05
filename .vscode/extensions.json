@@ -15,5 +15,6 @@
     "tamasfe.even-better-toml",
     "trunk.io",
     "vue.volar"
-  ]
+  ],
+  "unwantedRecommendations": ["ms-toolsai.jupyter"]
 }
