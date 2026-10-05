@@ -4,6 +4,7 @@ definePageMeta({
 });
 
 const { user, clear: clearSession } = useUserSession();
+const userName = (user as { name?: string } | null | undefined)?.name ?? "there";
 
 async function logout() {
   await clearSession();
@@ -14,13 +15,13 @@ async function logout() {
 <template>
   <div class="space-y-12">
     <!-- Hero Section -->
-    <section class="hero min-h-[30vh] bg-gradient-to-br from-base-200 to-base-300 rounded-2xl">
+    <section class="hero min-h-[30vh] bg-linear-to-br from-base-200 to-base-300 rounded-2xl">
       <div class="hero-content text-center">
         <div class="max-w-2xl">
           <h1
-            class="text-5xl md:text-6xl font-bold bg-gradient-to-r from-secondary to-accent bg-clip-text text-transparent"
+            class="text-5xl md:text-6xl font-bold bg-linear-to-r from-secondary to-accent bg-clip-text text-transparent"
           >
-            Welcome, {{ user?.name }}!
+            Welcome, {{ userName }}!
           </h1>
         </div>
       </div>
