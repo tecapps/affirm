@@ -30,13 +30,22 @@ export default defineEventHandler(async (request) => {
       hash: result.password,
     });
     if (check) {
+      const message = { ...result };
+      delete message.password;
+
+      await setUserSession(request, {
+        user: message,
+      });
+
       return {
+        status: 200,
         error: false,
-        message: `${body.email} logged in`,
+        message,
       } as ApiResponse;
     }
   }
   return {
+    status: 401,
     error: true,
     message: `${body.email} failed login`,
   } as ApiResponse;
