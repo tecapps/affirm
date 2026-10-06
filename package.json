@@ -4,7 +4,7 @@
     "@nuxt/fonts": "^0.14.0",
     "@nuxt/icon": "^2.5.1",
     "@nuxt/image": "^2.1.0",
-    "@nuxt/scripts": "^1.3.9",
+    "@nuxt/scripts": "^1.3.10",
     "@tailwindcss/vite": "^4.3.3",
     "@unhead/vue": "^3.4.1",
     "daisyui": "^5.7.46",
@@ -20,7 +20,7 @@
   "devDependencies": {
     "@catppuccin/daisyui": "^2.1.1",
     "@iconify-json/heroicons": "^1.2.3",
-    "@iconify-json/logos": "^1.2.14",
+    "@iconify-json/logos": "^1.2.15",
     "@playwright/test": "^1.63.0",
     "@trunkio/launcher": "^1.3.4",
     "@types/node": "^26.6.3",
@@ -29,10 +29,11 @@
     "node-gyp": "^13.0.2",
     "npm-run-all2": "^9.0.3",
     "prettier": "^3.9.9",
+    "rimraf": "^6.1.3",
     "typescript": "^6.0.3",
     "vitest": "^5.0.2",
     "vue-tsc": "^3.3.11",
-    "wrangler": "^4.142.0"
+    "wrangler": "^4.143.0"
   },
   "devEngines": {
     "runtime": {
@@ -82,6 +83,7 @@
     "postinstall:trunk:upgrade": "pnpm exec trunk upgrade --ci",
     "preview": "pnpm exec run-s build preview:wrangler",
     "preview:wrangler": "pnpm exec wrangler dev",
+    "reset": "pnpm exec rimraf pnpm-lock.yaml node_modules && pnpm install",
     "test": "pnpm exec vitest",
     "test:coverage": "pnpm exec vitest --coverage",
     "test:e2e": "pnpm exec playwright test",

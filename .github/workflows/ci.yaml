@@ -1,8 +1,15 @@
 name: ci
-permissions: read-all
 on:
-  push: null
   pull_request: null
+  push: null
+permissions:
+  actions: read
+  checks: write
+  contents: read
+  id-token: write
+  issues: write
+  pull-requests: write
+  security-events: write
 jobs:
   lint:
     runs-on: ubuntu-latest
