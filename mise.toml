@@ -6,9 +6,9 @@ env_file = ".env"
 disable_tools = ["aube", "bun", "npm", "yarn"]
 
 [tools]
-pnpm = { version = "12.8.1" }
+pnpm = { version = "12.9.1" }
 node = { version = "26.10.0" }
-rust = { version = "1.96.0" }
+rust = { version = "1.99.0" }
 
 [tasks]
 start = "pnpm run dev"
