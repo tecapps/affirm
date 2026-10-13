@@ -16,10 +16,10 @@ const { loggedIn } = useUserSession();
         <NuxtLink to="/list" class="link link-hover" active-class="menu-active">List</NuxtLink>
       </li>
       <li v-if="loggedIn">
-        <NuxtLink to="/login" class="link link-hover" active-class="menu-active">Login</NuxtLink>
+        <NuxtLink to="/me" class="link link-hover" active-class="menu-active">Me</NuxtLink>
       </li>
       <li v-else>
-        <NuxtLink to="/me" class="link link-hover" active-class="menu-active">Me</NuxtLink>
+        <NuxtLink to="/login" class="link link-hover" active-class="menu-active">Login</NuxtLink>
       </li>
     </ul>
   </nav>

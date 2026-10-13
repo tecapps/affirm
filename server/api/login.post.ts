@@ -31,7 +31,7 @@ export default defineEventHandler(async (request) => {
     });
     if (check) {
       const message = { ...result };
-      delete message.password;
+      message.password = "";
 
       await setUserSession(request, {
         user: message,
