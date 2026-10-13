@@ -46,7 +46,7 @@
     "node": "^26.10.0"
   },
   "name": "affirm",
-  "packageManager": "pnpm@12.10.1",
+  "packageManager": "pnpm@12.11.2",
   "private": true,
   "scripts": {
     "build": "pnpm exec nuxt build --envName=production",

@@ -32,7 +32,7 @@ export default defineEventHandler(async (event) => {
       password: body.password,
       salt,
       parallelism: 1,
-      iterations: 256,
+      iterations: 32, // 32 iterations takes about 1 second on my machine
       memorySize: 2 ** 16,
       hashLength: 32, // output size = 32 bytes
       outputType: "encoded", // return standard encoded string containing parameters needed to verify the key
