@@ -6,7 +6,7 @@ env_file = ".env"
 disable_tools = ["aube", "bun", "npm", "yarn"]
 
 [tools]
-pnpm = { version = "12.9.1" }
+pnpm = { version = "12.11.2" }
 node = { version = "26.10.0" }
 rust = { version = "1.99.0" }
 
