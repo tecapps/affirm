@@ -1,15 +1,21 @@
 <script setup lang="ts">
 const email = ref("");
+const username = ref("");
 const password = ref("");
 const name = ref("");
 async function handleRegister() {
   try {
     console.log("Start Fetch");
-    if (email?.value && password?.value) {
+    if (email.value && password.value && username.value && name.value) {
       const res = await $fetch("/api/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: { email: email.value, password: password.value, name: name.value },
+        body: {
+          email: email.value,
+          username: username.value,
+          password: password.value,
+          name: name.value,
+        },
       });
       console.log("Fetch Complete");
       console.log(res);
@@ -31,6 +37,7 @@ async function handleRegister() {
       >
         <legend class="sr-only">Register Page</legend>
         <UiInput v-model="email" label="Email" placeholder="email@example.com" />
+        <UiInput v-model="username" label="Username" placeholder="socks" />
         <UiInput v-model="name" label="Name" placeholder="Socks Smith" />
         <UiInput v-model="password" label="Password" type="password" placeholder="password" />
 

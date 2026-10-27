@@ -37,7 +37,12 @@ export default defineEventHandler(async (event) => {
       hashLength: 32, // output size = 32 bytes
       outputType: "encoded", // return standard encoded string containing parameters needed to verify the key
     });
-    const _insert = await db.insert(users).values({ name: body.name, email: body.email, password: hash });
+    const _insert = await db.insert(users).values({
+      name: body.name,
+      email: body.email,
+      username: body.username,
+      password: hash,
+    });
     console.log("inserted inserted");
   }
   return {
