@@ -44,6 +44,8 @@ export default defineEventHandler(async (request) => {
       } as ApiResponse;
     }
   }
+
+  // !!todo use express to set http status codes
   return {
     status: 401,
     error: true,
