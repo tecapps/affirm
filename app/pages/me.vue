@@ -4,7 +4,7 @@ definePageMeta({
 });
 
 const { user, clear: clearSession } = useUserSession();
-const userName = (user as { name?: string } | null | undefined)?.name ?? "there";
+const userName = computed(() => (user.value as { name?: string } | null)?.name ?? "there");
 
 async function logout() {
   await clearSession();
