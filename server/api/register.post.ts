@@ -25,6 +25,10 @@ export default defineEventHandler(async (event) => {
   const body = await readBody(event);
   const select = (await db.select().from(users).where(eq(users.email, body.email)))?.[0];
   if (!select) {
+    const usernameTaken = (await db.select({ id: users.id }).from(users).where(eq(users.username, body.username)))?.[0];
+    if (usernameTaken) {
+      throw createError({ statusCode: 409, statusMessage: "Username already taken" });
+    }
     console.log("inserting new user");
     const salt = new Uint8Array(16); // allocate salt buffer of 16 bytes
     crypto.getRandomValues(salt); // fill salt with random bytes
