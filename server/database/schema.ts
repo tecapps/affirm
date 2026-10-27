@@ -7,9 +7,7 @@ export const users = sqliteTable("users", {
   name: text("name").notNull(),
   password: text("password").notNull(),
   businessRepresentative: integer("businessRepresentative", { mode: "boolean" }).default(false),
-  business: integer("businessRepresentative")
-    .default(0)
-    .references(() => businesses.id),
+  business: integer("business").references(() => businesses.id),
   verified: integer("verified", { mode: "boolean" }).default(false),
   createdAt: integer("created_at", { mode: "timestamp" })
     .notNull()

@@ -6,7 +6,7 @@ const name = ref("");
 async function handleRegister() {
   try {
     console.log("Start Fetch");
-    if (email.value && password.value && username.value && name.value) {
+    if (email.value && password.value && username.value) {
       const res = await $fetch("/api/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -14,7 +14,7 @@ async function handleRegister() {
           email: email.value,
           username: username.value,
           password: password.value,
-          name: name.value,
+          name: name?.value,
         },
       });
       console.log("Fetch Complete");

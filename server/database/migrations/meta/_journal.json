@@ -8,6 +8,13 @@
       "when": 1791143615167,
       "tag": "0000_whole_the_fury",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1793132545013,
+      "tag": "0001_sloppy_serpent_society",
+      "breakpoints": true
     }
   ]
 }
