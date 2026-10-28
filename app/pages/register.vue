@@ -26,8 +26,7 @@ async function handleRegister() {
     }
   } catch (err) {
     console.error("Register failed:", err);
-    // createError's statusMessage arrives in the response body as data.statusMessage
-    error.value = (err as { data?: { statusMessage?: string } }).data?.statusMessage || "Registration failed";
+    error.value = fetchErrorMessage(err, "Registration failed");
   }
 }
 </script>

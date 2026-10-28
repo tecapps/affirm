@@ -37,11 +37,7 @@ async function handleLogin() {
     }
   } catch (error) {
     form.pending = false;
-    if (error instanceof Error) {
-      form.error = error.message;
-    } else {
-      form.error = "Login failed";
-    }
+    form.error = fetchErrorMessage(error, "Login failed");
   }
 }
 </script>
