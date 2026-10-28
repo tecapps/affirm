@@ -7,9 +7,7 @@ export const users = sqliteTable("users", {
   name: text("name").notNull(),
   password: text("password").notNull(),
   businessRepresentative: integer("businessRepresentative", { mode: "boolean" }).default(false),
-  business: integer("businessRepresentative")
-    .default(0)
-    .references(() => businesses.id),
+  business: integer("business").references(() => businesses.id),
   verified: integer("verified", { mode: "boolean" }).default(false),
   createdAt: integer("created_at", { mode: "timestamp" })
     .notNull()
@@ -21,6 +19,12 @@ export const users = sqliteTable("users", {
 });
 export const businesses = sqliteTable("businesses", {
   id: integer("id").primaryKey({ autoIncrement: true }),
+});
+// Per-account login throttle: one row per submitted email, counting attempts in a fixed window.
+export const loginAttempts = sqliteTable("login_attempts", {
+  email: text("email").primaryKey(),
+  attempts: integer("attempts").notNull(),
+  windowStartedAt: integer("window_started_at", { mode: "timestamp_ms" }).notNull(),
 });
 
 // export const tags = sqliteTable("tags", {});

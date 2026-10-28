@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "b120fc2c-cd0e-40f3-920e-d4611448baeb",
+  "id": "e10ddc20-0ed3-43c9-87d0-6a0e4424087b",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "businesses": {
@@ -13,6 +13,37 @@
           "primaryKey": true,
           "notNull": true,
           "autoincrement": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "login_attempts": {
+      "name": "login_attempts",
+      "columns": {
+        "email": {
+          "name": "email",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "attempts": {
+          "name": "attempts",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "window_started_at": {
+          "name": "window_started_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
         }
       },
       "indexes": {},
@@ -65,7 +96,14 @@
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false,
-          "default": 0
+          "default": false
+        },
+        "business": {
+          "name": "business",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
         },
         "verified": {
           "name": "verified",
@@ -103,11 +141,11 @@
         }
       },
       "foreignKeys": {
-        "users_businessRepresentative_businesses_id_fk": {
-          "name": "users_businessRepresentative_businesses_id_fk",
+        "users_business_businesses_id_fk": {
+          "name": "users_business_businesses_id_fk",
           "tableFrom": "users",
           "tableTo": "businesses",
-          "columnsFrom": ["businessRepresentative"],
+          "columnsFrom": ["business"],
           "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"

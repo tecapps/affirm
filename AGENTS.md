@@ -37,7 +37,7 @@ This document outlines the development workflow, commands, and patterns for work
 - **Run All Tests**: `pnpm run test`
 - **E2E Tests**: `pnpm run test:e2e` (Playwright). Specs live in `tests/e2e/` and the config in `playwright.config.ts`. The script applies local D1 migrations and starts `nuxt dev` on port 3010. Install the browser once with `pnpm exec playwright install chromium`.
 
-Vitest uses a single configuration with no named projects. No Vitest test files are checked in; `pnpm run test --run --passWithNoTests` checks test discovery without failing on an empty suite.
+Vitest uses a single configuration with no named projects. Unit tests sit next to the code they cover as `*.test.ts` (for example `app/utils/fetchErrorMessage.test.ts`); run them once with `pnpm run test --run`.
 
 ### Deployment
 
@@ -104,7 +104,8 @@ export default defineEventHandler(async (event) => {
 
 1. **Environment Variables**: Managed via wrangler config bindings for runtime. For local dev, `.dev.vars` (a symlink to `.env`) is used. Declare every Worker secret in `secrets.required` in `wrangler.jsonc` and `wrangler.dev.jsonc`. `wrangler types` builds `Env` from that list, not from local `.env` files, so `worker-configuration.d.ts` comes out the same on every machine. `wrangler deploy` also refuses to deploy if a listed secret isn't set on the Worker.
 2. **Migrations**: Always run `pnpm run db:generate` after modifying schema. Do not modify SQL files manually. Remote migrations use the D1 binding from the appropriate wrangler config file.
-3. **Bindings**: The application relies on Cloudflare bindings (`DB`, `ASSETS`). Ensure `pnpm run dev` is used to properly proxy these during development.
+3. **Bindings**: The application relies on Cloudflare bindings (`DB`, `ASSETS`, `LOGIN_RATE_LIMITER`). Ensure `pnpm run dev` is used to properly proxy these during development. Each wrangler config gives `LOGIN_RATE_LIMITER` its own `namespace_id`, because every environment shares one Cloudflare account and the same ID would share counters.
 4. **Imports**: Use `~` alias for project root (e.g., `~/server/utils/db`).
 5. **Wrangler Configs**: Each environment has its own wrangler config. Migration and deploy scripts use `-c <config>` to target the right D1 database. Never pass `--database-id` to wrangler — it's not a valid flag for `d1 migrations apply`.
 6. **Workers Builds**: Deployment is handled by Cloudflare Workers Builds, not GitHub Actions. The `ci.yaml` workflow only runs lint/typecheck/build checks.
+7. **Login throttling**: `server/utils/loginThrottle.ts` has two layers. `LOGIN_RATE_LIMITER` throttles per IP; it is approximate and counted separately in each Cloudflare location. The `login_attempts` D1 table is the strict per-account limit: 10 attempts per 15-minute window, counted before the password check and cleared on success. The dev config sets the per-IP limit to 1000 so repeated E2E runs don't trip it.

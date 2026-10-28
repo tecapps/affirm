@@ -30,6 +30,14 @@
     "mode": "smart",
   },
   "preview_urls": true,
+  // Per-IP login throttle. Counts are approximate and per Cloudflare location; see server/utils/loginThrottle.ts.
+  "ratelimits": [
+    {
+      "name": "LOGIN_RATE_LIMITER",
+      "namespace_id": "1001",
+      "simple": { "limit": 20, "period": 60 },
+    },
+  ],
   "secrets": {
     "required": ["NUXT_SESSION_PASSWORD"],
   },

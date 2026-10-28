@@ -21,8 +21,13 @@ import type { ApiResponse } from "~~/shared/types";
 */
 
 export default defineEventHandler(async (request) => {
+  await assertLoginSourceAllowed(request);
   const db = useDB(request);
   const body = await readBody(request);
+  if (typeof body?.email !== "string" || typeof body.password !== "string") {
+    throw createError({ statusCode: 400, statusMessage: "Email and password are required" });
+  }
+  await assertLoginAccountAllowed(db, body.email);
   const result = (await db.select().from(users).where(eq(users.email, body.email)))[0];
   if (result?.password) {
     const check = await argon2Verify({
@@ -30,13 +35,25 @@ export default defineEventHandler(async (request) => {
       hash: result.password,
     });
     if (check) {
+      await clearLoginAttempts(db, body.email);
+      const message = { ...result };
+      message.password = "";
+
+      await setUserSession(request, {
+        user: message,
+      });
+
       return {
+        status: 200,
         error: false,
-        message: `${body.email} logged in`,
+        message,
       } as ApiResponse;
     }
   }
+
+  // !!todo use express to set http status codes
   return {
+    status: 401,
     error: true,
     message: `${body.email} failed login`,
   } as ApiResponse;

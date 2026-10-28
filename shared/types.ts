@@ -1,4 +1,5 @@
 export type ApiResponse = {
   error: boolean | undefined;
-  message: string;
+  status: number | undefined;
+  message: string | Record<string, unknown>;
 };
