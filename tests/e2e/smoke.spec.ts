@@ -13,7 +13,7 @@ test("login form labels are associated with their own inputs", async ({ page }) 
   const emailInput = page.getByLabel("Email");
   const passwordInput = page.getByLabel("Password");
 
-  await expect(emailInput).toHaveAttribute("type", "text");
+  await expect(emailInput).toHaveAttribute("type", "email");
   await expect(passwordInput).toHaveAttribute("type", "password");
   expect(await emailInput.getAttribute("id")).not.toBe(await passwordInput.getAttribute("id"));
 });
@@ -34,5 +34,5 @@ test("POST /api/login queries the D1 database and rejects an unknown user", asyn
 
   // A broken DB binding makes useDB() throw, which surfaces as a 500 rather than this response.
   expect(response.ok()).toBe(true);
-  expect(await response.json()).toEqual({ error: true, message: `${unknownEmail} failed login` });
+  expect(await response.json()).toEqual({ status: 401, error: true, message: `${unknownEmail} failed login` });
 });
