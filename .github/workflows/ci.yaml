@@ -2,17 +2,13 @@ name: ci
 on:
   pull_request: null
   push: null
-permissions:
-  actions: read
-  checks: write
-  contents: read
-  id-token: write
-  issues: write
-  pull-requests: write
-  security-events: write
+permissions: {}
 jobs:
   lint:
     runs-on: ubuntu-latest
+    permissions:
+      checks: write # trunk posts annotations
+      contents: read
     steps:
       - name: checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
