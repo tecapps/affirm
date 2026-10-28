@@ -15,6 +15,14 @@
   "main": "./.output/server/index.mjs",
   "minify": false,
   "name": "affirm",
+  // High limit so repeated local E2E runs don't trip the per-IP login throttle.
+  "ratelimits": [
+    {
+      "name": "LOGIN_RATE_LIMITER",
+      "namespace_id": "1003",
+      "simple": { "limit": 1000, "period": 60 },
+    },
+  ],
   "secrets": {
     "required": ["NUXT_SESSION_PASSWORD"],
   },

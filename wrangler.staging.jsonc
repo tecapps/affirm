@@ -39,6 +39,14 @@
     "mode": "smart",
   },
   "preview_urls": true,
+  // Per-IP login throttle. Counts are approximate and per Cloudflare location; see server/utils/loginThrottle.ts.
+  "ratelimits": [
+    {
+      "name": "LOGIN_RATE_LIMITER",
+      "namespace_id": "1002",
+      "simple": { "limit": 20, "period": 60 },
+    },
+  ],
   // TODO: declare "secrets": { "required": ["NUXT_SESSION_PASSWORD"] } here once the secret is set on
   // affirm-staging (`pnpm exec wrangler secret put NUXT_SESSION_PASSWORD -c wrangler.staging.jsonc`).
   // Declaring it before then makes every staging deploy and preview upload fail.

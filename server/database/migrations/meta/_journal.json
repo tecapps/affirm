@@ -15,6 +15,13 @@
       "when": 1793132545013,
       "tag": "0001_sloppy_serpent_society",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1793147375096,
+      "tag": "0002_motionless_wild_child",
+      "breakpoints": true
     }
   ]
 }

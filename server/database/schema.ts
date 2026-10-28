@@ -20,6 +20,12 @@ export const users = sqliteTable("users", {
 export const businesses = sqliteTable("businesses", {
   id: integer("id").primaryKey({ autoIncrement: true }),
 });
+// Per-account login throttle: one row per submitted email, counting attempts in a fixed window.
+export const loginAttempts = sqliteTable("login_attempts", {
+  email: text("email").primaryKey(),
+  attempts: integer("attempts").notNull(),
+  windowStartedAt: integer("window_started_at", { mode: "timestamp_ms" }).notNull(),
+});
 
 // export const tags = sqliteTable("tags", {});
 

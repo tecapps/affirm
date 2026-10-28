@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { execFileSync } from "node:child_process";
 
 test("home page renders the hero with the server-fetched ping message", async ({ page }) => {
   await page.goto("/");
@@ -74,4 +75,51 @@ test("POST /api/register treats a concurrent duplicate email like an existing on
   );
 
   expect(responses.map((response) => response.status())).toEqual([200, 200]);
+});
+
+test("POST /api/login locks an account out after too many attempts until the window ends", async ({ request }) => {
+  const lockedEmail = `e2e-lockout-${Date.now()}@example.invalid`;
+  const attemptLogin = () =>
+    request.post("/api/login", { data: { email: lockedEmail, password: "not-a-real-password" } });
+
+  // maxLoginAttemptsPerAccount (10) attempts are answered normally.
+  for (let attempt = 1; attempt <= 10; attempt++) {
+    expect((await attemptLogin()).status()).toBe(200);
+  }
+  const lockedResponse = await attemptLogin();
+  expect(lockedResponse.status()).toBe(429);
+  expect((await lockedResponse.json()).statusMessage).toBe("Too many login attempts. Try again later.");
+
+  // Move the window start back past the 15-minute window instead of waiting for it.
+  execFileSync(
+    "pnpm",
+    [
+      "exec",
+      "wrangler",
+      "d1",
+      "execute",
+      "affirm-local",
+      "--local",
+      "-c",
+      "wrangler.dev.jsonc",
+      "--command",
+      `UPDATE login_attempts SET window_started_at = 0 WHERE email = '${lockedEmail}'`,
+    ],
+    { stdio: "ignore" },
+  );
+  expect((await attemptLogin()).status()).toBe(200);
+});
+
+test("POST /api/login counts concurrent guesses atomically", async ({ request }) => {
+  const targetEmail = `e2e-burst-${Date.now()}@example.invalid`;
+
+  const statuses = await Promise.all(
+    Array.from({ length: 15 }, () =>
+      request
+        .post("/api/login", { data: { email: targetEmail, password: "not-a-real-password" } })
+        .then((response) => response.status()),
+    ),
+  );
+
+  expect(statuses.filter((status) => status === 429)).toHaveLength(5);
 });
