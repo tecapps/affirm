@@ -11,3 +11,15 @@ Each one serves a different purpose, so please consult the table below to find t
 | [github.com/tecapps/affirm/wiki](https://github.com/tecapps/affirm/wiki)                                 | The repository's static wiki. This is the primary and authoritative source of documentation for the project, covering setup, architecture, conventions, and day-to-day workflows. It can be - and should be - updated by repository users whenever they discover gaps, outdated information, or useful tips worth sharing with others.                                |
 | [deepwiki.com/tecapps/affirm](https://deepwiki.com/tecapps/affirm)                                       | The machine-generated DeepWiki, built automatically from the codebase. It may be helpful if something is missing from, or unclear in, the main wiki, as it can surface details directly from the source. Bear in mind that generated content is not always accurate. If you do find your answer there, please add it to the main wiki so that others benefit as well. |
 | [nuxt.com/docs/4.x/getting-started/introduction](https://nuxt.com/docs/4.x/getting-started/introduction) | The official Nuxt 4 documentation.`affirm` is built on Nuxt, so this is the place to go for framework-level questions about routing, rendering modes, modules, configuration, and the underlying Vue ecosystem.                                                                                                                                                       |
+
+## Important Junk
+
+When you deploy, not before, you need to set NUXT_SESSION_PASSWORD.
+
+```sh
+openssl rand -base64 32 | pnpm exec wrangler secret put NUXT_SESSION_PASSWORD -c wrangler.staging.jsonc
+```
+
+We'll also need to set it as required in `wrangler.staging.jsonc`. Replace the TODO with `"secrets": { "required": ["NUXT_SESSION_PASSWORD"] }`. This has to happen AFTER the first deploy.
+
+The same will be necessary for production. I'll update this document when we do a prod deploy to test with.
