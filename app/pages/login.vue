@@ -3,8 +3,8 @@ const { fetch: refreshSession } = useUserSession();
 
 const form = reactive({
   data: {
-    email: "admin@gmail.com",
-    password: "password",
+    email: "",
+    password: "",
   },
   error: "",
   pending: false,
