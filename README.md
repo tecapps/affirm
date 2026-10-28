@@ -20,6 +20,6 @@ When you deploy, not before, you need to set NUXT_SESSION_PASSWORD.
 openssl rand -base64 32 | pnpm exec wrangler secret put NUXT_SESSION_PASSWORD -c wrangler.staging.jsonc
 ```
 
-We'll also need to set it as required in `wrangler.staging.jsonc`. Replace the TODO with `"secrets": { "required": ["NUXT_SESSION_PASSWORD"] }`. This has to happen AFTER the first deploy.
+Done for staging: in `wrangler.staging.jsonc` replace the TODO with `"secrets": { "required": ["NUXT_SESSION_PASSWORD"] }`.
 
-The same will be necessary for production. I'll update this document when we do a prod deploy to test with.
+The same will be necessary for production AFTER first deploy. I'll update this document when we do a prod deploy to test with.
