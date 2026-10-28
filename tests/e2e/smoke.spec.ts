@@ -36,3 +36,42 @@ test("POST /api/login queries the D1 database and rejects an unknown user", asyn
   expect(response.ok()).toBe(true);
   expect(await response.json()).toEqual({ status: 401, error: true, message: `${unknownEmail} failed login` });
 });
+
+test("POST /api/register answers 409 when concurrent registrations race for one username", async ({ request }) => {
+  const sharedUsername = `e2e-race-${Date.now()}`;
+
+  // Both requests pass the username preflight while the other is still hashing its password.
+  const responses = await Promise.all(
+    [1, 2].map((attempt) =>
+      request.post("/api/register", {
+        data: {
+          email: `${sharedUsername}-${attempt}@example.invalid`,
+          username: sharedUsername,
+          password: "not-a-real-password",
+          name: "",
+        },
+      }),
+    ),
+  );
+
+  expect(responses.map((response) => response.status()).sort()).toEqual([200, 409]);
+});
+
+test("POST /api/register treats a concurrent duplicate email like an existing one", async ({ request }) => {
+  const sharedEmail = `e2e-race-${Date.now()}@example.invalid`;
+
+  const responses = await Promise.all(
+    [1, 2].map((attempt) =>
+      request.post("/api/register", {
+        data: {
+          email: sharedEmail,
+          username: `e2e-race-email-${Date.now()}-${attempt}`,
+          password: "not-a-real-password",
+          name: "",
+        },
+      }),
+    ),
+  );
+
+  expect(responses.map((response) => response.status())).toEqual([200, 200]);
+});
