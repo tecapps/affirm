@@ -1,5 +1,14 @@
-PRAGMA foreign_keys=OFF;--> statement-breakpoint
-CREATE TABLE `__new_users` (
+CREATE TABLE `businesses` (
+	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL
+);
+--> statement-breakpoint
+CREATE TABLE `login_attempts` (
+	`email` text PRIMARY KEY NOT NULL,
+	`attempts` integer NOT NULL,
+	`window_started_at` integer NOT NULL
+);
+--> statement-breakpoint
+CREATE TABLE `users` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`email` text NOT NULL,
 	`username` text NOT NULL,
@@ -13,9 +22,5 @@ CREATE TABLE `__new_users` (
 	FOREIGN KEY (`business`) REFERENCES `businesses`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
-INSERT INTO `__new_users`("id", "email", "username", "name", "password", "businessRepresentative", "business", "verified", "created_at", "updated_at") SELECT "id", "email", "username", "name", "password", "businessRepresentative", "business", "verified", "created_at", "updated_at" FROM `users`;--> statement-breakpoint
-DROP TABLE `users`;--> statement-breakpoint
-ALTER TABLE `__new_users` RENAME TO `users`;--> statement-breakpoint
-PRAGMA foreign_keys=ON;--> statement-breakpoint
 CREATE UNIQUE INDEX `users_email_unique` ON `users` (`email`);--> statement-breakpoint
 CREATE UNIQUE INDEX `users_username_unique` ON `users` (`username`);
