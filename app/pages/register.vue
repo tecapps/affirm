@@ -3,7 +3,9 @@ const email = ref("");
 const username = ref("");
 const password = ref("");
 const name = ref("");
+const error = ref("");
 async function handleRegister() {
+  error.value = "";
   try {
     console.log("Start Fetch");
     if (email.value && password.value && username.value) {
@@ -20,10 +22,12 @@ async function handleRegister() {
       console.log("Fetch Complete");
       console.log(res);
     } else {
-      console.log("Nothing to insert");
+      error.value = "Enter your email, username and password";
     }
-  } catch (error) {
-    console.error("Register failed:", error);
+  } catch (err) {
+    console.error("Register failed:", err);
+    // createError's statusMessage arrives in the response body as data.statusMessage
+    error.value = (err as { data?: { statusMessage?: string } }).data?.statusMessage || "Registration failed";
   }
 }
 </script>
@@ -36,6 +40,10 @@ async function handleRegister() {
         class="fieldset bg-base-200 border-base-300 border rounded-box w-full p-4 flex flex-col justify-stretch gap-4"
       >
         <legend class="sr-only">Register Page</legend>
+        <div v-if="error" role="alert" class="alert alert-error">
+          <Icon name="heroicons:x-circle" size="1.5rem" />
+          <span>{{ error }}</span>
+        </div>
         <UiInput v-model="email" label="Email" placeholder="email@example.com" />
         <UiInput v-model="username" label="Username" placeholder="socks" />
         <UiInput v-model="name" label="Name" placeholder="Socks Smith" />
