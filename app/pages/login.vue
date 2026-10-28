@@ -31,7 +31,10 @@ async function handleLogin() {
         await refreshSession();
         await navigateTo("/me");
       }
-    } else console.log("Login Failed, empty input");
+    } else {
+      form.pending = false;
+      form.error = "Enter your email and password";
+    }
   } catch (error) {
     form.pending = false;
     if (error instanceof Error) {
