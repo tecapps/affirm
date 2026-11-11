@@ -1,12 +1,11 @@
 /**
  * POST /api/login
  *
- * Needs to take the password from the login page and encrypt it into argon2 for storage
+ * Needs to take the password from the login page and verify it against the stored scrypt hash
  * Gotta figure out how to pass the password from the login
  */
 import { users } from "#server/database/schema";
 import { eq } from "drizzle-orm";
-import { argon2Verify } from "hash-wasm";
 import type { ApiResponse } from "~~/shared/types";
 
 //const dataBaseHash = await query();
@@ -30,10 +29,7 @@ export default defineEventHandler(async (request) => {
   await assertLoginAccountAllowed(db, body.email);
   const result = (await db.select().from(users).where(eq(users.email, body.email)))[0];
   if (result?.password) {
-    const check = await argon2Verify({
-      password: body.password,
-      hash: result.password,
-    });
+    const check = await verifyPassword(result.password, body.password);
     if (check) {
       await clearLoginAttempts(db, body.email);
       const message = { ...result };
