@@ -32,6 +32,12 @@ export default defineEventHandler(async (request) => {
     const check = await verifyPassword(result.password, body.password);
     if (check) {
       await clearLoginAttempts(db, body.email);
+      if (passwordNeedsReHash(result.password)) {
+        await db
+          .update(users)
+          .set({ password: await hashPassword(body.password) })
+          .where(eq(users.id, result.id));
+      }
       const message = { ...result };
       message.password = "";
 

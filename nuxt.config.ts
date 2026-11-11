@@ -34,6 +34,20 @@ export default defineNuxtConfig({
     plugins: [tailwindcss()],
   },
   modules: ["@nuxt/eslint", "@nuxt/fonts", "@nuxt/icon", "@nuxt/image", "@nuxt/scripts", "nuxt-auth-utils"],
+  runtimeConfig: {
+    hash: {
+      // OWASP's N=2^14, r=8, p=5 tier: equal strength to N=2^17 but only 16 MiB, which fits the
+      // 128 MB Worker memory limit. Costs ~80 ms CPU per hash, measured in workerd.
+      scrypt: {
+        cost: 2 ** 14,
+        blockSize: 8,
+        parallelization: 5,
+        keyLength: 64,
+        saltSize: 16,
+        maxMemory: 32 * 1024 * 1024,
+      },
+    },
+  },
   $env: {
     production: {
       nitro: {
